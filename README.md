@@ -1,60 +1,77 @@
-# Symfony Docker
+# Compliance Store API
 
-A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework,
-with [FrankenPHP](https://frankenphp.dev) and [Caddy](https://caddyserver.com/) inside!
+**Compliance Store** est une API REST open-source hautement disponible et sécurisée pour la gestion du cycle de vie des documents sensibles (CNI, passeports, justificatifs de domicile).
 
-Coding-agents ready: ships with a [Dev Container](https://containers.dev/) and a [one-page guide](docs/agents.md)
-to run [OpenCode](https://opencode.ai), [Claude Code](https://claude.ai/claude-code), or any AI coding assistant,
-against a local or a remote model, with an optional network sandbox.
+Elle offre une gestion fine de la conformité réglementaire, du chiffrement enveloppe *Zero Trust*, du masquage/redaction automatique des données PII, et s'interface avec n'importe quel fournisseur de stockage (S3, MinIO, Azure Blob, Disque local).
 
-![CI](https://github.com/dunglas/symfony-docker/workflows/CI/badge.svg)
+---
 
-## Getting Started
+## 🏛️ Architecture & Conception
 
-1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
-2. Run `docker compose build --pull --no-cache` to build fresh images
-3. Run `docker compose up --wait` to set up and start a fresh Symfony project
-4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+L'application est développée en **PHP 8.3+** avec **Symfony 7** & **API Platform**, en suivant strictement les principes de la **Clean Architecture / DDD (Domain-Driven Design)** :
 
-## Features
+```text
+src/
+├── Domain/              # Logique métier pure (Entités, Value Objects, Socle réglementaire)
+│   └── Port/            # Interfaces (Gateways, Repositories, Events)
+├── Application/         # Cas d'usage (Use Cases & DTOs)
+└── Infrastructure/      # Implémentations techniques (MinIO, Sodium, PostgreSQL, API Platform)
+```
 
-- Production, development and CI ready
-- Just 1 service by default
-- Super-readable configuration
-- Blazing-fast performance thanks to [the worker mode of FrankenPHP](https://frankenphp.dev/docs/worker/)
-- [Installation of extra Docker Compose services](docs/extra-services.md) with Symfony Flex
-- Automatic HTTPS (in dev and prod)
-- HTTP/3 and [Early Hints](https://symfony.com/blog/new-in-symfony-6-3-early-hints) support
-- Real-time messaging thanks to a built-in [Mercure hub](https://symfony.com/doc/current/mercure.html)
-- [Vulcain](https://vulcain.rocks) support
-- Native [XDebug](docs/xdebug.md) integration
-- [Hot Reloading](https://frankenphp.dev/docs/hot-reload/)
-- [Dev Container](https://containers.dev/) support
-- [AI coding agents](docs/agents.md) with an optional network sandbox
-- Rootless, slim production image
+Pour consulter la documentation détaillée de l'architecture :
+* 📘 [Table des Matières de la Documentation](docs/README.md)
+* 📜 [Décisions d'Architecture (ADRs)](docs/architecture/adr/)
+* 🔄 [Workflows d'Ingestion et de Consultation](docs/architecture/workflows/)
 
-**Enjoy!**
+---
 
-## Docs
+## 🚀 Démarrage Rapide (Environnement de Développement)
 
-1. [Options available](docs/options.md)
-2. [Using Symfony Docker with an existing project](docs/existing-project.md)
-3. [Support for extra services](docs/extra-services.md)
-4. [Deploying in production](docs/production.md)
-5. [Debugging with Xdebug](docs/xdebug.md)
-6. [TLS Certificates](docs/tls.md)
-7. [Using MySQL instead of PostgreSQL](docs/mysql.md)
-8. [Using Alpine Linux instead of Debian](docs/alpine.md)
-9. [Using a Makefile](docs/makefile.md)
-10. [Updating the template](docs/updating.md)
-11. [Troubleshooting](docs/troubleshooting.md)
-12. [Using AI coding agents](docs/agents.md)
+L'application tourne sur **FrankenPHP** et **Caddy** via Docker Compose.
 
-## License
+### Prérequis
+* Docker et Docker Compose (v2.10+)
 
-Symfony Docker is available under the MIT License.
+### Lancement
 
-## Credits
+1. **Construire les images Docker** :
+   ```bash
+   docker compose build --pull --no-cache
+   ```
 
-Created by [Kévin Dunglas](https://dunglas.dev), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+2. **Démarrer les services** (API FrankenPHP + PostgreSQL + MinIO) :
+   ```bash
+   docker compose up -d
+   ```
+
+3. **Accéder à l'application** :
+   * **API Platform / Swagger UI** : `https://localhost`
+   * **Console Web MinIO (S3 Local)** : `http://localhost:9001` *(User: `minioadmin` / Pass: `minioadmin`)*
+
+4. **Arrêter l'environnement** :
+   ```bash
+   docker compose down
+   ```
+
+---
+
+## 🛠️ Stack Technique
+
+* **Framework** : Symfony 7 + API Platform 3
+* **Serveur HTTP / Runtime** : FrankenPHP + Caddy (Worker Mode)
+* **Base de données** : PostgreSQL 16
+* **Stockage Objets** : MinIO (compatible S3) / League Flysystem
+* **Chiffrement** : Libsodium (`sodium_crypto_secretbox`)
+
+---
+
+## 📖 Template de base
+
+Ce projet est basé sur le template [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker).
+Pour consulter la documentation d'origine de l'infrastructure Docker/FrankenPHP, voir [README.symfony-docker.md](README.symfony-docker.md) ou le dossier [docs/docker-infra/](docs/docker-infra/).
+
+---
+
+## 📄 Licence
+
+Ce projet est sous licence MIT.
