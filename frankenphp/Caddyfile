@@ -1,5 +1,8 @@
 {
 	skip_install_trust
+	# Disable automatic HTTP to HTTPS redirection to allow local HTTP testing
+	# which avoids SSLException (internal_error) with JetBrains HTTP Client and self-signed certificates.
+	auto_https disable_redirects
 
 	{$CADDY_GLOBAL_OPTIONS}
 

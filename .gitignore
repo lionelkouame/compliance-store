@@ -9,3 +9,7 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+# HTTP Client private environments
+http-client.private.env.json
+

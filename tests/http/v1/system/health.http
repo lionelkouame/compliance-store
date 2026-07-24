@@ -1,0 +1,16 @@
+### Check System Status (Health Check V1)
+GET {{apiUrl}}/health
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Status is ok", function() {
+        client.assert(response.body.status === "ok", "System status is not ok");
+    });
+%}
+
+### Check OpenApi Json Specification
+GET {{baseUrl}}/api/docs.json
+Accept: application/json

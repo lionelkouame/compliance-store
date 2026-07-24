@@ -1,6 +1,10 @@
 api_platform:
-    title: Hello API Platform
+    title: Compliance Store API
     version: 1.0.0
+    description: Open-source REST API for regulatory compliance, zero-trust envelope encryption, and sensitive document storage lifecycle.
+    mapping:
+        paths:
+            - '%kernel.project_dir%/src/Infrastructure/ApiPlatform/Resource'
     defaults:
         stateless: true
         cache_headers:
