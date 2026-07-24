@@ -2,6 +2,7 @@ api_platform:
     title: Compliance Store API
     version: 1.0.0
     description: Open-source REST API for regulatory compliance, zero-trust envelope encryption, and sensitive document storage lifecycle.
+    enable_swagger_ui: true
     mapping:
         paths:
             - '%kernel.project_dir%/src/Infrastructure/ApiPlatform/Resource'
