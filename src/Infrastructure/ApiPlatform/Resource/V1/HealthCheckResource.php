@@ -5,13 +5,14 @@ namespace App\Infrastructure\ApiPlatform\Resource\V1;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use App\Infrastructure\ApiPlatform\State\V1\HealthCheckStateProvider;
+use ApiPlatform\OpenApi\Model\Operation;
 
 #[ApiResource(
     shortName: 'HealthCheck',
     operations: [
         new Get(
             uriTemplate: '/v1/health',
-            openapi: new \ApiPlatform\OpenApi\Model\Operation(
+            openapi: new Operation(
                 tags: ['V1 - System'],
                 summary: 'Vérifie l\'état de santé de l\'API (V1)',
                 description: 'Endpoint léger de test de validation de la Clean Architecture V1.'
