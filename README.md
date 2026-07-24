@@ -8,7 +8,7 @@ It provides fine-grained regulatory compliance management, *Zero Trust* envelope
 
 ## 🏛️ Architecture & Design
 
-The application is built with **PHP 8.3+**, **Symfony 7**, and **API Platform**, strictly adhering to the principles of **Clean Architecture** and **Domain-Driven Design (DDD)**:
+The application is built with **PHP 8.5+**, **Symfony 8.1**, and **API Platform 4**, strictly adhering to the principles of **Clean Architecture** and **Domain-Driven Design (DDD)**:
 
 ```text
 src/
@@ -57,7 +57,7 @@ The application runs on **FrankenPHP** and **Caddy** powered by Docker Compose.
 
 ## 🛠️ Technology Stack
 
-* **Framework**: Symfony 7 + API Platform 3
+* **Framework**: Symfony 8.1 + API Platform 4
 * **HTTP Server / Runtime**: FrankenPHP + Caddy (Worker Mode)
 * **Database**: PostgreSQL 16
 * **Object Storage**: MinIO (S3-compatible) / League Flysystem
