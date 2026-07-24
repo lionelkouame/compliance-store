@@ -11,13 +11,13 @@ use App\Infrastructure\ApiPlatform\State\V1\HealthCheckStateProvider;
     operations: [
         new Get(
             uriTemplate: '/v1/health',
-            description: 'Vérifie l\'état de santé de l\'API V1 et de la Clean Architecture',
-            provider: HealthCheckStateProvider::class,
             openapi: new \ApiPlatform\OpenApi\Model\Operation(
                 tags: ['V1 - System'],
                 summary: 'Vérifie l\'état de santé de l\'API (V1)',
                 description: 'Endpoint léger de test de validation de la Clean Architecture V1.'
-            )
+            ),
+            description: 'Vérifie l\'état de santé de l\'API V1 et de la Clean Architecture',
+            provider: HealthCheckStateProvider::class
         ),
     ]
 )]
@@ -28,3 +28,4 @@ final class HealthCheckResource
     public string $environment;
     public string $timestamp;
 }
+
