@@ -9,6 +9,7 @@
         "php": ">=8.5.8",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "api-platform/core": "^4.3",
         "symfony/console": "8.1.*",
         "symfony/dotenv": "8.1.*",
         "symfony/flex": "^2",
