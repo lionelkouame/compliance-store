@@ -11,11 +11,20 @@ SYMFONY  = $(PHP) bin/console
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build refresh up start down logs sh bash test composer vendor sf cc
+.PHONY        : help build refresh up start down logs sh bash test composer vendor sf cc setup-dns
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9\./_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
+
+## —— DNS & Setup 🌐 ———————————————————————————————————————————————————————————
+setup-dns: ## Ajoute compliance-store.loc au fichier /etc/hosts (nécessite sudo)
+	@if grep -q "compliance-store.loc" /etc/hosts 2>/dev/null; then \
+		echo "✅ compliance-store.loc est déjà présent dans /etc/hosts"; \
+	else \
+		echo "Ajout de compliance-store.loc dans /etc/hosts..."; \
+		echo "127.0.0.1 compliance-store.loc" | sudo tee -a /etc/hosts > /dev/null && echo "✅ compliance-store.loc a été ajouté avec succès !"; \
+	fi
 
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 build: ## Builds the Docker images (uses cache, fast — daily use)

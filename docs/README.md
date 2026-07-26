@@ -23,6 +23,7 @@ Bienvenue dans la documentation officielle du projet **Compliance Store**.
 Toute la documentation technique liée à l'environnement Docker Compose, FrankenPHP et Caddy est disponible dans le dossier **[docker-infra/](docker-infra/)** :
 
 * [Options du Template Symfony Docker](docker-infra/options.md)
+* [Configuration du DNS Local (compliance-store.loc)](docker-infra/dns.md)
 * [Guide de Déploiement en Production](docker-infra/production.md)
 * [Configuration du Débogage avec Xdebug](docker-infra/xdebug.md)
 * [Gestion des Certificats TLS / HTTPS](docker-infra/tls.md)

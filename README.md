@@ -32,6 +32,12 @@ The application runs on **FrankenPHP** and **Caddy** powered by Docker Compose.
 ### Prerequisites
 * Docker & Docker Compose (v2.10+)
 
+### 🌐 Local DNS Setup (`compliance-store.loc`)
+
+Map `compliance-store.loc` to `127.0.0.1` on your development host:
+* **Linux / macOS**: Run `make setup-dns` or execute `echo "127.0.0.1 compliance-store.loc" | sudo tee -a /etc/hosts`
+* **Windows**: Add `127.0.0.1 compliance-store.loc` to `C:\Windows\System32\drivers\etc\hosts`
+
 ### Launching the Stack
 
 1. **Build Docker images**:
@@ -45,7 +51,7 @@ The application runs on **FrankenPHP** and **Caddy** powered by Docker Compose.
    ```
 
 3. **Access the application**:
-   * **API Platform / Swagger UI**: `https://localhost`
+   * **API Platform / Swagger UI**: `https://compliance-store.loc` (or `http://compliance-store.loc`)
    * **MinIO Web Console (Local S3)**: `http://localhost:9001` *(User: `minioadmin` / Pass: `minioadmin`)*
 
 4. **Stop the environment**:
