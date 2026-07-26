@@ -51,7 +51,7 @@ Map `compliance-store.loc` to `127.0.0.1` on your development host:
    ```
 
 3. **Access the application**:
-   * **API Platform / Swagger UI**: `https://compliance-store.loc` (or `http://compliance-store.loc`)
+   * **API Platform / Swagger UI**: `https://compliance-store.loc/api` (or `http://compliance-store.loc/api`)
    * **MinIO Web Console (Local S3)**: `http://localhost:9001` *(User: `minioadmin` / Pass: `minioadmin`)*
 
 4. **Stop the environment**:

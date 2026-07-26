@@ -108,7 +108,7 @@ Après le démarrage des conteneurs (`docker compose up -d`) et la configuration
 
 2. **Test HTTPS (Swagger UI)** :
    Ouvrez votre navigateur sur :
-   * **[https://compliance-store.loc](https://compliance-store.loc)** (ou `http://compliance-store.loc`)
+   * **[https://compliance-store.loc/api](https://compliance-store.loc/api)** (ou `http://compliance-store.loc/api`)
 
 3. **Clients HTTP IDE (JetBrains / Postman / VS Code)** :
    Utilisez le fichier de variables `tests/http/http-client.env.json` qui pointe désormais sur `http://compliance-store.loc` et `https://compliance-store.loc`.
