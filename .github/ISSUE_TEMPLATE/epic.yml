@@ -1,0 +1,61 @@
+name: "🧭 Epic"
+description: A large body of work that groups several User Stories around one business goal
+title: "[EPIC] "
+labels: ["type: epic"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        An Epic describes a business goal or capability. It does not contain implementation
+        details — those live in the linked User Stories. Once created, link each User Story
+        to this Epic with **Add sub-issue** (top-right panel of this issue).
+
+  - type: textarea
+    id: business-goal
+    attributes:
+      label: Business Goal
+      description: What problem does this Epic solve, and why does it matter?
+      placeholder: |
+        As a [role], we need [capability] so that [business value].
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is explicitly in scope and out of scope?
+    validations:
+      required: false
+
+  - type: textarea
+    id: success-criteria
+    attributes:
+      label: Success Criteria
+      description: How do we know this Epic is done? One checkbox per measurable outcome.
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P0 - Critical
+        - P1 - High
+        - P2 - Medium
+        - P3 - Low
+    validations:
+      required: true
+
+  - type: input
+    id: spec-link
+    attributes:
+      label: Specification link
+      description: Link to the detailed spec in compliance-pilotage, if one exists
+      placeholder: https://github.com/lionelkouame/compliance-pilotage/blob/main/...
+    validations:
+      required: false

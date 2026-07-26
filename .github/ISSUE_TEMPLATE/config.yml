@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Product Specifications
+    url: https://github.com/lionelkouame/compliance-pilotage
+    about: Epics and User Stories are drafted and reviewed in the compliance-pilotage repository before an Issue is opened here.

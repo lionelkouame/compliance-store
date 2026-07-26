@@ -1,0 +1,64 @@
+name: "📝 User Story"
+description: A small, independently shippable increment of value
+title: "[US] "
+labels: ["type: story"]
+body:
+  - type: input
+    id: epic
+    attributes:
+      label: Parent Epic
+      description: Reference the parent Epic issue, e.g. #12 (or link it as a sub-issue once this is created)
+    validations:
+      required: false
+
+  - type: textarea
+    id: story
+    attributes:
+      label: User Story
+      placeholder: |
+        As a [role]
+        I want [capability]
+        So that [benefit]
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Given/When/Then, or a plain checklist — must be testable
+      placeholder: |
+        Given ...
+        When ...
+        Then ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-notes
+    attributes:
+      label: Technical Notes
+      description: Implementation pointers, affected files/classes, API contracts, edge cases
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P0 - Critical
+        - P1 - High
+        - P2 - Medium
+        - P3 - Low
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: definition-of-done
+    attributes:
+      label: Definition of Done
+      options:
+        - label: Code implemented and reviewed
+        - label: Unit / integration tests passing
+        - label: Documentation updated (if applicable)

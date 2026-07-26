@@ -1,0 +1,83 @@
+# Labels as code. Edit this file and merge to `main` to sync labels on GitHub —
+# do not create/rename/delete labels by hand in the UI, they will be overwritten.
+
+# --- Type ---------------------------------------------------------------
+- name: "type: epic"
+  color: "8B5CF6"
+  description: Groups several User Stories around one business goal
+
+- name: "type: story"
+  color: "1D76DB"
+  description: A small, independently shippable increment of value
+
+- name: "type: bug"
+  color: "D73A4A"
+  description: Something isn't working as expected
+
+- name: "type: chore"
+  color: "6E7781"
+  description: Tooling, refactor, dependency bump, CI — no functional change
+
+- name: "type: spike"
+  color: "0E8A16"
+  description: Time-boxed investigation to reduce uncertainty before committing to a story
+
+# --- Domain ---------------------------------------------------------------
+- name: "domain: engine"
+  color: "0E8A16"
+  description: Rules engine & RegulatoryScope
+
+- name: "domain: storage"
+  color: "D93F0B"
+  description: MinIO / S3 storage & encryption
+
+- name: "domain: audit"
+  color: "FBCA04"
+  description: Immutable audit trail (Le Griot)
+
+# --- Status ---------------------------------------------------------------
+- name: "status: ready"
+  color: "C2E0C6"
+  description: Spec validated, ready to be picked up
+
+- name: "status: in-progress"
+  color: "FEF2C0"
+  description: Actively being worked on
+
+- name: "status: in-review"
+  color: "BFD4F2"
+  description: Pull request open, awaiting review
+
+- name: "status: blocked"
+  color: "B60205"
+  description: Cannot proceed until a dependency is resolved
+
+# --- Priority ---------------------------------------------------------------
+- name: "priority: P0-critical"
+  color: "B60205"
+  description: Blocking, needs immediate attention
+
+- name: "priority: P1-high"
+  color: "D93F0B"
+  description: High priority, current sprint
+
+- name: "priority: P2-medium"
+  color: "FBCA04"
+  description: Normal priority, upcoming sprint
+
+- name: "priority: P3-low"
+  color: "C5DEF5"
+  description: Nice to have, unscheduled
+
+# --- Meta ---------------------------------------------------------------
+- name: "good first issue"
+  color: "7057FF"
+  description: Good for newcomers
+
+- name: "help wanted"
+  color: "008672"
+  description: Extra attention or contributors welcome
+
+- name: "wontfix"
+  color: "FFFFFF"
+  description: This will not be worked on
