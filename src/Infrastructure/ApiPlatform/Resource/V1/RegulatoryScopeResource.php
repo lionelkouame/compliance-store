@@ -29,12 +29,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: RegulatoryScopeCollectionProvider::class,
         ),
         new Get(
-            uriTemplate: '/regulatory-scopes/{code}',
-            uriVariables: ['code'],
+            uriTemplate: '/regulatory-scopes/{id}',
+            uriVariables: ['id'],
             openapi: new Operation(
                 tags: ['V1 - Regulatory Scopes'],
                 summary: 'Get regulatory scope details',
-                description: 'Retrieve a regulatory scope by its unique code.',
+                description: 'Retrieve a regulatory scope by its UUID or unique code.',
             ),
             provider: RegulatoryScopeItemProvider::class,
         ),
@@ -53,6 +53,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class RegulatoryScopeResource
 {
     #[ApiProperty(identifier: true)]
+    #[Assert\Uuid]
+    public ?string $id = null;
+
     #[Assert\NotBlank]
     #[Assert\Regex(
         pattern: '/^[A-Z][A-Z0-9_]*$/',
@@ -84,6 +87,7 @@ final class RegulatoryScopeResource
         }
 
         $resource = new self();
+        $resource->id = $scope->id()->value;
         $resource->code = $scope->code()->value;
         $resource->label = $scope->label()->value;
         $resource->description = $scope->description()->value;

@@ -7,19 +7,22 @@ namespace App\Application\UseCase\CreateRegulatoryScope;
 use App\Domain\Entity\RegulatoryScope;
 use App\Domain\Exception\RegulatoryScopeAlreadyExistsException;
 use App\Domain\Port\Repository\RegulatoryScopeRepositoryInterface;
+use App\Domain\Port\Service\IdGeneratorInterface;
 use App\Domain\ValueObject\AllowedDocumentTypes;
 use App\Domain\ValueObject\RegulatoryScopeCode;
 use App\Domain\ValueObject\RegulatoryScopeDescription;
+use App\Domain\ValueObject\RegulatoryScopeId;
 use App\Domain\ValueObject\RegulatoryScopeLabel;
 
 final readonly class CreateRegulatoryScopeUseCase
 {
     public function __construct(
         private RegulatoryScopeRepositoryInterface $regulatoryScopes,
+        private IdGeneratorInterface $idGenerator,
     ) {}
 
     /**
-     * @throws RegulatoryScopeAlreadyExistsException si le code existe déjà
+     * @throws RegulatoryScopeAlreadyExistsException if the code already exists
      */
     public function execute(CreateRegulatoryScopeCommand $command): RegulatoryScope
     {
@@ -29,7 +32,10 @@ final readonly class CreateRegulatoryScopeUseCase
             throw RegulatoryScopeAlreadyExistsException::forCode($command->code);
         }
 
+        $id = null !== $command->id ? RegulatoryScopeId::fromString($command->id) : $this->idGenerator->generate();
+
         $scope = RegulatoryScope::create(
+            id: $id,
             code: $code,
             label: new RegulatoryScopeLabel($command->label),
             description: new RegulatoryScopeDescription($command->description),

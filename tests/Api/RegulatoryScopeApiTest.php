@@ -42,6 +42,9 @@ final class RegulatoryScopeApiTest extends ApiTestCase
         ]);
 
         self::assertResponseStatusCodeSame(201);
+        $data = $response->toArray();
+        $id = $data['id'] ?? basename($data['@id'] ?? '');
+        self::assertTrue(\Symfony\Component\Uid\Uuid::isValid($id));
         self::assertJsonContains([
             'code' => 'CREDIT_AUDIT',
             'label' => "Audit de solvabilité crédit",
@@ -49,7 +52,11 @@ final class RegulatoryScopeApiTest extends ApiTestCase
             'isActive' => true,
         ]);
 
-        // Immédiatement utilisable, sans redéploiement : consultable via GET.
+        // Consultable par UUID ou par code
+        $client->request('GET', '/api/v1/regulatory-scopes/'.$id);
+        self::assertResponseIsSuccessful();
+        self::assertJsonContains(['code' => 'CREDIT_AUDIT']);
+
         $client->request('GET', '/api/v1/regulatory-scopes/CREDIT_AUDIT');
         self::assertResponseIsSuccessful();
         self::assertJsonContains(['code' => 'CREDIT_AUDIT']);
@@ -125,7 +132,10 @@ final class RegulatoryScopeApiTest extends ApiTestCase
         $repository = self::getContainer()->get(RegulatoryScopeRepositoryInterface::class);
         $validator = self::getContainer()->get(RegulatoryScopeValidator::class);
 
+        $idGenerator = self::getContainer()->get(\App\Domain\Port\Service\IdGeneratorInterface::class);
+
         $scope = RegulatoryScope::create(
+            id: $idGenerator->generate(),
             code: new RegulatoryScopeCode('OLD_SCOPE'),
             label: new RegulatoryScopeLabel('Ancien périmètre'),
             description: new RegulatoryScopeDescription('Désactivé'),

@@ -6,8 +6,9 @@ doctrine:
         # either here or in the DATABASE_URL env var (see .env file)
         #server_version: '16'
 
-        profiling_collect_backtrace: '%kernel.debug%'
         types:
+            regulatory_scope_id:
+                class: App\Infrastructure\Persistence\Type\RegulatoryScopeIdType
             regulatory_scope_code:
                 class: App\Infrastructure\Persistence\Type\RegulatoryScopeCodeType
             regulatory_scope_label:

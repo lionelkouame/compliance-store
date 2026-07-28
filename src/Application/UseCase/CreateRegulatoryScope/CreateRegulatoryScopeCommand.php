@@ -14,6 +14,7 @@ final readonly class CreateRegulatoryScopeCommand
         public string $label,
         public string $description,
         public array $allowedDocumentTypes,
+        public ?string $id = null,
         public bool $isActive = true,
     ) {}
 }

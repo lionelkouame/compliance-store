@@ -7,6 +7,7 @@ namespace App\Domain\Entity;
 use App\Domain\ValueObject\AllowedDocumentTypes;
 use App\Domain\ValueObject\RegulatoryScopeCode;
 use App\Domain\ValueObject\RegulatoryScopeDescription;
+use App\Domain\ValueObject\RegulatoryScopeId;
 use App\Domain\ValueObject\RegulatoryScopeLabel;
 
 /**
@@ -18,6 +19,7 @@ use App\Domain\ValueObject\RegulatoryScopeLabel;
 final class RegulatoryScope
 {
     private function __construct(
+        private readonly RegulatoryScopeId $id,
         private readonly RegulatoryScopeCode $code,
         private RegulatoryScopeLabel $label,
         private RegulatoryScopeDescription $description,
@@ -28,6 +30,7 @@ final class RegulatoryScope
     ) {}
 
     public static function create(
+        RegulatoryScopeId $id,
         RegulatoryScopeCode $code,
         RegulatoryScopeLabel $label,
         RegulatoryScopeDescription $description,
@@ -37,6 +40,7 @@ final class RegulatoryScope
         $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
 
         return new self(
+            id: $id,
             code: $code,
             label: $label,
             description: $description,
@@ -45,6 +49,11 @@ final class RegulatoryScope
             createdAt: $now,
             updatedAt: $now,
         );
+    }
+
+    public function id(): RegulatoryScopeId
+    {
+        return $this->id;
     }
 
     public function code(): RegulatoryScopeCode

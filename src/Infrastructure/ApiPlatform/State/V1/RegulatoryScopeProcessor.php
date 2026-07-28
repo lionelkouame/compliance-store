@@ -26,6 +26,7 @@ final readonly class RegulatoryScopeProcessor implements ProcessorInterface
             label: (string) $data->label,
             description: $data->description,
             allowedDocumentTypes: $data->allowedDocumentTypes,
+            id: $data->id,
             isActive: $data->isActive,
         ));
 

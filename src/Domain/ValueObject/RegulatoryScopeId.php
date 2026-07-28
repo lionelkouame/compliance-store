@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject;
 
-final readonly class RegulatoryScopeCode
-{
-    private const PATTERN = '/^[A-Z][A-Z0-9_]*$/';
+use App\Domain\Port\Service\IdValidatorInterface;
 
+final readonly class RegulatoryScopeId
+{
     public function __construct(
         public string $value,
+        ?IdValidatorInterface $validator = null,
     ) {
-        if (1 !== preg_match(self::PATTERN, $this->value)) {
+        if (null !== $validator && !$validator->isValid($this->value)) {
             throw new \InvalidArgumentException(\sprintf(
-                'The code "%s" is invalid: expected format is UPPERCASE_SNAKE_CASE (e.g. KYC_INDIVIDUAL).',
+                'The ID "%s" is not valid.',
                 $this->value,
             ));
         }
+    }
+
+    public static function fromString(string $value, ?IdValidatorInterface $validator = null): self
+    {
+        return new self($value, $validator);
     }
 
     public function equals(self $other): bool

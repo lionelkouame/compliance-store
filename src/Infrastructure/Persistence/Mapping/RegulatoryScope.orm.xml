@@ -5,10 +5,11 @@
                    https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="App\Domain\Entity\RegulatoryScope" table="regulatory_scope">
-        <id name="code" type="regulatory_scope_code" length="64">
+        <id name="id" type="regulatory_scope_id" length="36">
             <generator strategy="NONE"/>
         </id>
 
+        <field name="code" type="regulatory_scope_code" length="64" unique="true"/>
         <field name="label" type="regulatory_scope_label" length="255"/>
         <field name="description" type="regulatory_scope_description"/>
         <field name="allowedDocumentTypes" type="allowed_document_types" column="allowed_document_types"/>

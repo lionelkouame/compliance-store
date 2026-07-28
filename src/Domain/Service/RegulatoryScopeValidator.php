@@ -10,8 +10,8 @@ use App\Domain\Port\Repository\RegulatoryScopeRepositoryInterface;
 use App\Domain\ValueObject\RegulatoryScopeCode;
 
 /**
- * Vérifie dynamiquement qu'un code de périmètre réglementaire est connu et actif
- * avant qu'il ne soit associé à un document (moteur de règles).
+ * Dynamically verifies that a regulatory scope code is known and active
+ * before it is associated with a document (rules engine).
  */
 final readonly class RegulatoryScopeValidator
 {
@@ -20,7 +20,7 @@ final readonly class RegulatoryScopeValidator
     ) {}
 
     /**
-     * @throws InvalidRegulatoryScopeException si le périmètre est inactif, mal formé ou inconnu
+     * @throws InvalidRegulatoryScopeException if the scope is inactive, malformed, or unknown
      */
     public function assertActive(string $code): RegulatoryScope
     {
