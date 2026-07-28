@@ -31,7 +31,7 @@ final readonly class CreateRegulatoryScopeUseCase
             code: $code,
             label: new RegulatoryScopeLabel($command->label),
             description: new RegulatoryScopeDescription($command->description),
-            allowedDocumentTypes: new AllowedDocumentTypes($command->allowedDocumentTypes),
+            allowedDocumentTypes: AllowedDocumentTypes::fromStrings(...$command->allowedDocumentTypes),
             isActive: $command->isActive,
         );
 

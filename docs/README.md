@@ -8,9 +8,10 @@ Bienvenue dans la documentation officielle du projet **Compliance Store**.
 
 * **[Aperçu Global & Architecture](architecture/overview/index.md)** : Clean Architecture, principes DDD, structure du code et couches applicatives.
 * **[Registre des Décisions d'Architecture (ADRs)](architecture/adr/)** :
-  * [ADR 0001 : Socle réglementaire natif et Port d'extension Provider](architecture/adr/0001-native-compliance-and-extension-port.md)
-  * [ADR 0002 : Chiffrement Enveloppe et Zero Trust Storage](architecture/adr/0002-envelope-encryption-zero-trust.md)
-  * [ADR 0003 : Découplage d'API Platform via State Processors / Providers](architecture/adr/0003-api-platform-decoupling-state-processors.md)
+  * [ADR 0001: Native Compliance Core and Provider Extension Port](architecture/adr/0001-native-compliance-and-extension-port.md)
+  * [ADR 0002: Envelope Encryption and Zero Trust Storage](architecture/adr/0002-envelope-encryption-zero-trust.md)
+  * [ADR 0003: Decoupling API Platform via State Processors / Providers](architecture/adr/0003-api-platform-decoupling-state-processors.md)
+  * [ADR 0004: Mandatory Value Objects in the Domain (no primitives, no native arrays)](architecture/adr/0004-value-objects-in-domain.md)
 * **Workflows & Pipelines** :
   * [Pipeline d'Ingestion & Redaction PII](architecture/workflows/ingestion.md)
   * [Pipeline de Consultation & Déchiffrement](architecture/workflows/consultation.md)

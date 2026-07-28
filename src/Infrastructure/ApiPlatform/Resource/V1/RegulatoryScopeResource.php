@@ -76,11 +76,16 @@ final class RegulatoryScopeResource
 
     public static function fromEntity(RegulatoryScope $scope): self
     {
+        $allowedDocumentTypes = [];
+        foreach ($scope->allowedDocumentTypes() as $documentType) {
+            $allowedDocumentTypes[] = $documentType->value;
+        }
+
         $resource = new self();
         $resource->code = $scope->code()->value;
         $resource->label = $scope->label()->value;
         $resource->description = $scope->description()->value;
-        $resource->allowedDocumentTypes = $scope->allowedDocumentTypes()->toArray();
+        $resource->allowedDocumentTypes = $allowedDocumentTypes;
         $resource->isActive = $scope->isActive();
         $resource->createdAt = $scope->createdAt()->format(\DateTimeInterface::ATOM);
         $resource->updatedAt = $scope->updatedAt()->format(\DateTimeInterface::ATOM);

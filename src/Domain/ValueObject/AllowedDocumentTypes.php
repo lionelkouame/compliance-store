@@ -2,37 +2,58 @@
 
 namespace App\Domain\ValueObject;
 
-final readonly class AllowedDocumentTypes
+/**
+ * Collection immuable de DocumentType.
+ *
+ * Aucune méthode `array` n'est exposée publiquement : la collection se consomme
+ * via `foreach`, `count()` et `contains()`. Le tableau interne est un détail
+ * d'implémentation privé (conversion vers un tableau brut réservée à l'Infrastructure).
+ *
+ * @implements \IteratorAggregate<int, DocumentType>
+ */
+final readonly class AllowedDocumentTypes implements \IteratorAggregate, \Countable
 {
     /**
-     * @var list<string>
+     * @var list<DocumentType>
      */
-    public array $values;
+    private array $documentTypes;
 
-    /**
-     * @param list<string> $values
-     */
-    public function __construct(array $values)
+    public function __construct(DocumentType ...$documentTypes)
     {
-        foreach ($values as $documentType) {
-            if (!\is_string($documentType) || '' === trim($documentType)) {
-                throw new \InvalidArgumentException('Un type de document autorisé ne peut pas être vide.');
+        $this->documentTypes = array_values($documentTypes);
+    }
+
+    public static function fromStrings(string ...$values): self
+    {
+        return new self(...array_map(
+            static fn (string $value): DocumentType => new DocumentType($value),
+            $values,
+        ));
+    }
+
+    public function contains(DocumentType $documentType): bool
+    {
+        foreach ($this->documentTypes as $existing) {
+            if ($existing->equals($documentType)) {
+                return true;
             }
         }
 
-        $this->values = array_values($values);
+        return false;
     }
 
-    public function contains(string $documentType): bool
+    public function isEmpty(): bool
     {
-        return \in_array($documentType, $this->values, true);
+        return [] === $this->documentTypes;
     }
 
-    /**
-     * @return list<string>
-     */
-    public function toArray(): array
+    public function count(): int
     {
-        return $this->values;
+        return \count($this->documentTypes);
+    }
+
+    public function getIterator(): \Traversable
+    {
+        yield from $this->documentTypes;
     }
 }

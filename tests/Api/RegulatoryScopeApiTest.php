@@ -127,7 +127,7 @@ final class RegulatoryScopeApiTest extends ApiTestCase
             code: new RegulatoryScopeCode('OLD_SCOPE'),
             label: new RegulatoryScopeLabel('Ancien périmètre'),
             description: new RegulatoryScopeDescription('Désactivé'),
-            allowedDocumentTypes: new AllowedDocumentTypes([]),
+            allowedDocumentTypes: new AllowedDocumentTypes(),
             isActive: false,
         );
         $repository->add($scope);

@@ -14,13 +14,18 @@ final class AllowedDocumentTypesType extends JsonType
     {
         $decoded = parent::convertToPHPValue($value, $platform);
 
-        return new AllowedDocumentTypes($decoded ?? []);
+        return AllowedDocumentTypes::fromStrings(...($decoded ?? []));
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if ($value instanceof AllowedDocumentTypes) {
-            $value = $value->toArray();
+            $values = [];
+            foreach ($value as $documentType) {
+                $values[] = $documentType->value;
+            }
+
+            $value = $values;
         }
 
         return parent::convertToDatabaseValue($value, $platform);
