@@ -9,6 +9,7 @@
         "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-xml": "*",
         "api-platform/core": "^4.3",
         "doctrine/doctrine-bundle": "^3.3",
         "doctrine/doctrine-migrations-bundle": "^4.0",
@@ -30,6 +31,9 @@
             "symfony/runtime": true
         },
         "bump-after-update": true,
+        "platform": {
+            "ext-xml": "8.4"
+        },
         "sort-packages": true
     },
     "autoload": {

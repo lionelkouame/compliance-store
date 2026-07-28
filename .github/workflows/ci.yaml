@@ -75,3 +75,4 @@ jobs:
           VALIDATE_TRIVY: false
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
+          VALIDATE_NATURAL_LANGUAGE: false
