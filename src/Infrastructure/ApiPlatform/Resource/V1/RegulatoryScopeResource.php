@@ -18,34 +18,35 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'RegulatoryScope',
     operations: [
         new GetCollection(
-            uriTemplate: '/v1/regulatory-scopes',
+            uriTemplate: '/regulatory-scopes',
             openapi: new Operation(
                 tags: ['V1 - Regulatory Scopes'],
-                summary: 'Liste les périmètres réglementaires',
-                description: 'Liste tous les périmètres réglementaires (RegulatoryScope) administrés dynamiquement.',
+                summary: 'List regulatory scopes',
+                description: 'List all dynamically managed regulatory scopes (RegulatoryScope).',
             ),
             provider: RegulatoryScopeCollectionProvider::class,
         ),
         new Get(
-            uriTemplate: '/v1/regulatory-scopes/{code}',
+            uriTemplate: '/regulatory-scopes/{code}',
             uriVariables: ['code'],
             openapi: new Operation(
                 tags: ['V1 - Regulatory Scopes'],
-                summary: 'Détail d\'un périmètre réglementaire',
-                description: 'Récupère un périmètre réglementaire par son code unique.',
+                summary: 'Get regulatory scope details',
+                description: 'Retrieve a regulatory scope by its unique code.',
             ),
             provider: RegulatoryScopeItemProvider::class,
         ),
         new Post(
-            uriTemplate: '/v1/regulatory-scopes',
+            uriTemplate: '/regulatory-scopes',
             openapi: new Operation(
                 tags: ['V1 - Regulatory Scopes'],
-                summary: 'Crée un périmètre réglementaire',
-                description: 'Crée dynamiquement un nouveau périmètre réglementaire, immédiatement utilisable par le moteur de règles.',
+                summary: 'Create a regulatory scope',
+                description: 'Dynamically create a new regulatory scope, immediately available for the rules engine.',
             ),
             processor: RegulatoryScopeProcessor::class,
         ),
     ],
+    routePrefix: '/v1',
 )]
 final class RegulatoryScopeResource
 {
@@ -53,7 +54,7 @@ final class RegulatoryScopeResource
     #[Assert\NotBlank]
     #[Assert\Regex(
         pattern: '/^[A-Z][A-Z0-9_]*$/',
-        message: 'Le code doit être en MAJUSCULES_SNAKE_CASE (ex: KYC_INDIVIDUAL).',
+        message: 'The code must be in UPPERCASE_SNAKE_CASE (e.g. KYC_INDIVIDUAL).',
     )]
     public ?string $code = null;
 

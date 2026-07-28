@@ -9,9 +9,10 @@ use ApiPlatform\OpenApi\Model\Operation;
 
 #[ApiResource(
     shortName: 'HealthCheck',
+    routePrefix: '/v1',
     operations: [
         new Get(
-            uriTemplate: '/v1/health',
+            uriTemplate: '/health',
             openapi: new Operation(
                 tags: ['V1 - System'],
                 summary: 'Vérifie l\'état de santé de l\'API (V1)',
