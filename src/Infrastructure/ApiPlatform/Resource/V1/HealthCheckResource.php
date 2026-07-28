@@ -9,7 +9,6 @@ use ApiPlatform\OpenApi\Model\Operation;
 
 #[ApiResource(
     shortName: 'HealthCheck',
-    routePrefix: '/v1',
     operations: [
         new Get(
             uriTemplate: '/health',
@@ -21,7 +20,8 @@ use ApiPlatform\OpenApi\Model\Operation;
             description: 'Vérifie l\'état de santé de l\'API V1 et de la Clean Architecture',
             provider: HealthCheckStateProvider::class
         ),
-    ]
+    ],
+    routePrefix: '/v1'
 )]
 final class HealthCheckResource
 {
