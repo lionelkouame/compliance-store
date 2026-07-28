@@ -6,6 +6,6 @@ final class InvalidRegulatoryScopeException extends \DomainException
 {
     public static function forCode(string $code): self
     {
-        return new self(\sprintf('Le périmètre réglementaire "%s" est inactif ou inconnu.', $code));
+        return new self(\sprintf('The regulatory scope "%s" is inactive or unknown.', $code));
     }
 }
