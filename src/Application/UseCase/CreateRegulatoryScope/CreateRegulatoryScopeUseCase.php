@@ -5,6 +5,10 @@ namespace App\Application\UseCase\CreateRegulatoryScope;
 use App\Domain\Entity\RegulatoryScope;
 use App\Domain\Exception\RegulatoryScopeAlreadyExistsException;
 use App\Domain\Port\Repository\RegulatoryScopeRepositoryInterface;
+use App\Domain\ValueObject\AllowedDocumentTypes;
+use App\Domain\ValueObject\RegulatoryScopeCode;
+use App\Domain\ValueObject\RegulatoryScopeDescription;
+use App\Domain\ValueObject\RegulatoryScopeLabel;
 
 final readonly class CreateRegulatoryScopeUseCase
 {
@@ -17,15 +21,17 @@ final readonly class CreateRegulatoryScopeUseCase
      */
     public function execute(CreateRegulatoryScopeCommand $command): RegulatoryScope
     {
-        if ($this->regulatoryScopes->existsByCode($command->code)) {
+        $code = new RegulatoryScopeCode($command->code);
+
+        if ($this->regulatoryScopes->existsByCode($code)) {
             throw RegulatoryScopeAlreadyExistsException::forCode($command->code);
         }
 
         $scope = RegulatoryScope::create(
-            code: $command->code,
-            label: $command->label,
-            description: $command->description,
-            allowedDocumentTypes: $command->allowedDocumentTypes,
+            code: $code,
+            label: new RegulatoryScopeLabel($command->label),
+            description: new RegulatoryScopeDescription($command->description),
+            allowedDocumentTypes: new AllowedDocumentTypes($command->allowedDocumentTypes),
             isActive: $command->isActive,
         );
 

@@ -7,6 +7,10 @@ use App\Domain\Entity\RegulatoryScope;
 use App\Domain\Exception\InvalidRegulatoryScopeException;
 use App\Domain\Port\Repository\RegulatoryScopeRepositoryInterface;
 use App\Domain\Service\RegulatoryScopeValidator;
+use App\Domain\ValueObject\AllowedDocumentTypes;
+use App\Domain\ValueObject\RegulatoryScopeCode;
+use App\Domain\ValueObject\RegulatoryScopeDescription;
+use App\Domain\ValueObject\RegulatoryScopeLabel;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class RegulatoryScopeApiTest extends ApiTestCase
@@ -120,10 +124,10 @@ final class RegulatoryScopeApiTest extends ApiTestCase
         $validator = self::getContainer()->get(RegulatoryScopeValidator::class);
 
         $scope = RegulatoryScope::create(
-            code: 'OLD_SCOPE',
-            label: 'Ancien périmètre',
-            description: 'Désactivé',
-            allowedDocumentTypes: [],
+            code: new RegulatoryScopeCode('OLD_SCOPE'),
+            label: new RegulatoryScopeLabel('Ancien périmètre'),
+            description: new RegulatoryScopeDescription('Désactivé'),
+            allowedDocumentTypes: new AllowedDocumentTypes([]),
             isActive: false,
         );
         $repository->add($scope);

@@ -5,6 +5,7 @@ namespace App\Domain\Service;
 use App\Domain\Entity\RegulatoryScope;
 use App\Domain\Exception\InvalidRegulatoryScopeException;
 use App\Domain\Port\Repository\RegulatoryScopeRepositoryInterface;
+use App\Domain\ValueObject\RegulatoryScopeCode;
 
 /**
  * Vérifie dynamiquement qu'un code de périmètre réglementaire est connu et actif
@@ -17,11 +18,17 @@ final readonly class RegulatoryScopeValidator
     ) {}
 
     /**
-     * @throws InvalidRegulatoryScopeException si le périmètre est inactif ou inconnu
+     * @throws InvalidRegulatoryScopeException si le périmètre est inactif, mal formé ou inconnu
      */
     public function assertActive(string $code): RegulatoryScope
     {
-        $scope = $this->regulatoryScopes->findActiveByCode($code);
+        try {
+            $scopeCode = new RegulatoryScopeCode($code);
+        } catch (\InvalidArgumentException) {
+            throw InvalidRegulatoryScopeException::forCode($code);
+        }
+
+        $scope = $this->regulatoryScopes->findActiveByCode($scopeCode);
 
         if (null === $scope) {
             throw InvalidRegulatoryScopeException::forCode($code);

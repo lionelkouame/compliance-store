@@ -4,6 +4,7 @@ namespace App\Infrastructure\Persistence;
 
 use App\Domain\Entity\RegulatoryScope;
 use App\Domain\Port\Repository\RegulatoryScopeRepositoryInterface;
+use App\Domain\ValueObject\RegulatoryScopeCode;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,14 +18,14 @@ final class RegulatoryScopeRepository extends ServiceEntityRepository implements
         parent::__construct($registry, RegulatoryScope::class);
     }
 
-    public function findByCode(string $code): ?RegulatoryScope
+    public function findByCode(RegulatoryScopeCode $code): ?RegulatoryScope
     {
-        return $this->find($code);
+        return $this->find($code->value);
     }
 
-    public function findActiveByCode(string $code): ?RegulatoryScope
+    public function findActiveByCode(RegulatoryScopeCode $code): ?RegulatoryScope
     {
-        return $this->findOneBy(['code' => $code, 'isActive' => true]);
+        return $this->findOneBy(['code' => $code->value, 'isActive' => true]);
     }
 
     public function findAll(): array
@@ -32,9 +33,9 @@ final class RegulatoryScopeRepository extends ServiceEntityRepository implements
         return parent::findAll();
     }
 
-    public function existsByCode(string $code): bool
+    public function existsByCode(RegulatoryScopeCode $code): bool
     {
-        return null !== $this->find($code);
+        return null !== $this->find($code->value);
     }
 
     public function add(RegulatoryScope $regulatoryScope): void

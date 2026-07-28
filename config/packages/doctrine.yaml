@@ -7,6 +7,15 @@ doctrine:
         #server_version: '16'
 
         profiling_collect_backtrace: '%kernel.debug%'
+        types:
+            regulatory_scope_code:
+                class: App\Infrastructure\Persistence\Type\RegulatoryScopeCodeType
+            regulatory_scope_label:
+                class: App\Infrastructure\Persistence\Type\RegulatoryScopeLabelType
+            regulatory_scope_description:
+                class: App\Infrastructure\Persistence\Type\RegulatoryScopeDescriptionType
+            allowed_document_types:
+                class: App\Infrastructure\Persistence\Type\AllowedDocumentTypesType
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

@@ -4,6 +4,7 @@ namespace App\Application\UseCase\GetRegulatoryScopeByCode;
 
 use App\Domain\Entity\RegulatoryScope;
 use App\Domain\Port\Repository\RegulatoryScopeRepositoryInterface;
+use App\Domain\ValueObject\RegulatoryScopeCode;
 
 final readonly class GetRegulatoryScopeByCodeUseCase
 {
@@ -13,6 +14,12 @@ final readonly class GetRegulatoryScopeByCodeUseCase
 
     public function execute(string $code): ?RegulatoryScope
     {
-        return $this->regulatoryScopes->findByCode($code);
+        try {
+            $scopeCode = new RegulatoryScopeCode($code);
+        } catch (\InvalidArgumentException) {
+            return null;
+        }
+
+        return $this->regulatoryScopes->findByCode($scopeCode);
     }
 }

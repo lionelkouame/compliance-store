@@ -2,35 +2,34 @@
 
 namespace App\Domain\Entity;
 
+use App\Domain\ValueObject\AllowedDocumentTypes;
+use App\Domain\ValueObject\RegulatoryScopeCode;
+use App\Domain\ValueObject\RegulatoryScopeDescription;
+use App\Domain\ValueObject\RegulatoryScopeLabel;
+
 /**
- * Périmètre réglementaire administrable dynamiquement (No-Code).
+ * Dynamically manageable regulatory scope (No-Code).
  *
- * Type un flux de documents (ex: KYC_INDIVIDUAL, GDPR_RETENTION) sans nécessiter
- * de redéploiement : la liste des périmètres n'est jamais figée en code (enum).
+ * Types a document flow (e.g. KYC_INDIVIDUAL, GDPR_RETENTION) without requiring
+ * redeployment: the list of scopes is never hardcoded (enum).
  */
 final class RegulatoryScope
 {
-    /**
-     * @param list<string> $allowedDocumentTypes
-     */
     private function __construct(
-        private readonly string $code,
-        private string $label,
-        private string $description,
-        private array $allowedDocumentTypes,
+        private readonly RegulatoryScopeCode $code,
+        private RegulatoryScopeLabel $label,
+        private RegulatoryScopeDescription $description,
+        private AllowedDocumentTypes $allowedDocumentTypes,
         private bool $isActive,
         private readonly \DateTimeImmutable $createdAt,
         private \DateTimeImmutable $updatedAt,
     ) {}
 
-    /**
-     * @param list<string> $allowedDocumentTypes
-     */
     public static function create(
-        string $code,
-        string $label,
-        string $description,
-        array $allowedDocumentTypes,
+        RegulatoryScopeCode $code,
+        RegulatoryScopeLabel $label,
+        RegulatoryScopeDescription $description,
+        AllowedDocumentTypes $allowedDocumentTypes,
         bool $isActive = true,
     ): self {
         $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
@@ -46,25 +45,22 @@ final class RegulatoryScope
         );
     }
 
-    public function code(): string
+    public function code(): RegulatoryScopeCode
     {
         return $this->code;
     }
 
-    public function label(): string
+    public function label(): RegulatoryScopeLabel
     {
         return $this->label;
     }
 
-    public function description(): string
+    public function description(): RegulatoryScopeDescription
     {
         return $this->description;
     }
 
-    /**
-     * @return list<string>
-     */
-    public function allowedDocumentTypes(): array
+    public function allowedDocumentTypes(): AllowedDocumentTypes
     {
         return $this->allowedDocumentTypes;
     }
