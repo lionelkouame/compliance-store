@@ -8,7 +8,7 @@ final readonly class DocumentType
         public string $value,
     ) {
         if ('' === trim($this->value)) {
-            throw new \InvalidArgumentException('Un type de document ne peut pas être vide.');
+            throw new \InvalidArgumentException('A document type cannot be empty.');
         }
     }
 

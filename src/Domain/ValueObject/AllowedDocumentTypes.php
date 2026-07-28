@@ -3,11 +3,11 @@
 namespace App\Domain\ValueObject;
 
 /**
- * Collection immuable de DocumentType.
+ * Immutable collection of DocumentType.
  *
- * Aucune méthode `array` n'est exposée publiquement : la collection se consomme
- * via `foreach`, `count()` et `contains()`. Le tableau interne est un détail
- * d'implémentation privé (conversion vers un tableau brut réservée à l'Infrastructure).
+ * No raw array is exposed publicly: the collection is consumed via
+ * `foreach`, `count()`, and `contains()`. The internal array is a private
+ * implementation detail (conversion to a plain array is reserved for Infrastructure).
  *
  * @implements \IteratorAggregate<int, DocumentType>
  */

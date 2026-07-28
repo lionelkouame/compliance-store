@@ -11,7 +11,7 @@ final readonly class RegulatoryScopeCode
     ) {
         if (1 !== preg_match(self::PATTERN, $this->value)) {
             throw new \InvalidArgumentException(\sprintf(
-                'Le code "%s" est invalide : format attendu MAJUSCULES_SNAKE_CASE (ex: KYC_INDIVIDUAL).',
+                'The code "%s" is invalid: expected format is UPPERCASE_SNAKE_CASE (e.g. KYC_INDIVIDUAL).',
                 $this->value,
             ));
         }

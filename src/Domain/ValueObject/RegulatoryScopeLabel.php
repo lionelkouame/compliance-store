@@ -10,12 +10,12 @@ final readonly class RegulatoryScopeLabel
         public string $value,
     ) {
         if ('' === trim($this->value)) {
-            throw new \InvalidArgumentException('Le libellé du périmètre réglementaire ne peut pas être vide.');
+            throw new \InvalidArgumentException('The regulatory scope label cannot be empty.');
         }
 
         if (\strlen($this->value) > self::MAX_LENGTH) {
             throw new \InvalidArgumentException(\sprintf(
-                'Le libellé du périmètre réglementaire ne peut pas dépasser %d caractères.',
+                'The regulatory scope label cannot exceed %d characters.',
                 self::MAX_LENGTH,
             ));
         }
