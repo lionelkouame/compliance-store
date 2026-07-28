@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\ApiPlatform\State\V1;
 
 use ApiPlatform\Metadata\Operation;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\UseCase\ListRegulatoryScopes;
 
 use App\Domain\Entity\RegulatoryScope;
