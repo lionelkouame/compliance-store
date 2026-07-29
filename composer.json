@@ -40,6 +40,7 @@
             "ext-intl": "8.4",
             "ext-pdo": "8.4",
             "ext-pdo_pgsql": "8.4",
+            "ext-session": "8.4",
             "ext-xml": "8.4",
             "ext-zip": "1.2"
         },

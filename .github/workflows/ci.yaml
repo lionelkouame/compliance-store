@@ -69,7 +69,7 @@ jobs:
       - name: Lint Code Base
         uses: super-linter/super-linter/slim@v7
         env:
-          COMPOSER_OPTIONS: "--ignore-platform-reqs"
+          COMPOSER_OPTIONS: "--ignore-platform-reqs --no-scripts"
           GITHUB_ACTIONS_CONFIG_FILE: actionlint.yaml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_CHECKOV: false
