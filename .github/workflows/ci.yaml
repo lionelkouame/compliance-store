@@ -84,6 +84,8 @@ jobs:
           VALIDATE_MARKDOWN_PRETTIER: false
           VALIDATE_YAML_PRETTIER: false
           VALIDATE_PHP_STAN: false
+          VALIDATE_PHP_PHPSTAN: false
+          VALIDATE_PHPSTAN: false
           VALIDATE_PHP_PSALM: false
           VALIDATE_PHP_PHPCS: false
           VALIDATE_PHP_CS_FIXER: false
