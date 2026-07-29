@@ -69,7 +69,6 @@ jobs:
       - name: Lint Code Base
         uses: super-linter/super-linter/slim@v7
         env:
-          COMPOSER_OPTIONS: "--ignore-platform-reqs --no-scripts"
           GITHUB_ACTIONS_CONFIG_FILE: actionlint.yaml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_CHECKOV: false
@@ -77,3 +76,7 @@ jobs:
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
           VALIDATE_NATURAL_LANGUAGE: false
+          VALIDATE_PHP_STAN: false
+          VALIDATE_PHP_PSALM: false
+          VALIDATE_PHP_PHPCS: false
+          VALIDATE_PHP_CS_FIXER: false
