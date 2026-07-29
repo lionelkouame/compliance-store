@@ -31,8 +31,17 @@
             "symfony/runtime": true
         },
         "bump-after-update": true,
+        "platform-check": false,
         "platform": {
-            "ext-xml": "8.4"
+            "php": "8.4.1",
+            "ext-apcu": "5.1",
+            "ext-ctype": "8.4",
+            "ext-iconv": "8.4",
+            "ext-intl": "8.4",
+            "ext-pdo": "8.4",
+            "ext-pdo_pgsql": "8.4",
+            "ext-xml": "8.4",
+            "ext-zip": "1.2"
         },
         "sort-packages": true
     },
