@@ -67,8 +67,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Lint Code Base
-        uses: super-linter/super-linter/slim@v7
+        uses: super-linter/super-linter@v7
         env:
+          DEFAULT_BRANCH: main
+          FILTER_REGEX_EXCLUDE: .*vendor/.*
           GITHUB_ACTIONS_CONFIG_FILE: actionlint.yaml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: false
@@ -83,9 +85,7 @@ jobs:
           VALIDATE_JSCPD: false
           VALIDATE_MARKDOWN_PRETTIER: false
           VALIDATE_YAML_PRETTIER: false
-          VALIDATE_PHP_STAN: false
           VALIDATE_PHP_PHPSTAN: false
-          VALIDATE_PHPSTAN: false
           VALIDATE_PHP_PSALM: false
           VALIDATE_PHP_PHPCS: false
           VALIDATE_PHP_CS_FIXER: false
