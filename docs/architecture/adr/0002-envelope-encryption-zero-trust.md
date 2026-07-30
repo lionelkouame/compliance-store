@@ -1,40 +1,40 @@
-# ADR 0002 : Chiffrement Enveloppe et Zero Trust Storage
+# ADR 0002: Envelope Encryption and Zero Trust Storage
 
-* **Statut** : Accepté
-* **Date** : 2026-07-24
-* **Auteurs** : Équipe Architecture & Sécurité
-* **Projet** : Compliance Store
-
----
-
-## Context (Contexte)
-
-Les documents stockés par Compliance Store sont hautement confidentiels (CNI, passeports, fiches de paie). Le stockage technique (MinIO, AWS S3, Azure Blob) ne doit jamais recevoir ni conserver un document en clair (*Zero Trust Storage*).
-
-De plus, si un document doit être masqué (redaction PII) ou analysé par OCR, cette opération doit se faire sur le binaire en clair **uniquement en mémoire RAM** avant d'être chiffrée.
+* **Status**: Accepted
+* **Date**: 2026-07-24
+* **Authors**: Architecture & Security Team
+* **Project**: Compliance Store
 
 ---
 
-## Decision (Décision retenue)
+## Context
 
-1. **Chiffrement systématique avant écriture (`CipherPort`)** :
-   * Aucun octet n'est envoyé au `StorageGatewayInterface` sans avoir été au préalable chiffré par l'application via `sodium_crypto_secretbox` (ou KMS/Vault).
+Documents stored by Compliance Store are highly confidential (ID cards, passports, payslips). The storage backend (MinIO, AWS S3, Azure Blob) must never receive or retain a document in plaintext (*Zero Trust Storage*).
 
-2. **Chiffrement Enveloppe (Envelope Encryption)** :
-   * Chaque document est chiffré avec une clé de données unique (Data Key).
-   * La Data Key est elle-même chiffrée par une clé maître (Master Key / KMS).
-
-3. **Placement dans le Pipeline** :
-   * Ingestion : `Réception` $\rightarrow$ `Vérification Conformité` $\rightarrow$ `Redaction / Masquage PII (mémoire)` $\rightarrow$ `Chiffrement (CipherPort)` $\rightarrow$ `Stockage (StorageGateway)`.
-   * Consultation : `Lecture Stockage (Chiffré)` $\rightarrow$ `Déchiffrement (mémoire)` $\rightarrow$ `Redaction Dynamique (si accès partiel)` $\rightarrow$ `Restitution HTTP`.
+Furthermore, if a document needs to be masked (PII redaction) or analyzed by OCR, this operation must happen on the plaintext binary **only in RAM**, before it is encrypted.
 
 ---
 
-## Consequences (Conséquences)
+## Decision
 
-### Positives
-* **Confidentialité totale** : Même en cas de fuite du bucket S3 ou des disques durs, les données restent totalement illisibles sans la clé master KMS.
-* **Redaction préservée** : Permet d'appliquer le biffage réglementaire sur le document avant son chiffrement final.
+1. **Systematic encryption before write (`CipherPort`)**:
+   * No byte is sent to the `StorageGatewayInterface` without first being encrypted by the application via `sodium_crypto_secretbox` (or KMS/Vault).
 
-### Négatives
-* Gestion et rotation sécurisée des clés maîtres (KMS / variables d'environnement sécurisées).
+2. **Envelope Encryption**:
+   * Each document is encrypted with a unique Data Key.
+   * The Data Key is itself encrypted by a Master Key (KMS).
+
+3. **Placement in the Pipeline**:
+   * Ingestion: `Reception` $\rightarrow$ `Compliance Check` $\rightarrow$ `PII Redaction / Masking (in memory)` $\rightarrow$ `Encryption (CipherPort)` $\rightarrow$ `Storage (StorageGateway)`.
+   * Consultation: `Storage Read (Encrypted)` $\rightarrow$ `Decryption (in memory)` $\rightarrow$ `Dynamic Redaction (if partial access)` $\rightarrow$ `HTTP Response`.
+
+---
+
+## Consequences
+
+### Positive
+* **Total confidentiality**: Even if the S3 bucket or hard drives leak, data remains completely unreadable without the master KMS key.
+* **Redaction preserved**: Allows applying regulatory redaction to the document before its final encryption.
+
+### Negative
+* Secure management and rotation of master keys (KMS / secured environment variables).

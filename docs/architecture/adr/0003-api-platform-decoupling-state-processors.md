@@ -1,44 +1,44 @@
-# ADR 0003 : Découplage d'API Platform et de la Clean Architecture via State Processors / Providers
+# ADR 0003: Decoupling API Platform from Clean Architecture via State Processors / Providers
 
-* **Statut** : Accepté
-* **Date** : 2026-07-24
-* **Auteurs** : Équipe Architecture
-* **Projet** : Compliance Store
-
----
-
-## Context (Contexte)
-
-Par défaut, API Platform encourage l'annotation directe des Entités Doctrine (`#[ApiResource]` et `#[ORM\Column]`) dans le même fichier. 
-
-Dans le cadre de **Compliance Store**, cette approche standard présente trois inconvénients majeurs :
-1. **Violation du DDD & Clean Architecture** : La couche Domaine deviendrait couplée au framework HTTP (API Platform) et au système de persistance (Doctrine ORM).
-2. **Contournement des règles de sécurité** : L'écriture directe en base de données par API Platform sauterait le pipeline de vérification de conformité, de masquage PII et de chiffrement (`CipherPort`).
-3. **Rigidité des Contrats d'API** : Impossible de faire évoluer le modèle de réponse HTTP indépendamment de la structure interne des données.
+* **Status**: Accepted
+* **Date**: 2026-07-24
+* **Authors**: Architecture Team
+* **Project**: Compliance Store
 
 ---
 
-## Decision (Décision retenue)
+## Context
 
-Nous décidons de séparer strictement la couche d'Exposition HTTP (API Platform) du Domaine métier :
+By default, API Platform encourages annotating Doctrine Entities directly (`#[ApiResource]` and `#[ORM\Column]`) in the same file.
 
-1. **Entités Domaine Pures (`src/Domain/Entity/`)** :
-   * Classes PHP pures sans aucun attribut `#[ApiResource]` ni annotation Doctrine.
-   * Contiennent uniquement la logique métier, les invariants et le comportement.
-
-2. **Ressources d'Exposition API (`src/Infrastructure/ApiPlatform/Resource/`)** :
-   * Des DTOs légers portant les attributs `#[ApiResource]` pour définir les endpoints REST et la documentation OpenAPI/Swagger.
-
-3. **Délégation aux Use Cases via State Processors & Providers** :
-   * **Lectures (`GET`)** : Gérées par un `StateProviderInterface` (`src/Infrastructure/ApiPlatform/State/`) qui appelle le `ConsultDocumentUseCase`.
-   * **Écritures (`POST`/`DELETE`)** : Gérées par un `StateProcessorInterface` qui transmet l'entrée au `StoreDocumentUseCase`.
+Within **Compliance Store**, this standard approach has three major drawbacks:
+1. **Violation of DDD & Clean Architecture**: The Domain layer would become coupled to the HTTP framework (API Platform) and the persistence system (Doctrine ORM).
+2. **Bypassing security rules**: Direct database writes by API Platform would skip the compliance-check, PII-masking and encryption (`CipherPort`) pipeline.
+3. **Rigid API contracts**: Impossible to evolve the HTTP response model independently of the internal data structure.
 
 ---
 
-## Architecture du Flux d'Exposition
+## Decision
+
+We decide to strictly separate the HTTP Exposure layer (API Platform) from the business Domain:
+
+1. **Pure Domain Entities (`src/Domain/Entity/`)**:
+   * Pure PHP classes with no `#[ApiResource]` attribute and no Doctrine annotation.
+   * Contain only business logic, invariants and behavior.
+
+2. **API Exposure Resources (`src/Infrastructure/ApiPlatform/Resource/`)**:
+   * Lightweight DTOs carrying the `#[ApiResource]` attributes to define REST endpoints and OpenAPI/Swagger documentation.
+
+3. **Delegation to Use Cases via State Processors & Providers**:
+   * **Reads (`GET`)**: Handled by a `StateProviderInterface` (`src/Infrastructure/ApiPlatform/State/`) that calls the `ConsultDocumentUseCase`.
+   * **Writes (`POST`/`DELETE`)**: Handled by a `StateProcessorInterface` that forwards the input to the `StoreDocumentUseCase`.
+
+---
+
+## Exposure Flow Architecture
 
 ```text
-Requête HTTP (JSON/REST)
+HTTP Request (JSON/REST)
        │
        ▼
 [DocumentResource DTO] (Infrastructure/ApiPlatform/Resource)
@@ -58,12 +58,12 @@ Requête HTTP (JSON/REST)
 
 ---
 
-## Consequences (Conséquences)
+## Consequences
 
-### Positives
-* **Domaine 100% Pur** : Aucune dépendance vers Symfony, API Platform ou Doctrine dans le domaine.
-* **Garantie de Sécurité** : Impossible d'enregistrer un document sans passer par le Use Case (qui exécute la redaction PII et le chiffrement Libsodium).
-* **Évolutivité de l'API** : Facilité de créer des versions d'API (v1, v2) avec des DTOs différents sans impacter la logique métier.
+### Positive
+* **100% Pure Domain**: No dependency on Symfony, API Platform or Doctrine in the domain.
+* **Security guarantee**: Impossible to save a document without going through the Use Case (which runs PII redaction and Libsodium encryption).
+* **API evolvability**: Easy to create API versions (v1, v2) with different DTOs without impacting business logic.
 
-### Négatives
-* Nécessite la création de DTOs et de classes `StateProcessor`/`StateProvider` au lieu d'utiliser le générateur automatique CRUD d'API Platform.
+### Negative
+* Requires creating DTOs and `StateProcessor`/`StateProvider` classes instead of using API Platform's automatic CRUD generator.

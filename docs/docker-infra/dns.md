@@ -1,5 +1,7 @@
 # Configuration du DNS Local (`compliance-store.loc`)
 
+<!-- markdownlint-disable MD013 -->
+
 Ce document explique comment configurer et utiliser le nom de domaine local `compliance-store.loc` pour le développement de l'application **Compliance Store**.
 
 ---

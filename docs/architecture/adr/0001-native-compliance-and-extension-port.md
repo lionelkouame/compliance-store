@@ -1,54 +1,54 @@
-# ADR 0001 : Socle réglementaire natif et Port d'extension Provider
+# ADR 0001: Native Compliance Core and Provider Extension Port
 
-* **Statut** : Accepté
-* **Date** : 2026-07-24
-* **Auteurs** : Équipe Architecture & Conformité
-* **Projet** : Compliance Store
-
----
-
-## Context (Contexte)
-
-Dans les projets gérant des documents sensibles (CNI, passeports, justificatifs), la conformité réglementaire (RGPD, durées de rétention, masquage de données PII) est souvent dispersée ou déléguée aveuglément à des services externes (ex: Onfido, Veriff) ou des buckets S3 basiques.
-
-Cette approche présente deux risques majeurs :
-1. **Domaine anémique** : Compliance Store deviendrait un simple proxy passe-plat sans intelligence métier propre.
-2. **Lock-in Fournisseur** : Impossible de changer de prestataire de vérification sans réécrire l'application.
+* **Status**: Accepted
+* **Date**: 2026-07-24
+* **Authors**: Architecture & Compliance Team
+* **Project**: Compliance Store
 
 ---
 
-## Decision (Décision retenue)
+## Context
 
-Nous décidons d'adopter une **stratégie de composition additive** basée sur la Clean Architecture :
+In projects handling sensitive documents (ID cards, passports, proof of address), regulatory compliance (GDPR, retention periods, PII masking) is often scattered or blindly delegated to external services (e.g. Onfido, Veriff) or plain S3 buckets.
 
-1. **Socle Réglementaire Natif (Dans le Domaine)** :
-   * Le domaine métier porte un **socle de conformité natif** entièrement configurable par l'équipe de conformité (sans déploiement de code).
-   * Ce socle garantit les invariants légaux durs (durée maximale de rétention, obligation de chiffrement, masquage PII par défaut).
-
-2. **Port d'Extension Provider (`ExternalComplianceGatewayInterface`)** :
-   * Le domaine expose un port d'extension permettant de brancher des providers externes optionnels (ex: Onfido, Veriff, KYC externes).
-
-3. **Règle d'Additivité ("Fail-Closed")** :
-   * Un document doit valider **à la fois** le socle natif **ET** les règles du provider externe.
-   * Le provider externe ne peut **jamais** affaiblir la sécurité ou les règles du socle natif, il ne peut que les renforcer.
+This approach carries two major risks:
+1. **Anemic Domain**: Compliance Store would become a simple pass-through proxy with no business intelligence of its own.
+2. **Vendor Lock-in**: Impossible to switch verification providers without rewriting the application.
 
 ---
 
-## Heuristique de classement d'une règle
+## Decision
 
-| Origine du changement | Emplacement de la règle | Exemple |
+We decide to adopt an **additive composition strategy** based on Clean Architecture:
+
+1. **Native Compliance Core (in the Domain)**:
+   * The business domain carries a **native compliance core**, fully configurable by the compliance team (without code deployment).
+   * This core guarantees hard legal invariants (maximum retention period, mandatory encryption, PII masking by default).
+
+2. **Provider Extension Port (`ExternalComplianceGatewayInterface`)**:
+   * The domain exposes an extension port allowing optional external providers to be plugged in (e.g. Onfido, Veriff, external KYC).
+
+3. **Additivity Rule ("Fail-Closed")**:
+   * A document must validate **both** the native core **AND** the external provider's rules.
+   * The external provider can **never** weaken the security or rules of the native core, it can only reinforce them.
+
+---
+
+## Rule Classification Heuristic
+
+| Origin of the change | Location of the rule | Example |
 | :--- | :--- | :--- |
-| Évolution légale / RGPD / Réglementation | **Domaine (Socle Natif)** | Réduction de la durée de conservation d'un passeport de 5 à 3 ans. |
-| Changement de partenaire / Fournisseur technique | **Infrastructure (Provider)** | Vérification supplémentaire du score de fraude d'Onfido. |
+| Legal / GDPR / regulatory change | **Domain (Native Core)** | Reducing a passport's retention period from 5 to 3 years. |
+| Partner / technical vendor change | **Infrastructure (Provider)** | Additional fraud-score check from Onfido. |
 
 ---
 
-## Consequences (Conséquences)
+## Consequences
 
-### Positives
-* **Autonomie de l'équipe conformité** : Possibilité de faire évoluer le socle natif de manière dynamique.
-* **Sécurité renforcée** : Les règles métier dures sont protégées contre les défaillances ou configurations laxistes des providers tiers.
-* **Indépendance technique** : Changement de provider externe sans impact sur le domaine.
+### Positive
+* **Compliance team autonomy**: Ability to evolve the native core dynamically.
+* **Reinforced security**: Hard business rules are protected against failures or lax configuration of third-party providers.
+* **Technical independence**: Switching external providers has no impact on the domain.
 
-### Négatives / Défis
-* Nécessite le développement d'un moteur de règles déclaratif (ex: basé sur `Symfony ExpressionLanguage`) dans la couche Domaine.
+### Negative / Challenges
+* Requires building a declarative rules engine (e.g. based on `Symfony ExpressionLanguage`) in the Domain layer.

@@ -1,0 +1,48 @@
+### Create a RegulatoryScope dynamically (No-Code)
+POST {{apiUrl}}/regulatory-scopes
+Content-Type: application/ld+json
+Accept: application/ld+json
+
+{
+  "code": "CREDIT_AUDIT",
+  "label": "Audit de solvabilité crédit",
+  "description": "Nouveau cas d'usage métier ajouté à la volée",
+  "allowedDocumentTypes": ["BANK_STATEMENT", "PAYSLIP"],
+  "isActive": true
+}
+
+> {%
+    client.test("Status code is 201 Created", function() {
+        client.assert(response.status === 201, "Expected 201 Created");
+    });
+%}
+
+### List RegulatoryScopes
+GET {{apiUrl}}/regulatory-scopes
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### Get a RegulatoryScope by code
+GET {{apiUrl}}/regulatory-scopes/CREDIT_AUDIT
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### Get an unknown RegulatoryScope
+GET {{apiUrl}}/regulatory-scopes/DOES_NOT_EXIST
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 404", function() {
+        client.assert(response.status === 404, "Expected 404 Not Found");
+    });
+%}

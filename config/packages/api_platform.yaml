@@ -3,6 +3,9 @@ api_platform:
     version: 1.0.0
     description: Open-source REST API for regulatory compliance, zero-trust envelope encryption, and sensitive document storage lifecycle.
     enable_swagger_ui: true
+    formats:
+        jsonld: ['application/ld+json']
+        json: ['application/json']
     mapping:
         paths:
             - '%kernel.project_dir%/src/Infrastructure/ApiPlatform/Resource'
@@ -10,3 +13,6 @@ api_platform:
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
+    exception_to_status:
+        App\Domain\Exception\InvalidRegulatoryScopeException: 422
+        App\Domain\Exception\RegulatoryScopeAlreadyExistsException: 409

@@ -13,3 +13,8 @@
 # HTTP Client private environments
 http-client.private.env.json
 
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###

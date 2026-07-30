@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\ApiPlatform\Resource\V1;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -11,16 +13,17 @@ use ApiPlatform\OpenApi\Model\Operation;
     shortName: 'HealthCheck',
     operations: [
         new Get(
-            uriTemplate: '/v1/health',
+            uriTemplate: '/health',
             openapi: new Operation(
                 tags: ['V1 - System'],
-                summary: 'Vérifie l\'état de santé de l\'API (V1)',
-                description: 'Endpoint léger de test de validation de la Clean Architecture V1.'
+                summary: 'Check API health status (V1)',
+                description: 'Lightweight test endpoint to validate Clean Architecture V1.'
             ),
-            description: 'Vérifie l\'état de santé de l\'API V1 et de la Clean Architecture',
+            description: 'Check V1 API health status and Clean Architecture',
             provider: HealthCheckStateProvider::class
         ),
-    ]
+    ],
+    routePrefix: '/v1'
 )]
 final class HealthCheckResource
 {
