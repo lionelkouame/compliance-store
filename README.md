@@ -1,5 +1,16 @@
 # Compliance Store API
 
+[![CI](https://github.com/lionelkouame/compliance-store/actions/workflows/ci.yaml/badge.svg)](https://github.com/lionelkouame/compliance-store/actions/workflows/ci.yaml)
+![PHP](https://img.shields.io/badge/PHP-%3E%3D%208.5-777BB4?logo=php&logoColor=white)
+![Symfony](https://img.shields.io/badge/Symfony-8.1-000000?logo=symfony&logoColor=white)
+![API Platform](https://img.shields.io/badge/API%20Platform-v4.3-30B69E?logo=apiplatform&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
+![FrankenPHP](https://img.shields.io/badge/FrankenPHP-Ready-00A88F?logo=frankenphp&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
+![PHPUnit](https://img.shields.io/badge/PHPUnit-Passing-3776AB?logo=phpunit&logoColor=white)
+![Super-Linter](https://img.shields.io/badge/Super--Linter-Passing-2088FF?logo=githubactions&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **Compliance Store** is a highly available, secure open-source REST API designed for managing the full lifecycle of sensitive document storage (IDs, passports, utility bills).
 
 It provides fine-grained regulatory compliance management, *Zero Trust* envelope encryption, automated PII data masking/redaction, and integrates seamlessly with any storage provider (AWS S3, MinIO, Azure Blob, Local File System).
