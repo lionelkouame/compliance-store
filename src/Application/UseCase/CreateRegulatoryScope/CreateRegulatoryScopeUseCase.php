@@ -11,7 +11,6 @@ use App\Domain\Port\Service\IdGeneratorInterface;
 use App\Domain\ValueObject\AllowedDocumentTypes;
 use App\Domain\ValueObject\RegulatoryScopeCode;
 use App\Domain\ValueObject\RegulatoryScopeDescription;
-use App\Domain\ValueObject\RegulatoryScopeId;
 use App\Domain\ValueObject\RegulatoryScopeLabel;
 
 final readonly class CreateRegulatoryScopeUseCase
@@ -32,7 +31,7 @@ final readonly class CreateRegulatoryScopeUseCase
             throw RegulatoryScopeAlreadyExistsException::forCode($command->code);
         }
 
-        $id = null !== $command->id ? RegulatoryScopeId::fromString($command->id) : $this->idGenerator->generate();
+        $id = $this->idGenerator->generate();
 
         $scope = RegulatoryScope::create(
             id: $id,
