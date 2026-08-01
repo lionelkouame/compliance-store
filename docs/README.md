@@ -12,6 +12,7 @@ Bienvenue dans la documentation officielle du projet **Compliance Store**.
   * [ADR 0002: Envelope Encryption and Zero Trust Storage](architecture/adr/0002-envelope-encryption-zero-trust.md)
   * [ADR 0003: Decoupling API Platform via State Processors / Providers](architecture/adr/0003-api-platform-decoupling-state-processors.md)
   * [ADR 0004: Mandatory Value Objects in the Domain (no primitives, no native arrays)](architecture/adr/0004-value-objects-in-domain.md)
+  * [ADR 0005: Declarative DTO Validation with Infrastructure Delegation and Domain Double-Lock Guard](architecture/adr/0005-declarative-dto-validation-and-domain-double-lock.md)
 * **Workflows & Pipelines** :
   * [Pipeline d'Ingestion & Redaction PII](architecture/workflows/ingestion.md)
   * [Pipeline de Consultation & Déchiffrement](architecture/workflows/consultation.md)

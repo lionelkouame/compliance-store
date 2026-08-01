@@ -14,6 +14,7 @@ use App\Domain\Entity\RegulatoryScope;
 use App\Infrastructure\ApiPlatform\State\V1\RegulatoryScopeCollectionProvider;
 use App\Infrastructure\ApiPlatform\State\V1\RegulatoryScopeItemProvider;
 use App\Infrastructure\ApiPlatform\State\V1\RegulatoryScopeProcessor;
+use App\Infrastructure\ApiPlatform\Validator\Constraint\AssertRegulatoryScopeCodeUnique;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -61,6 +62,7 @@ final class RegulatoryScopeResource
         pattern: '/^[A-Z][A-Z0-9_]*$/',
         message: 'The code must be in UPPERCASE_SNAKE_CASE (e.g. KYC_INDIVIDUAL).',
     )]
+    #[AssertRegulatoryScopeCodeUnique]
     public ?string $code = null;
 
     #[Assert\NotBlank]

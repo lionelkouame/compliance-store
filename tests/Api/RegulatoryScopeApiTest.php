@@ -106,7 +106,7 @@ final class RegulatoryScopeApiTest extends ApiTestCase
         self::assertResponseStatusCodeSame(201);
 
         $client->request('POST', '/api/v1/regulatory-scopes', ['json' => $payload]);
-        self::assertResponseStatusCodeSame(409);
+        self::assertResponseStatusCodeSame(422);
     }
 
     public function testItRejectsAnInvalidCodeFormat(): void
