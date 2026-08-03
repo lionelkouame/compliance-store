@@ -1,22 +1,32 @@
 # @name storeKycCniDocument
 ### Store Sensitive KYC Document - CNI (Carte Nationale d'Identité)
 POST {{apiUrl}}/documents
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=ComplianceStoreBoundary
 Accept: application/ld+json
-Authorization: Bearer {{jwtToken}}
+# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
 
-{
-  "regulatoryScopeCode": "KYC_VERIFICATION",
-  "documentType": "CNI",
-  "ownerId": "usr_kyc_987654321",
-  "metadata": {
-    "country": "FRA",
-    "identityNumber": "123456789012",
-    "holderName": "Jean Dupont",
-    "expirationDate": "2030-12-31",
-    "retentionYears": 5
-  }
-}
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="documentType"
+
+PASSPORT
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="ownerId"
+
+usr_123456789
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="country"
+
+FRA
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="retentionYears"
+
+5
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="file"; filename="passport.png"
+Content-Type: image/png
+
+< ../../passport.png
+--ComplianceStoreBoundary--
 
 ###
 

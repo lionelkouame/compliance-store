@@ -1,7 +1,7 @@
 ### Retrieve Audit Trail Logs
 GET {{apiUrl}}/compliance/audit-logs
 Accept: application/ld+json
-Authorization: Bearer {{jwtToken}}
+# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
 
 > {%
     client.test("Status code is 200 OK", function() {
