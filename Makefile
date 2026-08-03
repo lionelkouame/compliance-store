@@ -1,3 +1,7 @@
+# Load .env.local if it exists (local overrides, gitignored — useful for port conflicts in WSL, etc.)
+-include .env.local
+export
+
 # Executables (local)
 DOCKER_COMP = docker compose
 
