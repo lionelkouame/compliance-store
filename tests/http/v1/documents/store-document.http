@@ -1,17 +1,31 @@
 ### Store Sensitive Document (Ingestion & Zero-Trust Encryption)
 POST {{apiUrl}}/documents
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=ComplianceStoreBoundary
 Accept: application/ld+json
-Authorization: Bearer {{jwtToken}}
+# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
 
-{
-  "documentType": "PASSPORT",
-  "ownerId": "usr_123456789",
-  "metadata": {
-    "country": "FRA",
-    "retentionYears": 5
-  }
-}
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="documentType"
+
+PASSPORT
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="ownerId"
+
+usr_123456789
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="country"
+
+FRA
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="retentionYears"
+
+5
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="file"; filename="passport.png"
+Content-Type: image/png
+
+< ../../passport.png
+--ComplianceStoreBoundary--
 
 > {%
     client.test("Status code is 201 Created", function() {

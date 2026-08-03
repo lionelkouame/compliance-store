@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Entity\Document" table="document">
+        <id name="id" type="document_id" length="36">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="documentType" type="document_type" length="64" column="document_type"/>
+        <field name="ownerId" type="owner_id" length="255" column="owner_id"/>
+        <field name="regulatoryScopeId" type="regulatory_scope_id" length="36" column="regulatory_scope_id"/>
+        <field name="metadata" type="document_metadata"/>
+        <field name="fileHash" type="file_hash" length="64" column="file_hash"/>
+        <field name="wrappedDataKey" type="wrapped_data_key" column="wrapped_data_key"/>
+        <field name="storageKey" type="storage_key" column="storage_key"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+    </entity>
+</doctrine-mapping>

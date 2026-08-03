@@ -1,7 +1,7 @@
 ### Consult Document by ID
 GET {{apiUrl}}/documents/doc_123456789
 Accept: application/ld+json
-Authorization: Bearer {{jwtToken}}
+# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
 
 > {%
     client.test("Status code is 200 OK", function() {

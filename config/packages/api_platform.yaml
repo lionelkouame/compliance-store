@@ -16,3 +16,4 @@ api_platform:
     exception_to_status:
         App\Domain\Exception\InvalidRegulatoryScopeException: 422
         App\Domain\Exception\RegulatoryScopeAlreadyExistsException: 409
+        App\Domain\Exception\NonCompliantDocumentException: 422
