@@ -16,12 +16,10 @@ final readonly class GetRegulatoryScopeByCodeUseCase
 
     public function execute(string $code): ?RegulatoryScope
     {
-        try {
-            $scopeCode = new RegulatoryScopeCode($code);
-        } catch (\InvalidArgumentException) {
+        if (!RegulatoryScopeCode::isValid($code)) {
             return null;
         }
 
-        return $this->regulatoryScopes->findByCode($scopeCode);
+        return $this->regulatoryScopes->findByCode(new RegulatoryScopeCode($code));
     }
 }
