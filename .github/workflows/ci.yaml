@@ -67,7 +67,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Lint Code Base
-        uses: super-linter/super-linter@v7
+        uses: super-linter/super-linter@v8
         env:
           DEFAULT_BRANCH: main
           FILTER_REGEX_EXCLUDE: .*vendor/.*
