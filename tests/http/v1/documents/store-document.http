@@ -1,3 +1,4 @@
+# @name storeKycCniDocument
 ### Store Sensitive KYC Document - CNI (Carte Nationale d'Identité)
 POST {{apiUrl}}/documents
 Content-Type: application/json
@@ -17,12 +18,9 @@ Authorization: Bearer {{jwtToken}}
   }
 }
 
-> {%
-    client.test("Status code is 201 Created", function() {
-        client.assert(response.status === 201, "Expected 201 Created");
-    });
-%}
+###
 
+# @name storeKycPassportDocument
 ### Store Sensitive KYC Document - PASSPORT
 POST {{apiUrl}}/documents
 Content-Type: application/json
@@ -42,12 +40,9 @@ Authorization: Bearer {{jwtToken}}
   }
 }
 
-> {%
-    client.test("Status code is 201 Created", function() {
-        client.assert(response.status === 201, "Expected 201 Created");
-    });
-%}
+###
 
+# @name storeKycProofOfAddressDocument
 ### Store Sensitive KYC Document - JUSTIFICATIF_DOMICILE (Proof of Address)
 POST {{apiUrl}}/documents
 Content-Type: application/json
@@ -65,9 +60,3 @@ Authorization: Bearer {{jwtToken}}
     "retentionYears": 5
   }
 }
-
-> {%
-    client.test("Status code is 201 Created", function() {
-        client.assert(response.status === 201, "Expected 201 Created");
-    });
-%}

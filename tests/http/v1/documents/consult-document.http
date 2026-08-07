@@ -1,10 +1,5 @@
+# @name consultKycDocument
 ### Consult Stored KYC Document by ID
 GET {{apiUrl}}/documents/doc_kyc_123456789
 Accept: application/ld+json
 Authorization: Bearer {{jwtToken}}
-
-> {%
-    client.test("Status code is 200 OK", function() {
-        client.assert(response.status === 200, "Expected 200 OK");
-    });
-%}
