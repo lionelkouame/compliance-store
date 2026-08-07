@@ -1,13 +1,13 @@
-### Create a RegulatoryScope dynamically (No-Code)
+### Create a RegulatoryScope for KYC Onboarding (CNI, Passport, Proof of Address)
 POST {{apiUrl}}/regulatory-scopes
 Content-Type: application/ld+json
 Accept: application/ld+json
 
 {
-  "code": "CREDIT_AUDIT",
-  "label": "Audit de solvabilité crédit",
-  "description": "Nouveau cas d'usage métier ajouté à la volée",
-  "allowedDocumentTypes": ["BANK_STATEMENT", "PAYSLIP"],
+  "code": "KYC_VERIFICATION",
+  "label": "Vérification d'identité KYC",
+  "description": "Périmètre de conformité pour la vérification d'identité des clients (CNI, Passeport, Justificatif de domicile)",
+  "allowedDocumentTypes": ["CNI", "PASSPORT", "JUSTIFICATIF_DOMICILE"],
   "isActive": true
 }
 
@@ -27,8 +27,8 @@ Accept: application/ld+json
     });
 %}
 
-### Get a RegulatoryScope by code
-GET {{apiUrl}}/regulatory-scopes/CREDIT_AUDIT
+### Get a RegulatoryScope by code (KYC_VERIFICATION)
+GET {{apiUrl}}/regulatory-scopes/KYC_VERIFICATION
 Accept: application/ld+json
 
 > {%

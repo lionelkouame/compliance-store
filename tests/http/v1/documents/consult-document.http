@@ -1,5 +1,5 @@
-### Consult Document by ID
-GET {{apiUrl}}/documents/doc_123456789
+### Consult Stored KYC Document by ID
+GET {{apiUrl}}/documents/doc_kyc_123456789
 Accept: application/ld+json
 Authorization: Bearer {{jwtToken}}
 

@@ -33,10 +33,10 @@ final class RegulatoryScopeApiTest extends ApiTestCase
 
         $response = $client->request('POST', '/api/v1/regulatory-scopes', [
             'json' => [
-                'code' => 'CREDIT_AUDIT',
-                'label' => "Audit de solvabilité crédit",
-                'description' => 'Nouveau cas d\'usage métier ajouté à la volée',
-                'allowedDocumentTypes' => ['BANK_STATEMENT', 'PAYSLIP'],
+                'code' => 'KYC_VERIFICATION',
+                'label' => "Vérification d'identité KYC",
+                'description' => 'Périmètre de conformité pour la vérification d\'identité des clients (CNI, Passeport, Justificatif de domicile)',
+                'allowedDocumentTypes' => ['CNI', 'PASSPORT', 'JUSTIFICATIF_DOMICILE'],
                 'isActive' => true,
             ],
         ]);
@@ -46,20 +46,20 @@ final class RegulatoryScopeApiTest extends ApiTestCase
         $id = $data['id'] ?? basename($data['@id'] ?? '');
         self::assertTrue(\Symfony\Component\Uid\Uuid::isValid($id));
         self::assertJsonContains([
-            'code' => 'CREDIT_AUDIT',
-            'label' => "Audit de solvabilité crédit",
-            'allowedDocumentTypes' => ['BANK_STATEMENT', 'PAYSLIP'],
+            'code' => 'KYC_VERIFICATION',
+            'label' => "Vérification d'identité KYC",
+            'allowedDocumentTypes' => ['CNI', 'PASSPORT', 'JUSTIFICATIF_DOMICILE'],
             'isActive' => true,
         ]);
 
         // Consultable par UUID ou par code
         $client->request('GET', '/api/v1/regulatory-scopes/'.$id);
         self::assertResponseIsSuccessful();
-        self::assertJsonContains(['code' => 'CREDIT_AUDIT']);
+        self::assertJsonContains(['code' => 'KYC_VERIFICATION']);
 
-        $client->request('GET', '/api/v1/regulatory-scopes/CREDIT_AUDIT');
+        $client->request('GET', '/api/v1/regulatory-scopes/KYC_VERIFICATION');
         self::assertResponseIsSuccessful();
-        self::assertJsonContains(['code' => 'CREDIT_AUDIT']);
+        self::assertJsonContains(['code' => 'KYC_VERIFICATION']);
     }
 
     public function testItListsRegulatoryScopes(): void
