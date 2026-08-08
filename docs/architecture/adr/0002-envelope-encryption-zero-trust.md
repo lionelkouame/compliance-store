@@ -11,7 +11,7 @@
 
 Documents stored by Compliance Store are highly confidential (ID cards, passports, payslips). The storage backend (MinIO, AWS S3, Azure Blob) must never receive or retain a document in plaintext (*Zero Trust Storage*).
 
-Furthermore, if a document needs to be masked (PII redaction) or analyzed by OCR, this operation must happen on the plaintext binary **only in RAM**, before it is encrypted.
+Furthermore, if a document needs to be masked (PII redaction), this operation must happen on the plaintext binary **only in RAM**, before it is encrypted.
 
 ---
 

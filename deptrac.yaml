@@ -1,0 +1,47 @@
+parameters:
+  paths:
+    - ./src
+  exclude_files:
+    - '#.*/vendor/.*#'
+
+  layers:
+    - name: Domain
+      collectors:
+        - type: classLike
+          value: ^App\\Domain\\.*
+
+    - name: Application
+      collectors:
+        - type: classLike
+          value: ^App\\Application\\.*
+
+    - name: Infrastructure
+      collectors:
+        - type: classLike
+          value: ^App\\Infrastructure\\.*
+
+    - name: Symfony
+      collectors:
+        - type: classLike
+          value: ^Symfony\\.*
+
+    - name: Doctrine
+      collectors:
+        - type: classLike
+          value: ^Doctrine\\.*
+
+    - name: ApiPlatform
+      collectors:
+        - type: classLike
+          value: ^ApiPlatform\\.*
+
+  ruleset:
+    Domain: []
+    Application:
+      - Domain
+    Infrastructure:
+      - Domain
+      - Application
+      - Symfony
+      - Doctrine
+      - ApiPlatform

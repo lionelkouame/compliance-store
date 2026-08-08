@@ -18,3 +18,7 @@ http-client.private.env.json
 /phpunit.xml
 /.phpunit.cache/
 ###< phpunit/phpunit ###
+
+###> deptrac/deptrac ###
+/.deptrac.cache
+###< deptrac/deptrac ###

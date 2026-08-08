@@ -15,7 +15,7 @@ SYMFONY  = $(PHP) bin/console
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build refresh up start down logs sh bash test composer vendor sf cc setup-dns
+.PHONY        : help build refresh up start down logs sh bash test deptrac composer vendor sf cc setup-dns
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -57,8 +57,13 @@ bash: ## Connect to the FrankenPHP container via bash so up and down arrows go t
 	@$(PHP_CONT) bash
 
 test: ## Start tests with phpunit, pass the parameter "c=" to add options to phpunit, example: make test c="--group e2e --stop-on-failure"
+test: deptrac
 	@$(eval c ?=)
 	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/phpunit $(c)
+
+## —— Qualité 🧪 ————————————————————————————————————————————————————————————————
+deptrac: ## Vérifie le respect des couches Clean Architecture (Domain/Application/Infrastructure)
+	@$(PHP_CONT) vendor/bin/deptrac analyse --config-file=deptrac.yaml --no-interaction
 
 ## —— Composer 🧙 ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass the parameter "c=" to run a given command, example: make composer c='req symfony/orm-pack'
