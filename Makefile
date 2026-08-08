@@ -15,7 +15,7 @@ SYMFONY  = $(PHP) bin/console
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build refresh up start down logs sh bash test deptrac composer vendor sf cc setup-dns
+.PHONY        : help build refresh up start down logs sh bash test deptrac composer vendor sf cc setup-dns setup-hooks
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -29,6 +29,10 @@ setup-dns: ## Ajoute compliance-store.loc au fichier /etc/hosts (nécessite sudo
 		echo "Ajout de compliance-store.loc dans /etc/hosts..."; \
 		echo "127.0.0.1 compliance-store.loc" | sudo tee -a /etc/hosts > /dev/null && echo "✅ compliance-store.loc a été ajouté avec succès !"; \
 	fi
+
+setup-hooks: ## Active les git hooks partagés (.githooks) pour le projet
+	@git config core.hooksPath .githooks && echo "✅ Git hooks configurés (.githooks)"
+
 
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 build: ## Builds the Docker images (uses cache, fast — daily use)

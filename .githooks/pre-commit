@@ -1,0 +1,22 @@
+#!/bin/sh
+
+echo "🔍 [Git Hook] Running full test suite (Deptrac + PHPUnit)..."
+
+if command -v make >/dev/null 2>&1; then
+    make test
+else
+    php vendor/bin/deptrac analyse --config-file=deptrac.yaml --no-interaction && bin/phpunit
+fi
+
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+    echo ""
+    echo "❌ [Git Hook] Tests or architecture checks failed!"
+    echo "💡 Fix failing tests or architecture violations before committing."
+    exit $EXIT_CODE
+fi
+
+echo "✅ [Git Hook] All tests and architecture checks passed!"
+
+
