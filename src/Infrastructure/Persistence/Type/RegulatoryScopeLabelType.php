@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Type;
 
 use App\Domain\ValueObject\RegulatoryScopeLabel;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\StringType;
 
 final class RegulatoryScopeLabelType extends StringType
@@ -14,7 +15,15 @@ final class RegulatoryScopeLabelType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?RegulatoryScopeLabel
     {
-        return null === $value ? null : new RegulatoryScopeLabel($value);
+        if (null === $value) {
+            return null;
+        }
+
+        if (!\is_string($value)) {
+            throw InvalidType::new($value, self::NAME, ['null', 'string']);
+        }
+
+        return new RegulatoryScopeLabel($value);
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +32,14 @@ final class RegulatoryScopeLabelType extends StringType
             return null;
         }
 
-        return $value instanceof RegulatoryScopeLabel ? $value->value : (string) $value;
+        if ($value instanceof RegulatoryScopeLabel) {
+            return $value->value;
+        }
+
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        throw InvalidType::new($value, self::NAME, ['null', 'string', RegulatoryScopeLabel::class]);
     }
 }

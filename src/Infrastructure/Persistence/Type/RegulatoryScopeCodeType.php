@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Type;
 
 use App\Domain\ValueObject\RegulatoryScopeCode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\StringType;
 
 final class RegulatoryScopeCodeType extends StringType
@@ -14,7 +15,15 @@ final class RegulatoryScopeCodeType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?RegulatoryScopeCode
     {
-        return null === $value ? null : new RegulatoryScopeCode($value);
+        if (null === $value) {
+            return null;
+        }
+
+        if (!\is_string($value)) {
+            throw InvalidType::new($value, self::NAME, ['null', 'string']);
+        }
+
+        return new RegulatoryScopeCode($value);
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +32,14 @@ final class RegulatoryScopeCodeType extends StringType
             return null;
         }
 
-        return $value instanceof RegulatoryScopeCode ? $value->value : (string) $value;
+        if ($value instanceof RegulatoryScopeCode) {
+            return $value->value;
+        }
+
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        throw InvalidType::new($value, self::NAME, ['null', 'string', RegulatoryScopeCode::class]);
     }
 }

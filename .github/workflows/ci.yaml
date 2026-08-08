@@ -74,6 +74,8 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-interaction
       - name: Deptrac (Clean Architecture layers)
         run: vendor/bin/deptrac analyse --config-file=deptrac.yaml --no-interaction
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse --no-interaction --memory-limit=512M
       - name: Lint Code Base
         uses: super-linter/super-linter@v8
         env:

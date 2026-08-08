@@ -79,7 +79,8 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "deptrac": "deptrac analyse --config-file=deptrac.yaml --no-interaction"
+        "deptrac": "deptrac analyse --config-file=deptrac.yaml --no-interaction",
+        "phpstan": "phpstan analyse --memory-limit=512M"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -93,6 +94,9 @@
     },
     "require-dev": {
         "deptrac/deptrac": "^4.7",
+        "phpstan/phpstan": "^2.2",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^13.2.6",
         "symfony/browser-kit": "8.1.*",
         "symfony/css-selector": "8.1.*",

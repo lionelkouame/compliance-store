@@ -7,12 +7,10 @@ namespace App\Infrastructure\ApiPlatform\Validator\ConstraintValidator;
 use App\Domain\Port\Repository\RegulatoryScopeRepositoryInterface;
 use App\Domain\ValueObject\RegulatoryScopeCode;
 use App\Infrastructure\ApiPlatform\Validator\Constraint\AssertRegulatoryScopeCodeUnique;
-use Symfony\Component\Validator\Attribute\AsConstraintValidator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
-#[AsConstraintValidator]
 final class AssertRegulatoryScopeCodeUniqueValidator extends ConstraintValidator
 {
     public function __construct(
@@ -29,8 +27,12 @@ final class AssertRegulatoryScopeCodeUniqueValidator extends ConstraintValidator
             return;
         }
 
+        if (!\is_string($value)) {
+            return;
+        }
+
         try {
-            $code = new RegulatoryScopeCode((string) $value);
+            $code = new RegulatoryScopeCode($value);
         } catch (\InvalidArgumentException) {
             // Format constraint (Regex) will handle invalid value
             return;
@@ -38,7 +40,7 @@ final class AssertRegulatoryScopeCodeUniqueValidator extends ConstraintValidator
 
         if ($this->regulatoryScopes->existsByCode($code)) {
             $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ value }}', (string) $value)
+                ->setParameter('{{ value }}', $value)
                 ->addViolation();
         }
     }

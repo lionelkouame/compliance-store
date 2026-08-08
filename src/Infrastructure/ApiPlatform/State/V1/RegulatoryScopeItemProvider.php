@@ -23,7 +23,8 @@ final readonly class RegulatoryScopeItemProvider implements ProviderInterface
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?RegulatoryScopeResource
     {
-        $idOrCode = (string) ($uriVariables['id'] ?? $uriVariables['code'] ?? '');
+        $rawIdOrCode = $uriVariables['id'] ?? $uriVariables['code'] ?? '';
+        $idOrCode = \is_string($rawIdOrCode) ? $rawIdOrCode : '';
 
         if (Uuid::isValid($idOrCode)) {
             $scope = $this->getByIdUseCase->execute($idOrCode);
