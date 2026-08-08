@@ -14,7 +14,7 @@ final class OwnerIdType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?OwnerId
     {
-        return null === $value ? null : new OwnerId($value);
+        return \is_string($value) ? new OwnerId($value) : null;
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +23,6 @@ final class OwnerIdType extends StringType
             return null;
         }
 
-        return $value instanceof OwnerId ? $value->value : (string) $value;
+        return $value instanceof OwnerId ? $value->value : (\is_string($value) ? $value : null);
     }
 }

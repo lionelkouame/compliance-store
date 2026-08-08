@@ -16,7 +16,7 @@ final class DocumentMetadataType extends JsonType
     {
         $decoded = parent::convertToPHPValue($value, $platform);
 
-        if (null === $decoded) {
+        if (!\is_array($decoded) || !isset($decoded['country'], $decoded['retentionYears']) || !\is_string($decoded['country']) || !\is_int($decoded['retentionYears'])) {
             return null;
         }
 

@@ -24,7 +24,7 @@ final readonly class MinioStorageGateway implements StorageGatewayInterface
         try {
             $this->documentsStorage->write($key->value, $ciphertext);
         } catch (FilesystemException $e) {
-            throw new \RuntimeException(\sprintf('Unable to store the document at "%s".', $key->value), previous: $e);
+            throw new \RuntimeException(\sprintf('Unable to store the document at "%s": %s', $key->value, $e->getMessage()), previous: $e);
         }
     }
 

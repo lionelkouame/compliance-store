@@ -14,7 +14,7 @@ final class StorageKeyType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?StorageKey
     {
-        return null === $value ? null : new StorageKey($value);
+        return \is_string($value) ? new StorageKey($value) : null;
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +23,6 @@ final class StorageKeyType extends StringType
             return null;
         }
 
-        return $value instanceof StorageKey ? $value->value : (string) $value;
+        return $value instanceof StorageKey ? $value->value : (\is_string($value) ? $value : null);
     }
 }

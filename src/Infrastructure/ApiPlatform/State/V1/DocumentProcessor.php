@@ -10,6 +10,7 @@ use ApiPlatform\Validator\ValidatorInterface;
 use App\Application\UseCase\StoreDocument\StoreDocumentCommand;
 use App\Application\UseCase\StoreDocument\StoreDocumentUseCase;
 use App\Infrastructure\ApiPlatform\Resource\V1\DocumentResource;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -29,14 +30,26 @@ final readonly class DocumentProcessor implements ProcessorInterface
         $request = $this->requestStack->getCurrentRequest();
 
         $input = new DocumentResource();
-        $input->file = $request?->files->get('file');
-        $input->documentType = $request?->request->get('documentType');
-        $input->ownerId = $request?->request->get('ownerId');
-        $input->country = $request?->request->get('country');
+        $file = $request?->files->get('file');
+        $input->file = $file instanceof UploadedFile ? $file : null;
+
+        $documentType = $request?->request->get('documentType');
+        $input->documentType = \is_string($documentType) ? $documentType : null;
+
+        $ownerId = $request?->request->get('ownerId');
+        $input->ownerId = \is_string($ownerId) ? $ownerId : null;
+
+        $country = $request?->request->get('country');
+        $input->country = \is_string($country) ? $country : null;
+
         $retentionYears = $request?->request->get('retentionYears');
         $input->retentionYears = is_numeric($retentionYears) ? (int) $retentionYears : null;
 
         $this->validator->validate($input);
+
+        if (null === $input->file || null === $input->documentType || null === $input->ownerId || null === $input->country || null === $input->retentionYears) {
+            throw new UnprocessableEntityHttpException('Missing required document parameters.');
+        }
 
         try {
             $document = $this->useCase->execute(new StoreDocumentCommand(

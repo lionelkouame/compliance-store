@@ -14,7 +14,7 @@ final class FileHashType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?FileHash
     {
-        return null === $value ? null : new FileHash($value);
+        return \is_string($value) ? new FileHash($value) : null;
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +23,6 @@ final class FileHashType extends StringType
             return null;
         }
 
-        return $value instanceof FileHash ? $value->value : (string) $value;
+        return $value instanceof FileHash ? $value->value : (\is_string($value) ? $value : null);
     }
 }
