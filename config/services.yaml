@@ -27,3 +27,23 @@ services:
     # Kept public so it isn't pruned as unused by the container compiler.
     App\Domain\Service\RegulatoryScopeValidator:
         public: true
+
+    # S3-compatible client used by MinioStorageGateway (documents.storage, see flysystem.yaml).
+    Aws\S3\S3Client:
+        arguments:
+            -
+                endpoint: '%env(AWS_S3_ENDPOINT)%'
+                region: 'us-east-1'
+                version: 'latest'
+                use_path_style_endpoint: true
+                credentials:
+                    key: '%env(AWS_S3_ACCESS_KEY)%'
+                    secret: '%env(AWS_S3_SECRET_KEY)%'
+
+    App\Infrastructure\Gateway\MinioStorageGateway:
+        arguments:
+            $documentsStorage: '@documents.storage'
+
+    App\Infrastructure\Gateway\SodiumCipherGateway:
+        arguments:
+            $masterKey: '%env(base64:DOCUMENT_MASTER_KEY)%'

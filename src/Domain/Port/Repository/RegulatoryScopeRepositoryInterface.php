@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Port\Repository;
 
 use App\Domain\Entity\RegulatoryScope;
+use App\Domain\ValueObject\DocumentType;
 use App\Domain\ValueObject\RegulatoryScopeCode;
 use App\Domain\ValueObject\RegulatoryScopeId;
 
@@ -15,6 +16,12 @@ interface RegulatoryScopeRepositoryInterface
     public function findByCode(RegulatoryScopeCode $code): ?RegulatoryScope;
 
     public function findActiveByCode(RegulatoryScopeCode $code): ?RegulatoryScope;
+
+    /**
+     * Rules engine entry point: the active regulatory scope covering a given
+     * document type, if any (Native Compliance Core, ADR 0001).
+     */
+    public function findActiveByAllowedDocumentType(DocumentType $documentType): ?RegulatoryScope;
 
     /**
      * @return list<RegulatoryScope>

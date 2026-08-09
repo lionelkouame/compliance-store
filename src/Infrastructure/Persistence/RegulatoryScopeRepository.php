@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence;
 
 use App\Domain\Entity\RegulatoryScope;
 use App\Domain\Port\Repository\RegulatoryScopeRepositoryInterface;
+use App\Domain\ValueObject\DocumentType;
 use App\Domain\ValueObject\RegulatoryScopeCode;
 use App\Domain\ValueObject\RegulatoryScopeId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -36,6 +37,17 @@ final class RegulatoryScopeRepository extends ServiceEntityRepository implements
         return $this->findOneBy(['code' => $code->value, 'isActive' => true]);
     }
 
+    public function findActiveByAllowedDocumentType(DocumentType $documentType): ?RegulatoryScope
+    {
+        foreach ($this->findBy(['isActive' => true]) as $scope) {
+            if ($scope->allowedDocumentTypes()->contains($documentType)) {
+                return $scope;
+            }
+        }
+
+        return null;
+    }
+
     public function findAll(): array
     {
         return parent::findAll();
@@ -57,4 +69,5 @@ final class RegulatoryScopeRepository extends ServiceEntityRepository implements
         $entityManager->persist($regulatoryScope);
         $entityManager->flush();
     }
+
 }

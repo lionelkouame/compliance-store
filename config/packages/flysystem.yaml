@@ -1,0 +1,16 @@
+flysystem:
+    storages:
+        documents.storage:
+            adapter: 'aws'
+            options:
+                client: 'Aws\S3\S3Client'
+                bucket: '%env(AWS_S3_BUCKET)%'
+
+when@test:
+    flysystem:
+        storages:
+            documents.storage:
+                adapter: 'local'
+                options:
+                    directory: '%kernel.project_dir%/var/test_storage'
+
