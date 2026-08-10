@@ -18,12 +18,12 @@ final readonly class JurisdictionItemProvider implements ProviderInterface
         private GetJurisdictionByCodeUseCase $useCase,
     ) {}
 
+    /**
+     * @param array{code: string} $uriVariables
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?JurisdictionResource
     {
-        $rawCode = $uriVariables['code'] ?? '';
-        $code = \is_string($rawCode) ? $rawCode : '';
-
-        $jurisdiction = $this->useCase->execute($code);
+        $jurisdiction = $this->useCase->execute($uriVariables['code']);
 
         return null !== $jurisdiction ? JurisdictionResource::fromEntity($jurisdiction) : null;
     }
