@@ -28,10 +28,10 @@ Because `$uriVariables` is typed as a native generic `array` (`array<string, mix
 We decide that **all API Platform State Providers MUST specify their expected URI variables declaratively using PHPDoc Array Shapes**:
 
 ### 1. Declarative Shape Annotation
-Every State Provider consuming URI variables MUST document the exact array shape on its `provide()` method using PHPDoc syntax:
+Every State Provider consuming URI variables MUST document the exact array shape on its `provide()` method using PHPDoc syntax with optional key syntax (`key?: type`) to remain compatible with the default value `= []`:
 ```php
 /**
- * @param array{code: string} $uriVariables
+ * @param array{code?: string} $uriVariables
  */
 public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?JurisdictionResource
 ```
@@ -43,18 +43,19 @@ For endpoints supporting multiple route variables (e.g. lookup by ID or Code):
  */
 ```
 
-### 2. Direct Access Without Defensive Boilerplate
+### 2. Clean Access via Coalesce Null Fallback
 By declaring the shape contract:
 * PHPStan validates type safety across the entire provider.
-* Providers access `$uriVariables['code']` directly without intermediate defensive variables or runtime fallback type checks.
+* Default `= []` parameter initialization matches the optional shape `array{code?: string}`.
+* Providers access `$uriVariables['code'] ?? ''` cleanly without intermediate defensive variables or runtime `is_string` type checks.
 
 ```php
 /**
- * @param array{code: string} $uriVariables
+ * @param array{code?: string} $uriVariables
  */
 public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?JurisdictionResource
 {
-    $jurisdiction = $this->useCase->execute($uriVariables['code']);
+    $jurisdiction = $this->useCase->execute($uriVariables['code'] ?? '');
 
     return null !== $jurisdiction ? JurisdictionResource::fromEntity($jurisdiction) : null;
 }
