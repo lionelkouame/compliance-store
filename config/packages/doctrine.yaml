@@ -31,6 +31,20 @@ doctrine:
                 class: App\Infrastructure\Persistence\Type\WrappedDataKeyType
             document_metadata:
                 class: App\Infrastructure\Persistence\Type\DocumentMetadataType
+            jurisdiction_id:
+                class: App\Infrastructure\Persistence\Type\JurisdictionIdType
+            jurisdiction_code:
+                class: App\Infrastructure\Persistence\Type\JurisdictionCodeType
+            jurisdiction_label:
+                class: App\Infrastructure\Persistence\Type\JurisdictionLabelType
+            jurisdiction_region:
+                class: App\Infrastructure\Persistence\Type\JurisdictionRegionType
+            jurisdiction_country:
+                class: App\Infrastructure\Persistence\Type\JurisdictionCountryType
+            jurisdiction_sub_region:
+                class: App\Infrastructure\Persistence\Type\JurisdictionSubRegionType
+            applicable_frameworks:
+                class: App\Infrastructure\Persistence\Type\ApplicableFrameworksType
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
