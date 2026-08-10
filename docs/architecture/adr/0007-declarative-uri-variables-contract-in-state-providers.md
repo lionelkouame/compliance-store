@@ -49,6 +49,9 @@ By declaring the shape contract:
 * Default `= []` parameter initialization matches the optional shape `array{code?: string}`.
 * Providers access `$uriVariables['code'] ?? ''` cleanly without intermediate defensive variables or runtime `is_string` type checks.
 
+### 3. Early Return Guard Pattern for DTO Mapping
+State Providers MUST use an early return guard clause (`if (null === $domainObject) return null;`) rather than inline ternary returns (`return null !== $domainObject ? ... : null`). This clearly separates the failure/not-found path (which triggers API Platform HTTP 404) from the nominal DTO mapping path.
+
 ```php
 /**
  * @param array{code?: string} $uriVariables
@@ -56,8 +59,11 @@ By declaring the shape contract:
 public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?JurisdictionResource
 {
     $jurisdiction = $this->useCase->execute($uriVariables['code'] ?? '');
+    if (null === $jurisdiction) {
+        return null;
+    }
 
-    return null !== $jurisdiction ? JurisdictionResource::fromEntity($jurisdiction) : null;
+    return JurisdictionResource::fromEntity($jurisdiction);
 }
 ```
 

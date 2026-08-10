@@ -34,6 +34,10 @@ final readonly class RegulatoryScopeItemProvider implements ProviderInterface
             $scope = $this->getByCodeUseCase->execute($idOrCode);
         }
 
-        return null !== $scope ? RegulatoryScopeResource::fromEntity($scope) : null;
+        if (null === $scope) {
+            return null;
+        }
+
+        return RegulatoryScopeResource::fromEntity($scope);
     }
 }
