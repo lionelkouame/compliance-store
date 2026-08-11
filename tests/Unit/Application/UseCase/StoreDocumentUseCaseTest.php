@@ -37,7 +37,7 @@ final class StoreDocumentUseCaseTest extends TestCase
             allowedDocumentTypes: AllowedDocumentTypes::fromStrings('PASSPORT'),
         );
 
-        $regulatoryScopes = $this->createMock(RegulatoryScopeRepositoryInterface::class);
+        $regulatoryScopes = $this->createStub(RegulatoryScopeRepositoryInterface::class);
         $regulatoryScopes->method('findActiveByAllowedDocumentType')->willReturn($scope);
 
         $envelope = new EncryptionEnvelope(
@@ -57,7 +57,7 @@ final class StoreDocumentUseCaseTest extends TestCase
         $documents = $this->createMock(DocumentRepositoryInterface::class);
         $documents->expects(self::once())->method('add');
 
-        $idGenerator = $this->createMock(DocumentIdGeneratorInterface::class);
+        $idGenerator = $this->createStub(DocumentIdGeneratorInterface::class);
         $idGenerator->method('generate')->willReturn(DocumentId::fromString('660e8400-e29b-41d4-a716-446655440000'));
 
         $useCase = new StoreDocumentUseCase(
@@ -83,15 +83,15 @@ final class StoreDocumentUseCaseTest extends TestCase
 
     public function testExecuteThrowsWhenNoActiveScopeCoversTheDocumentType(): void
     {
-        $regulatoryScopes = $this->createMock(RegulatoryScopeRepositoryInterface::class);
+        $regulatoryScopes = $this->createStub(RegulatoryScopeRepositoryInterface::class);
         $regulatoryScopes->method('findActiveByAllowedDocumentType')->willReturn(null);
 
         $useCase = new StoreDocumentUseCase(
             complianceChecker: new DocumentComplianceChecker($regulatoryScopes),
-            cipher: $this->createMock(CipherGatewayInterface::class),
-            storage: $this->createMock(StorageGatewayInterface::class),
-            documents: $this->createMock(DocumentRepositoryInterface::class),
-            idGenerator: $this->createMock(DocumentIdGeneratorInterface::class),
+            cipher: $this->createStub(CipherGatewayInterface::class),
+            storage: $this->createStub(StorageGatewayInterface::class),
+            documents: $this->createStub(DocumentRepositoryInterface::class),
+            idGenerator: $this->createStub(DocumentIdGeneratorInterface::class),
         );
 
         $this->expectException(NonCompliantDocumentException::class);

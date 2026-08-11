@@ -17,3 +17,5 @@ api_platform:
         App\Domain\Exception\InvalidRegulatoryScopeException: 422
         App\Domain\Exception\RegulatoryScopeAlreadyExistsException: 409
         App\Domain\Exception\NonCompliantDocumentException: 422
+        App\Domain\Exception\InvalidJurisdictionException: 422
+        App\Domain\Exception\JurisdictionAlreadyExistsException: 409

@@ -47,3 +47,12 @@ services:
     App\Infrastructure\Gateway\SodiumCipherGateway:
         arguments:
             $masterKey: '%env(base64:DOCUMENT_MASTER_KEY)%'
+
+when@test:
+    services:
+        # No Monolog bundle is installed: the framework's fallback logger
+        # (Symfony\Component\HttpKernel\Log\Logger) writes every log record to
+        # stderr unconditionally, including expected/handled exceptions from
+        # negative-path tests (404, 409, 422...). Silence it in tests only.
+        logger:
+            class: Psr\Log\NullLogger

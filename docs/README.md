@@ -13,6 +13,8 @@ Bienvenue dans la documentation officielle du projet **Compliance Store**.
   * [ADR 0003: Decoupling API Platform via State Processors / Providers](architecture/adr/0003-api-platform-decoupling-state-processors.md)
   * [ADR 0004: Mandatory Value Objects in the Domain (no primitives, no native arrays)](architecture/adr/0004-value-objects-in-domain.md)
   * [ADR 0005: Declarative DTO Validation with Infrastructure Delegation and Domain Double-Lock Guard](architecture/adr/0005-declarative-dto-validation-and-domain-double-lock.md)
+  * [ADR 0006: Strict Non-Nullable Value Objects and Domain-Level Optionality Handling](architecture/adr/0006-handling-optional-domain-attributes-and-nullability.md)
+  * [ADR 0007: Declarative URI Variables Contract in API Platform State Providers via PHPDoc Shapes](architecture/adr/0007-declarative-uri-variables-contract-in-state-providers.md)
 * **Workflows & Pipelines** :
   * [Pipeline d'Ingestion & Redaction PII](architecture/workflows/ingestion.md)
   * [Pipeline de Consultation & Déchiffrement](architecture/workflows/consultation.md)
