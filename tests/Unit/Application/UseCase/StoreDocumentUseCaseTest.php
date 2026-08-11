@@ -37,7 +37,7 @@ final class StoreDocumentUseCaseTest extends TestCase
             allowedDocumentTypes: AllowedDocumentTypes::fromStrings('PASSPORT'),
         );
 
-        $regulatoryScopes = $this->createMock(RegulatoryScopeRepositoryInterface::class);
+        $regulatoryScopes = $this->createStub(RegulatoryScopeRepositoryInterface::class);
         $regulatoryScopes->method('findActiveByAllowedDocumentType')->willReturn($scope);
 
         $envelope = new EncryptionEnvelope(
