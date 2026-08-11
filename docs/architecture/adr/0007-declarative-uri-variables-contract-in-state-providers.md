@@ -43,14 +43,29 @@ For endpoints supporting multiple route variables (e.g. lookup by ID or Code):
  */
 ```
 
-### 2. Clean Access via Coalesce Null Fallback
+Similarly, for State Providers consuming execution context (such as the HTTP `Request` for query filtering):
+```php
+/**
+ * @param array{request?: Request} $context
+ */
+public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
+{
+    $query = isset($context['request']) ? $this->buildQueryFromRequest($context['request']) : new ListJurisdictionsQuery();
+    ...
+}
+```
+
+### 2. Clean Access via Coalesce Null Fallback & Shape Checking
 By declaring the shape contract:
 * PHPStan validates type safety across the entire provider.
-* Default `= []` parameter initialization matches the optional shape `array{code?: string}`.
-* Providers access `$uriVariables['code'] ?? ''` cleanly without intermediate defensive variables or runtime `is_string` type checks.
+* Default `= []` parameter initialization matches the optional shapes `array{code?: string}` and `array{request?: Request}`.
+* Providers access `$uriVariables['code'] ?? ''` and `isset($context['request'])` cleanly without intermediate defensive variables or runtime type checks.
 
 ### 3. Early Return Guard Pattern for DTO Mapping
 State Providers MUST use an early return guard clause (`if (null === $domainObject) return null;`) rather than inline ternary returns (`return null !== $domainObject ? ... : null`). This clearly separates the failure/not-found path (which triggers API Platform HTTP 404) from the nominal DTO mapping path.
+
+### 4. Explicit Naming for Collection Query Mapping (`buildQueryFromRequest`)
+To prevent ambiguity between Symfony HTTP `Request::$query` parameters and CQRS Application `Query` DTOs, helper mapping methods in Collection State Providers MUST be named `buildQueryFromRequest(Request $request): ListXxxQuery`.
 
 ```php
 /**

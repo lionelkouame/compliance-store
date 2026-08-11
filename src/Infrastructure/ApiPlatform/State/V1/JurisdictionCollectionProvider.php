@@ -21,12 +21,12 @@ final readonly class JurisdictionCollectionProvider implements ProviderInterface
     ) {}
 
     /**
+     * @param array{request?: Request} $context
      * @return list<JurisdictionResource>
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
-        $request = $context['request'] ?? null;
-        $query = $request instanceof Request ? $this->queryFromRequest($request) : new ListJurisdictionsQuery();
+        $query = isset($context['request']) ? $this->buildQueryFromRequest($context['request']) : new ListJurisdictionsQuery();
 
         return array_map(
             JurisdictionResource::fromEntity(...),
@@ -34,7 +34,7 @@ final readonly class JurisdictionCollectionProvider implements ProviderInterface
         );
     }
 
-    private function queryFromRequest(Request $request): ListJurisdictionsQuery
+    private function buildQueryFromRequest(Request $request): ListJurisdictionsQuery
     {
         $region = $request->query->get('region');
         $country = $request->query->get('country');
