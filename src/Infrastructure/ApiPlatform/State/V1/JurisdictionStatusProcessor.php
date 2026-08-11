@@ -19,13 +19,14 @@ final readonly class JurisdictionStatusProcessor implements ProcessorInterface
         private UpdateJurisdictionStatusUseCase $useCase,
     ) {}
 
+    /**
+     * @param JurisdictionResource $data
+     * @param array{code?: string} $uriVariables
+     */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JurisdictionResource
     {
-        $rawCode = $uriVariables['code'] ?? '';
-        $code = \is_string($rawCode) ? $rawCode : '';
-
         $jurisdiction = $this->useCase->execute(new UpdateJurisdictionStatusCommand(
-            code: $code,
+            code: $uriVariables['code'] ?? '',
             active: $data->active,
         ));
 
