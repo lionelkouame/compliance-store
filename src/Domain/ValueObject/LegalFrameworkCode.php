@@ -5,15 +5,29 @@ declare(strict_types=1);
 namespace App\Domain\ValueObject;
 
 /**
- * A legal/regulatory framework applicable to a jurisdiction (e.g. GDPR, EIDAS_2).
+ * A legal/regulatory framework code, both the identity of a LegalFramework
+ * registry entry and the value referenced by Jurisdiction::applicableFrameworks
+ * (e.g. FRAMEWORK-GDPR, FRAMEWORK-EIDAS2, FRAMEWORK-COMMERCIAL-CODE-FR).
  */
 final readonly class LegalFrameworkCode
 {
+    private const PATTERN = '/^FRAMEWORK-[A-Z0-9_-]+$/D';
+    private const MAX_LENGTH = 64;
+
+    public static function isValid(string $value): bool
+    {
+        return 1 === preg_match(self::PATTERN, $value) && \strlen($value) <= self::MAX_LENGTH;
+    }
+
     public function __construct(
         public string $value,
     ) {
-        if ('' === trim($this->value)) {
-            throw new \InvalidArgumentException('A legal framework code cannot be empty.');
+        if (!self::isValid($this->value)) {
+            throw new \InvalidArgumentException(\sprintf(
+                'The legal framework code "%s" is invalid: expected format is FRAMEWORK-XXX (e.g. FRAMEWORK-GDPR), max %d characters.',
+                $this->value,
+                self::MAX_LENGTH,
+            ));
         }
     }
 

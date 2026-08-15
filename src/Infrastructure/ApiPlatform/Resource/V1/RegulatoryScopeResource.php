@@ -59,7 +59,7 @@ final class RegulatoryScopeResource
 
     #[Assert\NotBlank]
     #[Assert\Regex(
-        pattern: '/^[A-Z][A-Z0-9_]*$/',
+        pattern: '/^[A-Z][A-Z0-9_]*$/D',
         message: 'The code must be in UPPERCASE_SNAKE_CASE (e.g. KYC_INDIVIDUAL).',
     )]
     #[AssertRegulatoryScopeCodeUnique]

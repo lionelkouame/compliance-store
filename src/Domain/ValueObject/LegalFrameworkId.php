@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject;
 
-final readonly class RegulatoryScopeCode
+use App\Domain\Port\Service\IdValidatorInterface;
+
+final readonly class LegalFrameworkId
 {
-    private const UPPERCASE_SNAKE_CASE_PATTERN = '/^[A-Z][A-Z0-9_]*$/D';
-
-    public static function isValid(string $value): bool
-    {
-        return 1 === preg_match(self::UPPERCASE_SNAKE_CASE_PATTERN, $value);
-    }
-
     public function __construct(
         public string $value,
+        ?IdValidatorInterface $validator = null,
     ) {
-        if (!self::isValid($this->value)) {
+        if (null !== $validator && !$validator->isValid($this->value)) {
             throw new \InvalidArgumentException(\sprintf(
-                'The code "%s" is invalid: expected format is UPPERCASE_SNAKE_CASE (e.g. KYC_INDIVIDUAL).',
+                'The ID "%s" is not valid.',
                 $this->value,
             ));
         }
+    }
+
+    public static function fromString(string $value, ?IdValidatorInterface $validator = null): self
+    {
+        return new self($value, $validator);
     }
 
     public function equals(self $other): bool

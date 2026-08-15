@@ -1,0 +1,69 @@
+# @name createGdprLegalFramework
+### Register the GDPR legal framework
+POST {{apiUrl}}/legal-frameworks
+Content-Type: application/ld+json
+Accept: application/ld+json
+
+{
+  "code": "FRAMEWORK-GDPR",
+  "name": "General Data Protection Regulation (EU 2016/679)",
+  "officialReference": "OJEU L 119, 4.5.2016",
+  "regulatoryAuthority": "CNIL / EDPB",
+  "jurisdictionCode": "JUR-EU-GLOBAL"
+}
+
+###
+
+# @name createSec17a4LegalFramework
+### Register the SEC Rule 17a-4 legal framework
+POST {{apiUrl}}/legal-frameworks
+Content-Type: application/ld+json
+Accept: application/ld+json
+
+{
+  "code": "FRAMEWORK-SEC-17A4",
+  "name": "SEC Rule 17a-4",
+  "officialReference": "17 CFR 240.17a-4",
+  "regulatoryAuthority": "SEC",
+  "jurisdictionCode": "JUR-US-CA"
+}
+
+###
+
+# @name listLegalFrameworks
+### List all legal frameworks
+GET {{apiUrl}}/legal-frameworks
+Accept: application/ld+json
+
+###
+
+# @name listActiveEuGlobalLegalFrameworks
+### Filter active legal frameworks for a jurisdiction
+GET {{apiUrl}}/legal-frameworks?jurisdictionCode=JUR-EU-GLOBAL&active=true
+Accept: application/ld+json
+
+###
+
+# @name getGdprLegalFrameworkByCode
+### Get a legal framework by code (FRAMEWORK-GDPR)
+GET {{apiUrl}}/legal-frameworks/FRAMEWORK-GDPR
+Accept: application/ld+json
+
+###
+
+# @name getUnknownLegalFramework
+### Get an unknown legal framework
+GET {{apiUrl}}/legal-frameworks/FRAMEWORK-DOES-NOT-EXIST
+Accept: application/ld+json
+
+###
+
+# @name deactivateGdprLegalFramework
+### Deactivate the GDPR legal framework
+PATCH {{apiUrl}}/legal-frameworks/FRAMEWORK-GDPR
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "active": false
+}

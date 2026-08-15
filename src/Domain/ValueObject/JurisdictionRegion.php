@@ -12,8 +12,13 @@ namespace App\Domain\ValueObject;
  */
 final readonly class JurisdictionRegion
 {
-    private const PATTERN = '/^[A-Z]{2,}$/';
+    private const PATTERN = '/^[A-Z]{2,}$/D';
     private const MAX_LENGTH = 32;
+
+    public static function isValid(string $value): bool
+    {
+        return 1 === preg_match(self::PATTERN, $value) && \strlen($value) <= self::MAX_LENGTH;
+    }
 
     public function __construct(
         public string $value,
