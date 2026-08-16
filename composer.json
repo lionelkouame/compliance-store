@@ -33,6 +33,10 @@
             "symfony/flex": true,
             "symfony/runtime": true
         },
+        "preferred-install": {
+            "phpunit/phpunit": "source",
+            "*": "dist"
+        },
         "bump-after-update": true,
         "platform-check": false,
         "platform": {
