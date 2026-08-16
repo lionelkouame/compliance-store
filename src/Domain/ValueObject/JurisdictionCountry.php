@@ -11,7 +11,12 @@ namespace App\Domain\ValueObject;
  */
 final readonly class JurisdictionCountry
 {
-    private const PATTERN = '/^[A-Z]{3}$/';
+    private const PATTERN = '/^[A-Z]{3}$/D';
+
+    public static function isValid(string $value): bool
+    {
+        return 1 === preg_match(self::PATTERN, $value);
+    }
 
     public function __construct(
         public string $value,

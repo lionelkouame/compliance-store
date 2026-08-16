@@ -10,7 +10,7 @@ Accept: application/ld+json
   "region": "EU",
   "country": "FRA",
   "subRegion": null,
-  "applicableFrameworks": ["GDPR", "EIDAS_2", "COMMERCIAL_CODE_FR"]
+  "applicableFrameworks": ["FRAMEWORK-GDPR", "FRAMEWORK-EIDAS2", "FRAMEWORK-COMMERCIAL-CODE-FR"]
 }
 
 ###
@@ -27,7 +27,7 @@ Accept: application/ld+json
   "region": "NA",
   "country": "USA",
   "subRegion": "CA",
-  "applicableFrameworks": ["CCPA"]
+  "applicableFrameworks": ["FRAMEWORK-CCPA"]
 }
 
 ###

@@ -6,7 +6,7 @@ namespace App\Domain\ValueObject;
 
 final readonly class JurisdictionCode
 {
-    private const PATTERN = '/^JUR-[A-Z0-9_-]+$/';
+    private const PATTERN = '/^JUR-[A-Z0-9_-]+$/D';
     private const MAX_LENGTH = 64;
 
     public static function isValid(string $value): bool

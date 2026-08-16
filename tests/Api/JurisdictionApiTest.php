@@ -31,7 +31,7 @@ final class JurisdictionApiTest extends ApiTestCase
                 'region' => 'EU',
                 'country' => 'FRA',
                 'subRegion' => null,
-                'applicableFrameworks' => ['GDPR', 'EIDAS_2', 'COMMERCIAL_CODE_FR'],
+                'applicableFrameworks' => ['FRAMEWORK-GDPR', 'FRAMEWORK-EIDAS2', 'FRAMEWORK-COMMERCIAL-CODE-FR'],
             ],
         ]);
 
@@ -43,7 +43,7 @@ final class JurisdictionApiTest extends ApiTestCase
             'label' => 'France (European Union)',
             'region' => 'EU',
             'country' => 'FRA',
-            'applicableFrameworks' => ['GDPR', 'EIDAS_2', 'COMMERCIAL_CODE_FR'],
+            'applicableFrameworks' => ['FRAMEWORK-GDPR', 'FRAMEWORK-EIDAS2', 'FRAMEWORK-COMMERCIAL-CODE-FR'],
             'active' => true,
         ]);
     }
@@ -57,7 +57,7 @@ final class JurisdictionApiTest extends ApiTestCase
             'label' => 'France (European Union)',
             'region' => 'EU',
             'country' => 'FRA',
-            'applicableFrameworks' => ['GDPR'],
+            'applicableFrameworks' => ['FRAMEWORK-GDPR'],
         ];
 
         $client->request('POST', '/api/v1/jurisdictions', ['json' => $payload]);
@@ -81,7 +81,7 @@ final class JurisdictionApiTest extends ApiTestCase
                 'label' => 'France (European Union)',
                 'region' => 'EU',
                 'country' => 'FRA',
-                'applicableFrameworks' => ['GDPR'],
+                'applicableFrameworks' => ['FRAMEWORK-GDPR'],
             ],
         ]);
         self::assertResponseStatusCodeSame(201);
@@ -92,7 +92,7 @@ final class JurisdictionApiTest extends ApiTestCase
                 'label' => 'Germany (European Union)',
                 'region' => 'EU',
                 'country' => 'DEU',
-                'applicableFrameworks' => ['GDPR'],
+                'applicableFrameworks' => ['FRAMEWORK-GDPR'],
             ],
         ]);
         self::assertResponseStatusCodeSame(201);
@@ -104,7 +104,7 @@ final class JurisdictionApiTest extends ApiTestCase
                 'region' => 'NA',
                 'country' => 'USA',
                 'subRegion' => 'CA',
-                'applicableFrameworks' => ['CCPA'],
+                'applicableFrameworks' => ['FRAMEWORK-CCPA'],
             ],
         ]);
         self::assertResponseStatusCodeSame(201);
@@ -132,7 +132,7 @@ final class JurisdictionApiTest extends ApiTestCase
                 'label' => 'France (European Union)',
                 'region' => 'EU',
                 'country' => 'FRA',
-                'applicableFrameworks' => ['GDPR'],
+                'applicableFrameworks' => ['FRAMEWORK-GDPR'],
             ],
         ]);
         self::assertResponseStatusCodeSame(201);
@@ -184,6 +184,39 @@ final class JurisdictionApiTest extends ApiTestCase
         self::assertResponseStatusCodeSame(422);
     }
 
+    public function testItRejectsAnEmptySubRegion(): void
+    {
+        $client = static::createClient();
+
+        $client->request('POST', '/api/v1/jurisdictions', [
+            'json' => [
+                'code' => 'JUR-EU-FRA',
+                'label' => 'France',
+                'region' => 'EU',
+                'subRegion' => '',
+                'applicableFrameworks' => [],
+            ],
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
+    public function testItRejectsAnApplicableFrameworkWithoutTheFrameworkPrefix(): void
+    {
+        $client = static::createClient();
+
+        $client->request('POST', '/api/v1/jurisdictions', [
+            'json' => [
+                'code' => 'JUR-EU-FRA',
+                'label' => 'France',
+                'region' => 'EU',
+                'applicableFrameworks' => ['GDPR'],
+            ],
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
     public function testItDeactivatesAJurisdictionViaPatch(): void
     {
         $client = static::createClient();
@@ -194,7 +227,7 @@ final class JurisdictionApiTest extends ApiTestCase
                 'label' => 'France (European Union)',
                 'region' => 'EU',
                 'country' => 'FRA',
-                'applicableFrameworks' => ['GDPR'],
+                'applicableFrameworks' => ['FRAMEWORK-GDPR'],
             ],
         ]);
         self::assertResponseStatusCodeSame(201);

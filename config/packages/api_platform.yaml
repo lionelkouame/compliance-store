@@ -19,3 +19,5 @@ api_platform:
         App\Domain\Exception\NonCompliantDocumentException: 422
         App\Domain\Exception\InvalidJurisdictionException: 422
         App\Domain\Exception\JurisdictionAlreadyExistsException: 409
+        App\Domain\Exception\InvalidLegalFrameworkException: 422
+        App\Domain\Exception\LegalFrameworkAlreadyExistsException: 409

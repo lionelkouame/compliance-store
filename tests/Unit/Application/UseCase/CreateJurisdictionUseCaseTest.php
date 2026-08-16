@@ -41,7 +41,7 @@ final class CreateJurisdictionUseCaseTest extends TestCase
             region: 'EU',
             country: 'FRA',
             subRegion: null,
-            applicableFrameworks: ['GDPR'],
+            applicableFrameworks: ['FRAMEWORK-GDPR'],
         ));
     }
 }

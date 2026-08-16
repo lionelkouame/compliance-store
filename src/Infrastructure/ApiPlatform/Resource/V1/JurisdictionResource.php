@@ -71,12 +71,13 @@ final class JurisdictionResource
     #[ApiProperty(identifier: true)]
     #[Assert\NotBlank]
     #[Assert\Regex(
-        pattern: '/^JUR-[A-Z0-9_-]+$/',
+        pattern: '/^JUR-[A-Z0-9_-]+$/D',
         message: 'The code must match the format JUR-XXX (e.g. JUR-EU-FRA).',
     )]
     #[AssertJurisdictionCodeUnique(groups: ['jurisdiction:create'])]
     public ?string $code = null;
 
+    #[ApiProperty(writable: false)]
     public ?string $id = null;
 
     #[Assert\NotBlank]
@@ -84,28 +85,37 @@ final class JurisdictionResource
 
     #[Assert\NotBlank]
     #[Assert\Regex(
-        pattern: '/^[A-Z]{2,}$/',
+        pattern: '/^[A-Z]{2,}$/D',
         message: 'The region must be uppercase letters only (e.g. EU, NA, GLOBAL).',
     )]
     public ?string $region = null;
 
     #[Assert\Regex(
-        pattern: '/^[A-Z]{3}$/',
+        pattern: '/^[A-Z]{3}$/D',
         message: 'The country must be an ISO 3166-1 alpha-3 code (e.g. FRA, DEU, USA).',
     )]
     public ?string $country = null;
 
+    #[Assert\NotBlank(allowNull: true)]
     public ?string $subRegion = null;
 
     /**
      * @var list<string>
      */
+    #[Assert\All([
+        new Assert\Regex(
+            pattern: '/^FRAMEWORK-[A-Z0-9_-]+$/D',
+            message: 'Each applicable framework must match the format FRAMEWORK-XXX (e.g. FRAMEWORK-GDPR).',
+        ),
+    ])]
     public array $applicableFrameworks = [];
 
     public bool $active = true;
 
+    #[ApiProperty(writable: false)]
     public ?string $createdAt = null;
 
+    #[ApiProperty(writable: false)]
     public ?string $updatedAt = null;
 
     public static function fromEntity(Jurisdiction $jurisdiction): self

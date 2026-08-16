@@ -6,7 +6,7 @@ namespace App\Domain\ValueObject;
 
 final readonly class RegulatoryScopeCode
 {
-    private const UPPERCASE_SNAKE_CASE_PATTERN = '/^[A-Z][A-Z0-9_]*$/';
+    private const UPPERCASE_SNAKE_CASE_PATTERN = '/^[A-Z][A-Z0-9_]*$/D';
 
     public static function isValid(string $value): bool
     {

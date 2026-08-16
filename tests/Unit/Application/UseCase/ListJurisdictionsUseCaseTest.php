@@ -32,7 +32,7 @@ final class ListJurisdictionsUseCaseTest extends TestCase
         );
     }
 
-    public function testExecuteReturnsAllJurisdictionsWithoutFilters(): void
+    public function testExecuteDelegatesToRepositoryWithoutFilters(): void
     {
         $jurisdictions = [
             $this->jurisdiction('JUR-EU-FRA', 'EU', 'FRA', true),
@@ -40,23 +40,31 @@ final class ListJurisdictionsUseCaseTest extends TestCase
             $this->jurisdiction('JUR-US-CA', 'NA', 'USA', false),
         ];
 
-        $repository = $this->createStub(JurisdictionRepositoryInterface::class);
-        $repository->method('findAll')->willReturn($jurisdictions);
+        $repository = $this->createMock(JurisdictionRepositoryInterface::class);
+        $repository->expects(self::once())
+            ->method('findAllMatching')
+            ->with(null, null, null)
+            ->willReturn($jurisdictions);
 
         $useCase = new ListJurisdictionsUseCase($repository);
         $result = $useCase->execute();
 
-        self::assertCount(3, $result);
+        self::assertSame($jurisdictions, $result);
     }
 
-    public function testExecuteFiltersByRegionAndActive(): void
+    public function testExecuteDelegatesRegionAndActiveFiltersToRepositoryAsValueObjects(): void
     {
         $euActive = $this->jurisdiction('JUR-EU-FRA', 'EU', 'FRA', true);
-        $euInactive = $this->jurisdiction('JUR-EU-DEU', 'EU', 'DEU', false);
-        $usActive = $this->jurisdiction('JUR-US-CA', 'NA', 'USA', true);
 
-        $repository = $this->createStub(JurisdictionRepositoryInterface::class);
-        $repository->method('findAll')->willReturn([$euActive, $euInactive, $usActive]);
+        $repository = $this->createMock(JurisdictionRepositoryInterface::class);
+        $repository->expects(self::once())
+            ->method('findAllMatching')
+            ->with(
+                self::callback(fn (JurisdictionRegion $region) => 'EU' === $region->value),
+                null,
+                true,
+            )
+            ->willReturn([$euActive]);
 
         $useCase = new ListJurisdictionsUseCase($repository);
         $result = $useCase->execute(new ListJurisdictionsQuery(region: 'EU', active: true));
@@ -65,18 +73,46 @@ final class ListJurisdictionsUseCaseTest extends TestCase
         self::assertSame($euActive, $result[0]);
     }
 
-    public function testExecuteFiltersByCountry(): void
+    public function testExecuteDelegatesCountryFilterToRepositoryAsValueObject(): void
     {
         $fra = $this->jurisdiction('JUR-EU-FRA', 'EU', 'FRA', true);
-        $deu = $this->jurisdiction('JUR-EU-DEU', 'EU', 'DEU', true);
 
-        $repository = $this->createStub(JurisdictionRepositoryInterface::class);
-        $repository->method('findAll')->willReturn([$fra, $deu]);
+        $repository = $this->createMock(JurisdictionRepositoryInterface::class);
+        $repository->expects(self::once())
+            ->method('findAllMatching')
+            ->with(
+                null,
+                self::callback(fn (JurisdictionCountry $country) => 'FRA' === $country->value),
+                null,
+            )
+            ->willReturn([$fra]);
 
         $useCase = new ListJurisdictionsUseCase($repository);
         $result = $useCase->execute(new ListJurisdictionsQuery(country: 'FRA'));
 
         self::assertCount(1, $result);
         self::assertSame($fra, $result[0]);
+    }
+
+    public function testExecuteReturnsEmptyArrayWithoutQueryingRepositoryForAMalformedRegionFilter(): void
+    {
+        $repository = $this->createMock(JurisdictionRepositoryInterface::class);
+        $repository->expects(self::never())->method('findAllMatching');
+
+        $useCase = new ListJurisdictionsUseCase($repository);
+        $result = $useCase->execute(new ListJurisdictionsQuery(region: 'not-a-valid-region'));
+
+        self::assertSame([], $result);
+    }
+
+    public function testExecuteReturnsEmptyArrayWithoutQueryingRepositoryForAMalformedCountryFilter(): void
+    {
+        $repository = $this->createMock(JurisdictionRepositoryInterface::class);
+        $repository->expects(self::never())->method('findAllMatching');
+
+        $useCase = new ListJurisdictionsUseCase($repository);
+        $result = $useCase->execute(new ListJurisdictionsQuery(country: 'FR'));
+
+        self::assertSame([], $result);
     }
 }

@@ -45,6 +45,16 @@ doctrine:
                 class: App\Infrastructure\Persistence\Type\JurisdictionSubRegionType
             applicable_frameworks:
                 class: App\Infrastructure\Persistence\Type\ApplicableFrameworksType
+            legal_framework_id:
+                class: App\Infrastructure\Persistence\Type\LegalFrameworkIdType
+            legal_framework_code:
+                class: App\Infrastructure\Persistence\Type\LegalFrameworkCodeType
+            legal_framework_name:
+                class: App\Infrastructure\Persistence\Type\LegalFrameworkNameType
+            legal_framework_official_reference:
+                class: App\Infrastructure\Persistence\Type\LegalFrameworkOfficialReferenceType
+            legal_framework_regulatory_authority:
+                class: App\Infrastructure\Persistence\Type\LegalFrameworkRegulatoryAuthorityType
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

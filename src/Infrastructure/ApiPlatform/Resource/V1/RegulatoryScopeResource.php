@@ -53,13 +53,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 final class RegulatoryScopeResource
 {
-    #[ApiProperty(identifier: true)]
+    #[ApiProperty(identifier: true, writable: false)]
     #[Assert\Uuid]
     public ?string $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Regex(
-        pattern: '/^[A-Z][A-Z0-9_]*$/',
+        pattern: '/^[A-Z][A-Z0-9_]*$/D',
         message: 'The code must be in UPPERCASE_SNAKE_CASE (e.g. KYC_INDIVIDUAL).',
     )]
     #[AssertRegulatoryScopeCodeUnique]
@@ -77,8 +77,10 @@ final class RegulatoryScopeResource
 
     public bool $isActive = true;
 
+    #[ApiProperty(writable: false)]
     public ?string $createdAt = null;
 
+    #[ApiProperty(writable: false)]
     public ?string $updatedAt = null;
 
     public static function fromEntity(RegulatoryScope $scope): self
