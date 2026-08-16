@@ -33,10 +33,6 @@
             "symfony/flex": true,
             "symfony/runtime": true
         },
-        "preferred-install": {
-            "phpunit/phpunit": "source",
-            "*": "dist"
-        },
         "bump-after-update": true,
         "platform-check": false,
         "platform": {
@@ -104,7 +100,7 @@
         "phpstan/phpstan": "^2.2",
         "phpstan/phpstan-doctrine": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
-        "phpunit/phpunit": "^13.2.6",
+        "phpunit/phpunit": "^11.5.56",
         "symfony/browser-kit": "8.1.*",
         "symfony/css-selector": "8.1.*",
         "symfony/http-client": "8.1.*"
