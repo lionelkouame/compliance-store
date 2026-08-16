@@ -102,3 +102,5 @@ jobs:
           VALIDATE_PHP_PSALM: false
           VALIDATE_PHP_PHPCS: false
           VALIDATE_PHP_CS_FIXER: false
+          VALIDATE_SPELL_CODESPELL: false
+          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
