@@ -77,6 +77,7 @@ final class LegalFrameworkResource
     #[AssertLegalFrameworkCodeUnique(groups: ['legal-framework:create'])]
     public ?string $code = null;
 
+    #[ApiProperty(writable: false)]
     public ?string $id = null;
 
     #[Assert\NotBlank]
@@ -97,8 +98,10 @@ final class LegalFrameworkResource
 
     public bool $active = true;
 
+    #[ApiProperty(writable: false)]
     public ?string $createdAt = null;
 
+    #[ApiProperty(writable: false)]
     public ?string $updatedAt = null;
 
     public static function fromEntity(LegalFramework $legalFramework): self

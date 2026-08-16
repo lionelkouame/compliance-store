@@ -77,6 +77,7 @@ final class JurisdictionResource
     #[AssertJurisdictionCodeUnique(groups: ['jurisdiction:create'])]
     public ?string $code = null;
 
+    #[ApiProperty(writable: false)]
     public ?string $id = null;
 
     #[Assert\NotBlank]
@@ -111,8 +112,10 @@ final class JurisdictionResource
 
     public bool $active = true;
 
+    #[ApiProperty(writable: false)]
     public ?string $createdAt = null;
 
+    #[ApiProperty(writable: false)]
     public ?string $updatedAt = null;
 
     public static function fromEntity(Jurisdiction $jurisdiction): self

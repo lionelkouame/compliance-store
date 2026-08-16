@@ -53,7 +53,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 final class RegulatoryScopeResource
 {
-    #[ApiProperty(identifier: true)]
+    #[ApiProperty(identifier: true, writable: false)]
     #[Assert\Uuid]
     public ?string $id = null;
 
@@ -77,8 +77,10 @@ final class RegulatoryScopeResource
 
     public bool $isActive = true;
 
+    #[ApiProperty(writable: false)]
     public ?string $createdAt = null;
 
+    #[ApiProperty(writable: false)]
     public ?string $updatedAt = null;
 
     public static function fromEntity(RegulatoryScope $scope): self
