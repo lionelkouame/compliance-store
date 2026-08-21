@@ -1,5 +1,5 @@
-# @name storeKycCniDocument
-### Store Sensitive KYC Document - CNI (Carte Nationale d'Identité)
+# @name storeKycPassportDocument
+### Store Sensitive KYC Document - PASSPORT
 POST {{apiUrl}}/documents
 Content-Type: multipart/form-data; boundary=ComplianceStoreBoundary
 Accept: application/ld+json
@@ -30,41 +30,32 @@ Content-Type: image/png
 
 ###
 
-# @name storeKycPassportDocument
-### Store Sensitive KYC Document - PASSPORT
-POST {{apiUrl}}/documents
-Content-Type: application/json
-Accept: application/ld+json
-Authorization: Bearer {{jwtToken}}
-
-{
-  "documentType": "PASSPORT",
-  "ownerId": "usr_kyc_987654321",
-  "metadata": {
-    "country": "FRA",
-    "passportNumber": "20AA12345",
-    "holderName": "Jean Dupont",
-    "expirationDate": "2032-05-15",
-    "retentionYears": 5
-  }
-}
-
-###
-
 # @name storeKycProofOfAddressDocument
 ### Store Sensitive KYC Document - JUSTIFICATIF_DOMICILE (Proof of Address)
 POST {{apiUrl}}/documents
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=ComplianceStoreBoundary
 Accept: application/ld+json
-Authorization: Bearer {{jwtToken}}
+# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
 
-{
-  "documentType": "JUSTIFICATIF_DOMICILE",
-  "ownerId": "usr_kyc_987654321",
-  "metadata": {
-    "country": "FRA",
-    "issueDate": "2026-07-01",
-    "issuer": "EDF",
-    "retentionYears": 5
-  }
-}
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="documentType"
+
+JUSTIFICATIF_DOMICILE
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="ownerId"
+
+usr_kyc_987654321
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="country"
+
+FRA
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="retentionYears"
+
+5
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="file"; filename="passport.png"
+Content-Type: image/png
+
+< ../../passport.png
+--ComplianceStoreBoundary--

@@ -7,6 +7,7 @@ DOCKER_COMP = docker compose
 
 # Docker containers
 PHP_CONT = $(DOCKER_COMP) exec php
+DB_CONT  = $(DOCKER_COMP) exec database
 
 # Executables
 PHP      = $(PHP_CONT) php
@@ -15,7 +16,7 @@ SYMFONY  = $(PHP) bin/console
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build refresh up start down logs sh bash test deptrac phpstan composer vendor sf cc setup-dns setup-hooks
+.PHONY        : help build refresh up start down logs sh bash test deptrac phpstan composer vendor sf cc setup-dns setup-hooks db-reset
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -88,3 +89,18 @@ sf: ## List all Symfony commands or pass the parameter "c=" to run a given comma
 
 cc: c=c:c ## Clear the cache
 cc: sf
+
+## —— Base de données 🗄️ ——————————————————————————————————————————————————————
+db-reset: ## Drop, recreate and migrate the dev + test databases to match the current codebase
+	@echo "🔌 Terminating active connections..."
+	@$(DB_CONT) psql -U $${POSTGRES_USER:-app} -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname IN ('$${POSTGRES_DB:-app}', '$${POSTGRES_DB:-app}_test') AND pid <> pg_backend_pid();" > /dev/null
+	@echo "🗑️  Dropping databases..."
+	@$(SYMFONY) doctrine:database:drop --if-exists --force
+	@$(SYMFONY) doctrine:database:drop --if-exists --force --env=test
+	@echo "🏗️  Creating databases..."
+	@$(SYMFONY) doctrine:database:create
+	@$(SYMFONY) doctrine:database:create --env=test
+	@echo "⬆️  Running migrations..."
+	@$(SYMFONY) doctrine:migrations:migrate --no-interaction
+	@$(SYMFONY) doctrine:migrations:migrate --no-interaction --env=test
+	@echo "✅ Databases reset and up to date."

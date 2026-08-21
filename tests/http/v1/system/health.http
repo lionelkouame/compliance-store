@@ -7,5 +7,5 @@ Accept: application/ld+json
 
 # @name checkOpenApiSpec
 ### Check OpenApi Json Specification
-GET {{baseUrl}}/api/docs.json
-Accept: application/json
+GET {{baseUrl}}/api/docs.jsonopenapi
+Accept: application/vnd.openapi+json
