@@ -1,9 +1,11 @@
 # ADR 0006: Strict Non-Nullable Value Objects and Domain-Level Optionality Handling
 
-* **Status**: Accepted
+* **Status**: Obsolete
 * **Date**: 2026-08-11
 * **Authors**: Architecture Team & Lead Tech
 * **Project**: Compliance Store
+
+> **Obsolescence note (2026-08-21)**: `Jurisdiction` — the only entity in this codebase with optional domain attributes (`JurisdictionCountry`, `JurisdictionSubRegion`) — has been removed. No remaining entity currently applies this pattern.
 
 ---
 

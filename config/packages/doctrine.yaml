@@ -7,16 +7,6 @@ doctrine:
         #server_version: '16'
 
         types:
-            regulatory_scope_id:
-                class: App\Infrastructure\Persistence\Type\RegulatoryScopeIdType
-            regulatory_scope_code:
-                class: App\Infrastructure\Persistence\Type\RegulatoryScopeCodeType
-            regulatory_scope_label:
-                class: App\Infrastructure\Persistence\Type\RegulatoryScopeLabelType
-            regulatory_scope_description:
-                class: App\Infrastructure\Persistence\Type\RegulatoryScopeDescriptionType
-            allowed_document_types:
-                class: App\Infrastructure\Persistence\Type\AllowedDocumentTypesType
             document_id:
                 class: App\Infrastructure\Persistence\Type\DocumentIdType
             owner_id:
@@ -31,30 +21,6 @@ doctrine:
                 class: App\Infrastructure\Persistence\Type\WrappedDataKeyType
             document_metadata:
                 class: App\Infrastructure\Persistence\Type\DocumentMetadataType
-            jurisdiction_id:
-                class: App\Infrastructure\Persistence\Type\JurisdictionIdType
-            jurisdiction_code:
-                class: App\Infrastructure\Persistence\Type\JurisdictionCodeType
-            jurisdiction_label:
-                class: App\Infrastructure\Persistence\Type\JurisdictionLabelType
-            jurisdiction_region:
-                class: App\Infrastructure\Persistence\Type\JurisdictionRegionType
-            jurisdiction_country:
-                class: App\Infrastructure\Persistence\Type\JurisdictionCountryType
-            jurisdiction_sub_region:
-                class: App\Infrastructure\Persistence\Type\JurisdictionSubRegionType
-            applicable_frameworks:
-                class: App\Infrastructure\Persistence\Type\ApplicableFrameworksType
-            legal_framework_id:
-                class: App\Infrastructure\Persistence\Type\LegalFrameworkIdType
-            legal_framework_code:
-                class: App\Infrastructure\Persistence\Type\LegalFrameworkCodeType
-            legal_framework_name:
-                class: App\Infrastructure\Persistence\Type\LegalFrameworkNameType
-            legal_framework_official_reference:
-                class: App\Infrastructure\Persistence\Type\LegalFrameworkOfficialReferenceType
-            legal_framework_regulatory_authority:
-                class: App\Infrastructure\Persistence\Type\LegalFrameworkRegulatoryAuthorityType
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

@@ -1,9 +1,11 @@
 # ADR 0007: Declarative URI Variables Contract in API Platform State Providers via PHPDoc Shapes
 
-* **Status**: Accepted
+* **Status**: Obsolete
 * **Date**: 2026-08-11
 * **Authors**: Architecture Team & Lead Tech
 * **Project**: Compliance Store
+
+> **Obsolescence note (2026-08-21)**: `JurisdictionCollectionProvider`/`JurisdictionItemProvider` and their LegalFramework counterparts — the only state providers that consumed `$uriVariables` — have been removed. The remaining providers (`HealthCheckStateProvider`, `DocumentProcessor`) don't read URI variables, so no code currently applies this contract.
 
 ---
 

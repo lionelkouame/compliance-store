@@ -1,9 +1,11 @@
 # ADR 0001: Native Compliance Core and Provider Extension Port
 
-* **Status**: Accepted
+* **Status**: Obsolete
 * **Date**: 2026-07-24
 * **Authors**: Architecture & Compliance Team
 * **Project**: Compliance Store
+
+> **Obsolescence note (2026-08-21)**: `RegulatoryScope`, `DocumentComplianceChecker` and `RegulatoryScopeValidator` — the Native Compliance Core this ADR describes — have been removed. `StoreDocumentUseCase` no longer checks a document against any regulatory scope before storing it. This decision no longer reflects the codebase.
 
 ---
 

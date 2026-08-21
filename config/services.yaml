@@ -22,12 +22,6 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    # Domain service with no consumer yet in this codebase: it will be called by future
-    # document-submission use cases when they associate a document to a RegulatoryScope.
-    # Kept public so it isn't pruned as unused by the container compiler.
-    App\Domain\Service\RegulatoryScopeValidator:
-        public: true
-
     # S3-compatible client used by MinioStorageGateway (documents.storage, see flysystem.yaml).
     Aws\S3\S3Client:
         arguments:

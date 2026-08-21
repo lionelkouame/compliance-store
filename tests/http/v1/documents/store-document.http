@@ -38,7 +38,6 @@ Accept: application/ld+json
 Authorization: Bearer {{jwtToken}}
 
 {
-  "regulatoryScopeCode": "KYC_VERIFICATION",
   "documentType": "PASSPORT",
   "ownerId": "usr_kyc_987654321",
   "metadata": {
@@ -60,7 +59,6 @@ Accept: application/ld+json
 Authorization: Bearer {{jwtToken}}
 
 {
-  "regulatoryScopeCode": "KYC_VERIFICATION",
   "documentType": "JUSTIFICATIF_DOMICILE",
   "ownerId": "usr_kyc_987654321",
   "metadata": {

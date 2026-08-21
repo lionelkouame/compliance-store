@@ -9,14 +9,12 @@ use App\Domain\ValueObject\DocumentMetadata;
 use App\Domain\ValueObject\DocumentType;
 use App\Domain\ValueObject\FileHash;
 use App\Domain\ValueObject\OwnerId;
-use App\Domain\ValueObject\RegulatoryScopeId;
 use App\Domain\ValueObject\StorageKey;
 use App\Domain\ValueObject\WrappedDataKey;
 
 /**
- * A sensitive document, stored encrypted (Zero Trust Storage, ADR 0002)
- * after passing the Native Compliance Core check (ADR 0001). Immutable once
- * stored.
+ * A sensitive document, stored encrypted (Zero Trust Storage, ADR 0002).
+ * Immutable once stored.
  */
 final class Document
 {
@@ -24,7 +22,6 @@ final class Document
         private readonly DocumentId $id,
         private readonly DocumentType $documentType,
         private readonly OwnerId $ownerId,
-        private readonly RegulatoryScopeId $regulatoryScopeId,
         private readonly DocumentMetadata $metadata,
         private readonly FileHash $fileHash,
         private readonly WrappedDataKey $wrappedDataKey,
@@ -36,7 +33,6 @@ final class Document
         DocumentId $id,
         DocumentType $documentType,
         OwnerId $ownerId,
-        RegulatoryScopeId $regulatoryScopeId,
         DocumentMetadata $metadata,
         FileHash $fileHash,
         WrappedDataKey $wrappedDataKey,
@@ -46,7 +42,6 @@ final class Document
             id: $id,
             documentType: $documentType,
             ownerId: $ownerId,
-            regulatoryScopeId: $regulatoryScopeId,
             metadata: $metadata,
             fileHash: $fileHash,
             wrappedDataKey: $wrappedDataKey,
@@ -68,11 +63,6 @@ final class Document
     public function ownerId(): OwnerId
     {
         return $this->ownerId;
-    }
-
-    public function regulatoryScopeId(): RegulatoryScopeId
-    {
-        return $this->regulatoryScopeId;
     }
 
     public function metadata(): DocumentMetadata

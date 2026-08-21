@@ -1,9 +1,11 @@
 # ADR 0005: Declarative DTO Validation with Infrastructure Delegation and Domain Double-Lock Guard
 
-* **Status**: Accepted
+* **Status**: Obsolete
 * **Date**: 2026-08-01
 * **Authors**: Architecture Team & Lead Tech
 * **Project**: Compliance Store
+
+> **Obsolescence note (2026-08-21)**: This ADR was written against `RegulatoryScope` (and applied identically to `Jurisdiction`/`LegalFramework`), all since removed along with their declarative unique-constraint validators. `src/Infrastructure/ApiPlatform/Validator/` no longer exists — no resource in the codebase currently applies this pattern.
 
 ---
 
