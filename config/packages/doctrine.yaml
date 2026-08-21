@@ -19,8 +19,6 @@ doctrine:
                 class: App\Infrastructure\Persistence\Type\StorageKeyType
             wrapped_data_key:
                 class: App\Infrastructure\Persistence\Type\WrappedDataKeyType
-            document_metadata:
-                class: App\Infrastructure\Persistence\Type\DocumentMetadataType
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

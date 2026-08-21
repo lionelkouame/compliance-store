@@ -33,8 +33,6 @@ final class DocumentApiTest extends ApiTestCase
                 'parameters' => [
                     'documentType' => 'PASSPORT',
                     'ownerId' => 'usr_123456789',
-                    'country' => 'FRA',
-                    'retentionYears' => '5',
                 ],
                 'files' => [
                     'file' => new UploadedFile(self::FIXTURE_PATH, 'passport.png', 'image/png', null, true),
@@ -46,8 +44,6 @@ final class DocumentApiTest extends ApiTestCase
         self::assertJsonContains([
             'documentType' => 'PASSPORT',
             'ownerId' => 'usr_123456789',
-            'country' => 'FRA',
-            'retentionYears' => 5,
         ]);
 
         $data = $response->toArray();
@@ -66,8 +62,6 @@ final class DocumentApiTest extends ApiTestCase
                 'parameters' => [
                     'documentType' => 'PASSPORT',
                     'ownerId' => 'usr_123456789',
-                    'country' => 'FRA',
-                    'retentionYears' => '5',
                 ],
             ],
         ]);

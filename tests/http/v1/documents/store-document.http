@@ -14,14 +14,6 @@ Content-Disposition: form-data; name="ownerId"
 
 usr_123456789
 --ComplianceStoreBoundary
-Content-Disposition: form-data; name="country"
-
-FRA
---ComplianceStoreBoundary
-Content-Disposition: form-data; name="retentionYears"
-
-5
---ComplianceStoreBoundary
 Content-Disposition: form-data; name="file"; filename="passport.png"
 Content-Type: image/png
 
@@ -45,14 +37,6 @@ JUSTIFICATIF_DOMICILE
 Content-Disposition: form-data; name="ownerId"
 
 usr_kyc_987654321
---ComplianceStoreBoundary
-Content-Disposition: form-data; name="country"
-
-FRA
---ComplianceStoreBoundary
-Content-Disposition: form-data; name="retentionYears"
-
-5
 --ComplianceStoreBoundary
 Content-Disposition: form-data; name="file"; filename="passport.png"
 Content-Type: image/png

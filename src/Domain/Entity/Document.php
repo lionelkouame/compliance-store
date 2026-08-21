@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain\Entity;
 
 use App\Domain\ValueObject\DocumentId;
-use App\Domain\ValueObject\DocumentMetadata;
 use App\Domain\ValueObject\DocumentType;
 use App\Domain\ValueObject\FileHash;
 use App\Domain\ValueObject\OwnerId;
@@ -22,7 +21,6 @@ final class Document
         private readonly DocumentId $id,
         private readonly DocumentType $documentType,
         private readonly OwnerId $ownerId,
-        private readonly DocumentMetadata $metadata,
         private readonly FileHash $fileHash,
         private readonly WrappedDataKey $wrappedDataKey,
         private readonly StorageKey $storageKey,
@@ -33,7 +31,6 @@ final class Document
         DocumentId $id,
         DocumentType $documentType,
         OwnerId $ownerId,
-        DocumentMetadata $metadata,
         FileHash $fileHash,
         WrappedDataKey $wrappedDataKey,
         StorageKey $storageKey,
@@ -42,7 +39,6 @@ final class Document
             id: $id,
             documentType: $documentType,
             ownerId: $ownerId,
-            metadata: $metadata,
             fileHash: $fileHash,
             wrappedDataKey: $wrappedDataKey,
             storageKey: $storageKey,
@@ -63,11 +59,6 @@ final class Document
     public function ownerId(): OwnerId
     {
         return $this->ownerId;
-    }
-
-    public function metadata(): DocumentMetadata
-    {
-        return $this->metadata;
     }
 
     public function fileHash(): FileHash

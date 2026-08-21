@@ -50,8 +50,6 @@ final class StoreDocumentUseCaseTest extends TestCase
         $document = $useCase->execute(new StoreDocumentCommand(
             documentType: 'PASSPORT',
             ownerId: 'usr_123',
-            country: 'FRA',
-            retentionYears: 5,
             content: 'plaintext content',
         ));
 

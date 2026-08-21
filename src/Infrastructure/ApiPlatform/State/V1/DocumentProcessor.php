@@ -39,15 +39,9 @@ final readonly class DocumentProcessor implements ProcessorInterface
         $ownerId = $request?->request->get('ownerId');
         $input->ownerId = \is_string($ownerId) ? $ownerId : null;
 
-        $country = $request?->request->get('country');
-        $input->country = \is_string($country) ? $country : null;
-
-        $retentionYears = $request?->request->get('retentionYears');
-        $input->retentionYears = is_numeric($retentionYears) ? (int) $retentionYears : null;
-
         $this->validator->validate($input);
 
-        if (null === $input->file || null === $input->documentType || null === $input->ownerId || null === $input->country || null === $input->retentionYears) {
+        if (null === $input->file || null === $input->documentType || null === $input->ownerId) {
             throw new UnprocessableEntityHttpException('Missing required document parameters.');
         }
 
@@ -55,8 +49,6 @@ final readonly class DocumentProcessor implements ProcessorInterface
             $document = $this->useCase->execute(new StoreDocumentCommand(
                 documentType: $input->documentType,
                 ownerId: $input->ownerId,
-                country: $input->country,
-                retentionYears: $input->retentionYears,
                 content: $input->file->getContent(),
             ));
         } catch (\InvalidArgumentException $e) {

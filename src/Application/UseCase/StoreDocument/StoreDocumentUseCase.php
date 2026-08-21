@@ -9,7 +9,6 @@ use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
 use App\Domain\Port\Service\DocumentIdGeneratorInterface;
-use App\Domain\ValueObject\DocumentMetadata;
 use App\Domain\ValueObject\DocumentType;
 use App\Domain\ValueObject\FileHash;
 use App\Domain\ValueObject\OwnerId;
@@ -40,7 +39,6 @@ final readonly class StoreDocumentUseCase
             id: $id,
             documentType: $documentType,
             ownerId: new OwnerId($command->ownerId),
-            metadata: new DocumentMetadata($command->country, $command->retentionYears),
             fileHash: $fileHash,
             wrappedDataKey: $envelope->wrappedDataKey,
             storageKey: $storageKey,
