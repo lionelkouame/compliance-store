@@ -11,6 +11,7 @@ use ApiPlatform\OpenApi\Model\Operation;
 use App\Domain\Entity\Document;
 use App\Infrastructure\ApiPlatform\State\V1\DocumentProcessor;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -22,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 tags: ['V1 - Documents'],
                 summary: 'Store a document',
-                description: 'Ingests a document, encrypts it (envelope encryption) and stores it on the Zero Trust storage backend.',
+                description: 'Ingests a document, and begin the workflow to store it',
             ),
             deserialize: false,
             processor: DocumentProcessor::class,
@@ -55,6 +56,22 @@ final class DocumentResource
     public ?string $storageKey = null;
 
     public ?string $createdAt = null;
+
+    public static function fromRequest(?Request $request): self
+    {
+        $resource = new self();
+
+        $file = $request?->files->get('file');
+        $resource->file = $file instanceof UploadedFile ? $file : null;
+
+        $documentType = $request?->request->get('documentType');
+        $resource->documentType = \is_string($documentType) ? $documentType : null;
+
+        $ownerId = $request?->request->get('ownerId');
+        $resource->ownerId = \is_string($ownerId) ? $ownerId : null;
+
+        return $resource;
+    }
 
     public static function fromEntity(Document $document): self
     {

@@ -27,29 +27,24 @@ final readonly class DocumentProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): DocumentResource
     {
-        $request = $this->requestStack->getCurrentRequest();
-
-        $input = new DocumentResource();
-        $file = $request?->files->get('file');
-        $input->file = $file instanceof UploadedFile ? $file : null;
-
-        $documentType = $request?->request->get('documentType');
-        $input->documentType = \is_string($documentType) ? $documentType : null;
-
-        $ownerId = $request?->request->get('ownerId');
-        $input->ownerId = \is_string($ownerId) ? $ownerId : null;
+        $input = DocumentResource::fromRequest($this->requestStack->getCurrentRequest());
 
         $this->validator->validate($input);
 
-        if (null === $input->file || null === $input->documentType || null === $input->ownerId) {
-            throw new UnprocessableEntityHttpException('Missing required document parameters.');
-        }
+        // The Assert constraints on DocumentResource already guarantee these are
+        // non-null here (validate() throws otherwise) — narrowing for PHPStan only.
+        /** @var UploadedFile $file */
+        $file = $input->file;
+        /** @var string $documentType */
+        $documentType = $input->documentType;
+        /** @var string $ownerId */
+        $ownerId = $input->ownerId;
 
         try {
             $document = $this->useCase->execute(new StoreDocumentCommand(
-                documentType: $input->documentType,
-                ownerId: $input->ownerId,
-                content: $input->file->getContent(),
+                documentType: $documentType,
+                ownerId: $ownerId,
+                content: $file->getContent(),
             ));
         } catch (\InvalidArgumentException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), $e);
