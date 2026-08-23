@@ -8,53 +8,53 @@ doctrine:
 
         types:
             regulatory_scope_id:
-                class: App\Infrastructure\Persistence\Type\RegulatoryScopeIdType
+                class: App\Infrastructure\Persistence\Doctrine\Type\RegulatoryScopeIdType
             regulatory_scope_code:
-                class: App\Infrastructure\Persistence\Type\RegulatoryScopeCodeType
+                class: App\Infrastructure\Persistence\Doctrine\Type\RegulatoryScopeCodeType
             regulatory_scope_label:
-                class: App\Infrastructure\Persistence\Type\RegulatoryScopeLabelType
+                class: App\Infrastructure\Persistence\Doctrine\Type\RegulatoryScopeLabelType
             regulatory_scope_description:
-                class: App\Infrastructure\Persistence\Type\RegulatoryScopeDescriptionType
+                class: App\Infrastructure\Persistence\Doctrine\Type\RegulatoryScopeDescriptionType
             allowed_document_types:
-                class: App\Infrastructure\Persistence\Type\AllowedDocumentTypesType
+                class: App\Infrastructure\Persistence\Doctrine\Type\AllowedDocumentTypesType
             document_id:
-                class: App\Infrastructure\Persistence\Type\DocumentIdType
+                class: App\Infrastructure\Persistence\Doctrine\Type\DocumentIdType
             owner_id:
-                class: App\Infrastructure\Persistence\Type\OwnerIdType
+                class: App\Infrastructure\Persistence\Doctrine\Type\OwnerIdType
             document_type:
-                class: App\Infrastructure\Persistence\Type\DocumentTypeType
+                class: App\Infrastructure\Persistence\Doctrine\Type\DocumentTypeType
             file_hash:
-                class: App\Infrastructure\Persistence\Type\FileHashType
+                class: App\Infrastructure\Persistence\Doctrine\Type\FileHashType
             storage_key:
-                class: App\Infrastructure\Persistence\Type\StorageKeyType
+                class: App\Infrastructure\Persistence\Doctrine\Type\StorageKeyType
             wrapped_data_key:
-                class: App\Infrastructure\Persistence\Type\WrappedDataKeyType
+                class: App\Infrastructure\Persistence\Doctrine\Type\WrappedDataKeyType
             document_metadata:
-                class: App\Infrastructure\Persistence\Type\DocumentMetadataType
+                class: App\Infrastructure\Persistence\Doctrine\Type\DocumentMetadataType
             jurisdiction_id:
-                class: App\Infrastructure\Persistence\Type\JurisdictionIdType
+                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionIdType
             jurisdiction_code:
-                class: App\Infrastructure\Persistence\Type\JurisdictionCodeType
+                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionCodeType
             jurisdiction_label:
-                class: App\Infrastructure\Persistence\Type\JurisdictionLabelType
+                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionLabelType
             jurisdiction_region:
-                class: App\Infrastructure\Persistence\Type\JurisdictionRegionType
+                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionRegionType
             jurisdiction_country:
-                class: App\Infrastructure\Persistence\Type\JurisdictionCountryType
+                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionCountryType
             jurisdiction_sub_region:
-                class: App\Infrastructure\Persistence\Type\JurisdictionSubRegionType
+                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionSubRegionType
             applicable_frameworks:
-                class: App\Infrastructure\Persistence\Type\ApplicableFrameworksType
+                class: App\Infrastructure\Persistence\Doctrine\Type\ApplicableFrameworksType
             legal_framework_id:
-                class: App\Infrastructure\Persistence\Type\LegalFrameworkIdType
+                class: App\Infrastructure\Persistence\Doctrine\Type\LegalFrameworkIdType
             legal_framework_code:
-                class: App\Infrastructure\Persistence\Type\LegalFrameworkCodeType
+                class: App\Infrastructure\Persistence\Doctrine\Type\LegalFrameworkCodeType
             legal_framework_name:
-                class: App\Infrastructure\Persistence\Type\LegalFrameworkNameType
+                class: App\Infrastructure\Persistence\Doctrine\Type\LegalFrameworkNameType
             legal_framework_official_reference:
-                class: App\Infrastructure\Persistence\Type\LegalFrameworkOfficialReferenceType
+                class: App\Infrastructure\Persistence\Doctrine\Type\LegalFrameworkOfficialReferenceType
             legal_framework_regulatory_authority:
-                class: App\Infrastructure\Persistence\Type\LegalFrameworkRegulatoryAuthorityType
+                class: App\Infrastructure\Persistence\Doctrine\Type\LegalFrameworkRegulatoryAuthorityType
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
@@ -65,7 +65,7 @@ doctrine:
             App:
                 type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Infrastructure/Persistence/Mapping'
+                dir: '%kernel.project_dir%/src/Infrastructure/Persistence/Doctrine/Mapping'
                 prefix: 'App\Domain\Entity'
                 alias: App
 

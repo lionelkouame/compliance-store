@@ -8,7 +8,7 @@ api_platform:
         json: ['application/json']
     mapping:
         paths:
-            - '%kernel.project_dir%/src/Infrastructure/ApiPlatform/Resource'
+            - '%kernel.project_dir%/src/Infrastructure/Presentation/ApiPlatform/V1/Resource'
     defaults:
         stateless: true
         cache_headers:
