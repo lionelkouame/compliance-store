@@ -38,7 +38,7 @@ We want to go even further in the technical separation end description of each s
 ### Move Validator out of ApiPlatform and rename it Validation
 
 - `Infrastructure/Presentation/ApiPlatform/Validator` is moved to `Infrastructure/Validation`, at the root of `Infrastructure`, and renamed from `Validator` to `Validation`.
-- These custom Symfony constraints (`AssertJurisdictionCodeUnique`, `AssertLegalFrameworkCodeUnique`) validate domain uniqueness rules; they are consumed by API Platform resources today but are not an API Platform concern themselves, so they don't belong under `Presentation/ApiPlatform`.
+- Custom Symfony constraints validating domain uniqueness rules are consumed by API Platform resources but are not an API Platform concern themselves, so they don't belong under `Presentation/ApiPlatform`.
 
 ### Extract a dedicated Storage folder from Gateway
 

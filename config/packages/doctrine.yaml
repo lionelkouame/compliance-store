@@ -21,30 +21,6 @@ doctrine:
                 class: App\Infrastructure\Persistence\Doctrine\Type\WrappedDataKeyType
             document_metadata:
                 class: App\Infrastructure\Persistence\Doctrine\Type\DocumentMetadataType
-            jurisdiction_id:
-                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionIdType
-            jurisdiction_code:
-                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionCodeType
-            jurisdiction_label:
-                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionLabelType
-            jurisdiction_region:
-                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionRegionType
-            jurisdiction_country:
-                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionCountryType
-            jurisdiction_sub_region:
-                class: App\Infrastructure\Persistence\Doctrine\Type\JurisdictionSubRegionType
-            applicable_frameworks:
-                class: App\Infrastructure\Persistence\Doctrine\Type\ApplicableFrameworksType
-            legal_framework_id:
-                class: App\Infrastructure\Persistence\Doctrine\Type\LegalFrameworkIdType
-            legal_framework_code:
-                class: App\Infrastructure\Persistence\Doctrine\Type\LegalFrameworkCodeType
-            legal_framework_name:
-                class: App\Infrastructure\Persistence\Doctrine\Type\LegalFrameworkNameType
-            legal_framework_official_reference:
-                class: App\Infrastructure\Persistence\Doctrine\Type\LegalFrameworkOfficialReferenceType
-            legal_framework_regulatory_authority:
-                class: App\Infrastructure\Persistence\Doctrine\Type\LegalFrameworkRegulatoryAuthorityType
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
