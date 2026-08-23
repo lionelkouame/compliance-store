@@ -15,7 +15,7 @@ use App\Domain\ValueObject\JurisdictionSubRegion;
 /**
  * Dynamically manageable territorial jurisdiction (No-Code).
  *
- * Types the geographic scope a RegulatoryScope or storage policy can be
+ * Types the geographic scope a storage policy can be
  * attached to (e.g. JUR-EU-FRA, JUR-US-CA, JUR-GLOBAL) without requiring
  * redeployment: the list of jurisdictions is never hardcoded (enum).
  */

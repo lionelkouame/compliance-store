@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 tags: ['V1 - Documents'],
                 summary: 'Store a document',
-                description: 'Ingests a document, checks it against the active regulatory scopes (Native Compliance Core), encrypts it (envelope encryption) and stores it on the Zero Trust storage backend.',
+                description: 'Ingests a document, encrypts it (envelope encryption) and stores it on the Zero Trust storage backend.',
             ),
             deserialize: false,
             processor: DocumentProcessor::class,
