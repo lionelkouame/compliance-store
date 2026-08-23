@@ -1278,7 +1278,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             timeout?: int|Param, // Connection timeout in seconds // Default: 90
  *             ignore_passive_address?: scalar|Param|null, // Ignore passive address // Default: null
  *             utf8?: bool|Param, // Enable UTF8 mode // Default: false
- *             transfer_mode?: scalar|Param|null, // Transfer mode (FTP_ASCII or FTP_BINARY constante on ftp extension) // Default: null
+ *             transfer_mode?: scalar|Param|null, // Transfer mode (FTP_ASCII or FTP_BINARY constant on ftp extension) // Default: null
  *             system_type?: null|"windows"|"unix"|Param, // FTP system type // Default: null
  *             timestamps_on_unix_listings_enabled?: bool|Param, // Enable timestamps on Unix listings // Default: false
  *             recurse_manually?: bool|Param, // Recurse directories manually // Default: true
@@ -1373,8 +1373,8 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         disable_asserts?: bool|Param, // Deprecated: The "disable_asserts" option is deprecated and will be removed in 4.0. // Default: false
  *         public_url?: list<scalar|Param|null>,
  *         path_normalizer?: scalar|Param|null, // Path normalizer service name (should implement League\Flysystem\PathNormalizer) // Default: null
- *         public_url_generator?: scalar|Param|null, // For adapter that do not provide public URLs or override adapter capabilities and public_url option, a public URL generator service name can be configured in the main Filesystem configuration (should implement League\Flysystem\PublicUrlGenerator) // Default: null
- *         temporary_url_generator?: scalar|Param|null, // For adapter that do not provide public URLs or override adapter capabilities, a temporary URL generator service name can be configured in the main Filesystem configuration (should implement League\Flysystem\TemporaryUrlGenerator) // Default: null
+ *         public_url_generator?: scalar|Param|null, // For adapter that do not provide public URLs or override adapter capabilities and public_url option, a public URL generator service name can be configured in the main Filesystem configuration (should implement League\Flysystem\UrlGeneration\PublicUrlGenerator) // Default: null
+ *         temporary_url_generator?: scalar|Param|null, // For adapter that do not provide public URLs or override adapter capabilities, a temporary URL generator service name can be configured in the main Filesystem configuration (should implement League\Flysystem\UrlGeneration\TemporaryUrlGenerator) // Default: null
  *         read_only?: bool|Param, // Converts a file system to read-only // Default: false
  *     }>,
  * }

@@ -11,9 +11,9 @@ src/
 ├── Domain/                   # COUCHE DOMAINE (Métier pur, zéro dépendance externe)
 │   ├── Entity/                # Entités & Agrégats (Document, Policy, Rule) — n'exposent que des Value Objects
 │   ├── ValueObject/           # Objets de valeur immuables (DocumentId, DocumentType, Hash) et leurs collections
-│   ├── Service/                # Services de domaine sans état (RegulatoryScopeValidator...)
+│   ├── Service/                # Services de domaine sans état
 │   ├── Event/                # Événements métier (DocumentStoredEvent, DocumentPurgedEvent)
-│   ├── Exception/            # Exceptions métier (NonCompliantDocumentException)
+│   ├── Exception/            # Exceptions métier (InvalidJurisdictionException...)
 │   └── Port/                 # Contrats d'interfaces (Ports Hexagonaux)
 │       ├── Gateway/          # StorageGatewayInterface, CipherGatewayInterface...
 │       ├── Repository/       # DocumentRepositoryInterface...
@@ -45,7 +45,7 @@ Les dépendances pointent toujours **vers l'intérieur** :
 
 Le Domaine n'expose jamais de `string`, `bool` métier non typé ou `array` brut dans sa surface publique — voir [ADR 0004](../adr/0004-value-objects-in-domain.md).
 
-* Chaque propriété scalaire d'une Entité est portée par un Value Object dédié (`RegulatoryScopeCode`, `RegulatoryScopeLabel`...) qui valide son invariant dans son constructeur.
+* Chaque propriété scalaire d'une Entité est portée par un Value Object dédié (`JurisdictionCode`, `LegalFrameworkName`...) qui valide son invariant dans son constructeur.
 * Une liste est modélisée par un Value Object **collection**, immuable, implémentant `IteratorAggregate` + `Countable` (ex: `AllowedDocumentTypes`) — jamais par une méthode `toArray()` exposée au Domaine.
 * La conversion vers un tableau brut reste un détail d'Infrastructure (Doctrine Types personnalisés, mapping vers les DTOs `#[ApiResource]`), jamais une responsabilité du Domaine.
 * Seuls les DTOs applicatifs (`Application/UseCase/*/*Command`), qui traversent la (dé)sérialisation HTTP, restent primitifs — c'est au Use Case de construire les Value Objects avant d'appeler le Domaine.

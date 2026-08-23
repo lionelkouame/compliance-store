@@ -14,7 +14,7 @@ use App\Domain\ValueObject\LegalFrameworkRegulatoryAuthority;
 /**
  * Dynamically manageable legal/regulatory framework (No-Code).
  *
- * Types the legal basis a RegulatoryScope or storage policy can be justified
+ * Types the legal basis a storage policy can be justified
  * by (e.g. FRAMEWORK-GDPR, FRAMEWORK-EIDAS2, FRAMEWORK-SEC-17A4) without
  * requiring redeployment: the list of frameworks is never hardcoded (enum).
  */

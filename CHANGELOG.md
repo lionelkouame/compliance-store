@@ -9,14 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Document` entity and Value Objects (`DocumentId`, `OwnerId`, `DocumentMetadata`, `FileHash`, `EncryptedPayload`, `WrappedDataKey`, `StorageKey`, `EncryptionEnvelope`).
-- `DocumentComplianceChecker` domain service and `NonCompliantDocumentException`: first Native Compliance Core check (ADR 0001), fail-closed on `RegulatoryScope`.
 - `SodiumCipherGateway` implementation for Libsodium envelope encryption.
 - `MinioStorageGateway` implementation for S3-compatible document storage (Flysystem).
 - `StoreDocumentUseCase` exposed as `POST /v1/documents` (multipart upload).
 
+### Removed
+- `RegulatoryScope` feature (entity, value objects, use cases, repository, API resource, `DocumentComplianceChecker` domain service and `NonCompliantDocumentException`): never released, dropped before its first stable version.
+
 ### Planned
 - `ConsultDocumentUseCase` (`GET /v1/documents/{id}`).
-- Configurable retention-period ceiling per `RegulatoryScope` (declarative rules engine, ADR 0001).
 
 ## [0.1.0] - 2026-07-24
 
