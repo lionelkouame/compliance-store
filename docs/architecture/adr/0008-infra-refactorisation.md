@@ -13,7 +13,7 @@ We want to review the infrastructure folder to follow better the convention of c
 The folder ApiPlatform is directly in the Infrasctructure root.
 the  doctrine files is directtly in the persistence root folder.  
 The folder Gateway contain the storage external service.
-```
+```text
 Infrastructure/
 ├─ ApiPlatform/
 ├─ Gateway/
@@ -24,23 +24,23 @@ We want to go even further in the technical separation end description of each s
 
 ## Decision
 
-### Add the presentation folder.
+### Add the presentation folder
 
 - The presentation folder represent the presentation layer who emebeded all services you exepose the application to the outside word.
 
 - The Persistence folder currently holds the Doctrine files directly. We want to add a Doctrine folder inside Persistence to better follow the clean architecture rules.
 
-### Group API versioning by version, not by technical type.
+### Group API versioning by version, not by technical type
 
 - `ApiPlatform/Resource/V1` and `ApiPlatform/State/V1` duplicated the `V1` segment under each technical folder. The version is promoted to the top level instead: `ApiPlatform/V1/Resource` and `ApiPlatform/V1/State`. A future `V2` is added the same way, alongside `V1`, without touching existing code.
 - `ApiPlatform/Validator` is not versioned (see below): validation rules are shared across API versions, not tied to one.
 
-### Move Validator out of ApiPlatform and rename it Validation.
+### Move Validator out of ApiPlatform and rename it Validation
 
 - `Infrastructure/Presentation/ApiPlatform/Validator` is moved to `Infrastructure/Validation`, at the root of `Infrastructure`, and renamed from `Validator` to `Validation`.
 - These custom Symfony constraints (`AssertJurisdictionCodeUnique`, `AssertLegalFrameworkCodeUnique`, `AssertRegulatoryScopeCodeUnique`) validate domain uniqueness rules; they are consumed by API Platform resources today but are not an API Platform concern themselves, so they don't belong under `Presentation/ApiPlatform`.
 
-### Extract a dedicated Storage folder from Gateway.
+### Extract a dedicated Storage folder from Gateway
 
 - `Infrastructure/Gateway` mixed two unrelated technical concerns under one folder: `MinioStorageGateway` (external document storage, implements `StorageGatewayInterface`) and `SodiumCipherGateway` (envelope encryption, implements `CipherGatewayInterface`).
 - `MinioStorageGateway` is moved to `Infrastructure/Storage`, at the root of `Infrastructure`, following the same pattern as `Persistence`, `Presentation` and `Validation`: one root folder per technical concern.
