@@ -36,20 +36,6 @@ final readonly class DocumentProcessor implements ProcessorInterface
         $ownerId = $request?->request->get('ownerId');
         $input->ownerId = \is_string($ownerId) ? $ownerId : null;
 
-        $rawMetadata = $request?->request->all('metadata');
-        if (empty($rawMetadata)) {
-            $rawMetadata = $request?->request->get('metadata');
-        }
-        $metadata = [];
-        if (\is_array($rawMetadata)) {
-            foreach ($rawMetadata as $k => $v) {
-                if (\is_string($k)) {
-                    $metadata[$k] = $v;
-                }
-            }
-        }
-        $input->metadata = $metadata;
-
         $this->validator->validate($input);
 
         if (null === $input->file || null === $input->ownerId) {
@@ -60,7 +46,6 @@ final readonly class DocumentProcessor implements ProcessorInterface
             $document = $this->useCase->execute(new StoreDocumentCommand(
                 ownerId: $input->ownerId,
                 content: $input->file->getContent(),
-                metadata: $input->metadata,
             ));
         } catch (\InvalidArgumentException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), $e);

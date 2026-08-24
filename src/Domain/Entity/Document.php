@@ -17,26 +17,18 @@ use App\Domain\ValueObject\WrappedDataKey;
  */
 final class Document
 {
-    /**
-     * @param array<string, mixed> $metadata
-     */
     private function __construct(
         private readonly DocumentId $id,
         private readonly OwnerId $ownerId,
-        private readonly array $metadata,
         private readonly FileHash $fileHash,
         private readonly WrappedDataKey $wrappedDataKey,
         private readonly StorageKey $storageKey,
         private readonly \DateTimeImmutable $createdAt,
     ) {}
 
-    /**
-     * @param array<string, mixed> $metadata
-     */
     public static function create(
         DocumentId $id,
         OwnerId $ownerId,
-        array $metadata,
         FileHash $fileHash,
         WrappedDataKey $wrappedDataKey,
         StorageKey $storageKey,
@@ -44,7 +36,6 @@ final class Document
         return new self(
             id: $id,
             ownerId: $ownerId,
-            metadata: $metadata,
             fileHash: $fileHash,
             wrappedDataKey: $wrappedDataKey,
             storageKey: $storageKey,
@@ -60,14 +51,6 @@ final class Document
     public function ownerId(): OwnerId
     {
         return $this->ownerId;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function metadata(): array
-    {
-        return $this->metadata;
     }
 
     public function fileHash(): FileHash

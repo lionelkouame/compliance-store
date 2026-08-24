@@ -35,7 +35,6 @@ final readonly class StoreDocumentUseCase
         $document = Document::create(
             id: $id,
             ownerId: new OwnerId($command->ownerId),
-            metadata: $command->metadata,
             fileHash: $fileHash,
             wrappedDataKey: $envelope->wrappedDataKey,
             storageKey: $storageKey,

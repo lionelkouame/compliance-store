@@ -50,10 +50,8 @@ final class StoreDocumentUseCaseTest extends TestCase
         $document = $useCase->execute(new StoreDocumentCommand(
             ownerId: 'usr_123',
             content: 'plaintext content',
-            metadata: ['category' => 'identity', 'country' => 'FRA'],
         ));
 
-        self::assertSame(['category' => 'identity', 'country' => 'FRA'], $document->metadata());
         self::assertSame('documents/660e8400-e29b-41d4-a716-446655440000', $document->storageKey()->value);
     }
 }
