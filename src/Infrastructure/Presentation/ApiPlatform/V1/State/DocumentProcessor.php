@@ -33,9 +33,6 @@ final readonly class DocumentProcessor implements ProcessorInterface
         $file = $request?->files->get('file');
         $input->file = $file instanceof UploadedFile ? $file : null;
 
-        $documentType = $request?->request->get('documentType');
-        $input->documentType = \is_string($documentType) ? $documentType : null;
-
         $ownerId = $request?->request->get('ownerId');
         $input->ownerId = \is_string($ownerId) ? $ownerId : null;
 
@@ -45,19 +42,30 @@ final readonly class DocumentProcessor implements ProcessorInterface
         $retentionYears = $request?->request->get('retentionYears');
         $input->retentionYears = is_numeric($retentionYears) ? (int) $retentionYears : null;
 
+        $rawAttributes = $request?->request->all('attributes');
+        $attributes = [];
+        if (\is_array($rawAttributes)) {
+            foreach ($rawAttributes as $k => $v) {
+                if (\is_string($k)) {
+                    $attributes[$k] = $v;
+                }
+            }
+        }
+        $input->attributes = $attributes;
+
         $this->validator->validate($input);
 
-        if (null === $input->file || null === $input->documentType || null === $input->ownerId || null === $input->country || null === $input->retentionYears) {
+        if (null === $input->file || null === $input->ownerId || null === $input->country || null === $input->retentionYears) {
             throw new UnprocessableEntityHttpException('Missing required document parameters.');
         }
 
         try {
             $document = $this->useCase->execute(new StoreDocumentCommand(
-                documentType: $input->documentType,
                 ownerId: $input->ownerId,
                 country: $input->country,
                 retentionYears: $input->retentionYears,
                 content: $input->file->getContent(),
+                attributes: $input->attributes,
             ));
         } catch (\InvalidArgumentException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), $e);

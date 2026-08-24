@@ -48,14 +48,14 @@ final class StoreDocumentUseCaseTest extends TestCase
         );
 
         $document = $useCase->execute(new StoreDocumentCommand(
-            documentType: 'PASSPORT',
             ownerId: 'usr_123',
             country: 'FRA',
             retentionYears: 5,
             content: 'plaintext content',
+            attributes: ['category' => 'identity'],
         ));
 
-        self::assertSame('PASSPORT', $document->documentType()->value);
+        self::assertSame('identity', $document->metadata()->get('category'));
         self::assertSame('documents/660e8400-e29b-41d4-a716-446655440000', $document->storageKey()->value);
     }
 }

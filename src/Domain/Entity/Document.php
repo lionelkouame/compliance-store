@@ -6,7 +6,6 @@ namespace App\Domain\Entity;
 
 use App\Domain\ValueObject\DocumentId;
 use App\Domain\ValueObject\DocumentMetadata;
-use App\Domain\ValueObject\DocumentType;
 use App\Domain\ValueObject\FileHash;
 use App\Domain\ValueObject\OwnerId;
 use App\Domain\ValueObject\StorageKey;
@@ -21,7 +20,6 @@ final class Document
 {
     private function __construct(
         private readonly DocumentId $id,
-        private readonly DocumentType $documentType,
         private readonly OwnerId $ownerId,
         private readonly DocumentMetadata $metadata,
         private readonly FileHash $fileHash,
@@ -32,7 +30,6 @@ final class Document
 
     public static function create(
         DocumentId $id,
-        DocumentType $documentType,
         OwnerId $ownerId,
         DocumentMetadata $metadata,
         FileHash $fileHash,
@@ -41,7 +38,6 @@ final class Document
     ): self {
         return new self(
             id: $id,
-            documentType: $documentType,
             ownerId: $ownerId,
             metadata: $metadata,
             fileHash: $fileHash,
@@ -54,11 +50,6 @@ final class Document
     public function id(): DocumentId
     {
         return $this->id;
-    }
-
-    public function documentType(): DocumentType
-    {
-        return $this->documentType;
     }
 
     public function ownerId(): OwnerId

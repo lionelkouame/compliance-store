@@ -9,9 +9,13 @@ final readonly class DocumentMetadata
     private const MIN_RETENTION_YEARS = 1;
     private const MAX_RETENTION_YEARS = 50;
 
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public function __construct(
         public string $country,
         public int $retentionYears,
+        public array $attributes = [],
     ) {
         if (1 !== preg_match('/^[A-Z]{3}$/', $this->country)) {
             throw new \InvalidArgumentException(\sprintf(
@@ -27,5 +31,15 @@ final readonly class DocumentMetadata
                 self::MAX_RETENTION_YEARS,
             ));
         }
+    }
+
+    public function get(string $key, mixed $default = null): mixed
+    {
+        return $this->attributes[$key] ?? $default;
+    }
+
+    public function has(string $key): bool
+    {
+        return \array_key_exists($key, $this->attributes);
     }
 }

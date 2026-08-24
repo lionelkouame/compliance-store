@@ -20,7 +20,17 @@ final class DocumentMetadataType extends JsonType
             return null;
         }
 
-        return new DocumentMetadata($decoded['country'], $decoded['retentionYears']);
+        $rawAttributes = $decoded['attributes'] ?? [];
+        $attributes = [];
+        if (\is_array($rawAttributes)) {
+            foreach ($rawAttributes as $k => $v) {
+                if (\is_string($k)) {
+                    $attributes[$k] = $v;
+                }
+            }
+        }
+
+        return new DocumentMetadata($decoded['country'], $decoded['retentionYears'], $attributes);
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -29,6 +39,7 @@ final class DocumentMetadataType extends JsonType
             $value = [
                 'country' => $value->country,
                 'retentionYears' => $value->retentionYears,
+                'attributes' => $value->attributes,
             ];
         }
 

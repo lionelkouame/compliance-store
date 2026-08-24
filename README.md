@@ -1,7 +1,7 @@
 # Compliance Store API
 
 [![CI](https://github.com/lionelkouame/compliance-store/actions/workflows/ci.yaml/badge.svg)](https://github.com/lionelkouame/compliance-store/actions/workflows/ci.yaml)
-![PHP](https://img.shields.io/badge/PHP-%3E%3D%208.5-777BB4?logo=php&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-%3E%3D%208.4-777BB4?logo=php&logoColor=white)
 ![Symfony](https://img.shields.io/badge/Symfony-8.1-000000?logo=symfony&logoColor=white)
 ![API Platform](https://img.shields.io/badge/API%20Platform-v4.3-30B69E?logo=apiplatform&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
@@ -13,20 +13,25 @@
 
 **Compliance Store** is a highly available, secure open-source REST API designed for managing the full lifecycle of sensitive document storage (IDs, passports, utility bills).
 
-It provides fine-grained regulatory compliance management, *Zero Trust* envelope encryption, automated PII data masking/redaction, and integrates seamlessly with any storage provider (AWS S3, MinIO, Azure Blob, Local File System).
+It provides *Zero Trust* envelope encryption (Libsodium) for every stored document and integrates with any S3-compatible storage backend (AWS S3, MinIO) via Flysystem.
 
 ---
 
 ## 🏛️ Architecture & Design
 
-The application is built with **PHP 8.5+**, **Symfony 8.1**, and **API Platform 4**, strictly adhering to the principles of **Clean Architecture** and **Domain-Driven Design (DDD)**:
+The application is built with **PHP 8.4+**, **Symfony 8.1**, and **API Platform 4**, strictly adhering to the principles of **Clean Architecture** and **Domain-Driven Design (DDD)**:
 
 ```text
 src/
-├── Domain/              # Pure business logic (Entities, Value Objects, Native Compliance Rules)
-│   └── Port/            # Interfaces (Gateways, Repositories, Events, Clock)
+├── Domain/              # Pure business logic (Entities, Value Objects, Ports)
+│   └── Port/            # Interfaces (Gateways, Repositories, Services)
 ├── Application/         # Orchestration & Use Cases (Use Cases & DTOs)
-└── Infrastructure/      # Technical implementations (MinIO, Sodium, PostgreSQL, API Platform)
+└── Infrastructure/      # Technical implementations
+    ├── Persistence/     # Doctrine repositories, mappings & custom types (PostgreSQL)
+    ├── Presentation/    # API Platform resources & state providers/processors
+    ├── Storage/         # MinIO / S3-compatible document storage (Flysystem)
+    ├── Gateway/         # Libsodium envelope encryption
+    └── Service/         # UUID generators
 ```
 
 To explore the detailed architecture documentation:

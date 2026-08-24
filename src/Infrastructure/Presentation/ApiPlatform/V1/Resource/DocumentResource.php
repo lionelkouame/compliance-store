@@ -45,9 +45,6 @@ final class DocumentResource
     public ?UploadedFile $file = null;
 
     #[Assert\NotBlank]
-    public ?string $documentType = null;
-
-    #[Assert\NotBlank]
     public ?string $ownerId = null;
 
     #[Assert\NotBlank]
@@ -56,6 +53,11 @@ final class DocumentResource
     #[Assert\NotNull]
     #[Assert\Positive]
     public ?int $retentionYears = null;
+
+    /**
+     * @var array<string, mixed>
+     */
+    public array $attributes = [];
 
     public ?string $fileHash = null;
 
@@ -67,10 +69,10 @@ final class DocumentResource
     {
         $resource = new self();
         $resource->id = $document->id()->value;
-        $resource->documentType = $document->documentType()->value;
         $resource->ownerId = $document->ownerId()->value;
         $resource->country = $document->metadata()->country;
         $resource->retentionYears = $document->metadata()->retentionYears;
+        $resource->attributes = $document->metadata()->attributes;
         $resource->fileHash = $document->fileHash()->value;
         $resource->storageKey = $document->storageKey()->value;
         $resource->createdAt = $document->createdAt()->format(\DateTimeInterface::ATOM);

@@ -12,10 +12,12 @@ final class DocumentMetadataTest extends TestCase
 {
     public function testConstructorAcceptsValidMetadata(): void
     {
-        $metadata = new DocumentMetadata('FRA', 5);
+        $metadata = new DocumentMetadata('FRA', 5, ['custom_key' => 'val']);
 
         self::assertSame('FRA', $metadata->country);
         self::assertSame(5, $metadata->retentionYears);
+        self::assertTrue($metadata->has('custom_key'));
+        self::assertSame('val', $metadata->get('custom_key'));
     }
 
     public function testConstructorRejectsInvalidCountryCode(): void
