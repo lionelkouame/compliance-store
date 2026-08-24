@@ -31,10 +31,12 @@ final class DocumentApiTest extends ApiTestCase
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'extra' => [
                 'parameters' => [
-                    'documentType' => 'PASSPORT',
                     'ownerId' => 'usr_123456789',
                     'country' => 'FRA',
                     'retentionYears' => '5',
+                    'attributes' => [
+                        'category' => 'identity',
+                    ],
                 ],
                 'files' => [
                     'file' => new UploadedFile(self::FIXTURE_PATH, 'passport.png', 'image/png', null, true),
@@ -44,10 +46,12 @@ final class DocumentApiTest extends ApiTestCase
 
         self::assertResponseStatusCodeSame(201);
         self::assertJsonContains([
-            'documentType' => 'PASSPORT',
             'ownerId' => 'usr_123456789',
             'country' => 'FRA',
             'retentionYears' => 5,
+            'attributes' => [
+                'category' => 'identity',
+            ],
         ]);
 
         $data = $response->toArray();
@@ -64,7 +68,6 @@ final class DocumentApiTest extends ApiTestCase
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'extra' => [
                 'parameters' => [
-                    'documentType' => 'PASSPORT',
                     'ownerId' => 'usr_123456789',
                     'country' => 'FRA',
                     'retentionYears' => '5',

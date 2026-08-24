@@ -43,6 +43,9 @@ final readonly class DocumentProcessor implements ProcessorInterface
         $input->retentionYears = is_numeric($retentionYears) ? (int) $retentionYears : null;
 
         $rawAttributes = $request?->request->all('attributes');
+        if (empty($rawAttributes)) {
+            $rawAttributes = $request?->request->get('attributes');
+        }
         $attributes = [];
         if (\is_array($rawAttributes)) {
             foreach ($rawAttributes as $k => $v) {

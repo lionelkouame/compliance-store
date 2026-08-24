@@ -6,10 +6,6 @@ Accept: application/ld+json
 # Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
 
 --ComplianceStoreBoundary
-Content-Disposition: form-data; name="documentType"
-
-PASSPORT
---ComplianceStoreBoundary
 Content-Disposition: form-data; name="ownerId"
 
 usr_123456789
@@ -38,7 +34,6 @@ Accept: application/ld+json
 Authorization: Bearer {{jwtToken}}
 
 {
-  "documentType": "PASSPORT",
   "ownerId": "usr_kyc_987654321",
   "metadata": {
     "country": "FRA",
@@ -59,7 +54,6 @@ Accept: application/ld+json
 Authorization: Bearer {{jwtToken}}
 
 {
-  "documentType": "JUSTIFICATIF_DOMICILE",
   "ownerId": "usr_kyc_987654321",
   "metadata": {
     "country": "FRA",
