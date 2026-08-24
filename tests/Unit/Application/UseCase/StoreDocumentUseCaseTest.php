@@ -48,7 +48,6 @@ final class StoreDocumentUseCaseTest extends TestCase
         );
 
         $document = $useCase->execute(new StoreDocumentCommand(
-            ownerId: 'usr_123',
             content: 'plaintext content',
         ));
 

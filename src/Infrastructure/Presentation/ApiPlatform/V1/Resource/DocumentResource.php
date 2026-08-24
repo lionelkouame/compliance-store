@@ -44,9 +44,6 @@ final class DocumentResource
     #[Assert\File]
     public ?UploadedFile $file = null;
 
-    #[Assert\NotBlank]
-    public ?string $ownerId = null;
-
     public ?string $fileHash = null;
 
     public ?string $storageKey = null;
@@ -57,7 +54,6 @@ final class DocumentResource
     {
         $resource = new self();
         $resource->id = $document->id()->value;
-        $resource->ownerId = $document->ownerId()->value;
         $resource->fileHash = $document->fileHash()->value;
         $resource->storageKey = $document->storageKey()->value;
         $resource->createdAt = $document->createdAt()->format(\DateTimeInterface::ATOM);

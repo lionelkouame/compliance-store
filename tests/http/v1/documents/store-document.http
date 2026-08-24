@@ -6,18 +6,6 @@ Accept: application/ld+json
 # Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
 
 --ComplianceStoreBoundary
-Content-Disposition: form-data; name="ownerId"
-
-usr_123456789
---ComplianceStoreBoundary
-Content-Disposition: form-data; name="country"
-
-FRA
---ComplianceStoreBoundary
-Content-Disposition: form-data; name="retentionYears"
-
-5
---ComplianceStoreBoundary
 Content-Disposition: form-data; name="file"; filename="passport.png"
 Content-Type: image/png
 
@@ -34,7 +22,6 @@ Accept: application/ld+json
 Authorization: Bearer {{jwtToken}}
 
 {
-  "ownerId": "usr_kyc_987654321",
   "metadata": {
     "country": "FRA",
     "passportNumber": "20AA12345",
@@ -54,7 +41,6 @@ Accept: application/ld+json
 Authorization: Bearer {{jwtToken}}
 
 {
-  "ownerId": "usr_kyc_987654321",
   "metadata": {
     "country": "FRA",
     "issueDate": "2026-07-01",

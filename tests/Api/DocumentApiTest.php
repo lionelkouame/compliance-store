@@ -30,9 +30,6 @@ final class DocumentApiTest extends ApiTestCase
         $response = $client->request('POST', '/api/v1/documents', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'extra' => [
-                'parameters' => [
-                    'ownerId' => 'usr_123456789',
-                ],
                 'files' => [
                     'file' => new UploadedFile(self::FIXTURE_PATH, 'passport.png', 'image/png', null, true),
                 ],
@@ -40,9 +37,6 @@ final class DocumentApiTest extends ApiTestCase
         ]);
 
         self::assertResponseStatusCodeSame(201);
-        self::assertJsonContains([
-            'ownerId' => 'usr_123456789',
-        ]);
 
         $data = $response->toArray();
         self::assertArrayNotHasKey('wrappedDataKey', $data);
@@ -56,11 +50,6 @@ final class DocumentApiTest extends ApiTestCase
 
         $client->request('POST', '/api/v1/documents', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
-            'extra' => [
-                'parameters' => [
-                    'ownerId' => 'usr_123456789',
-                ],
-            ],
         ]);
 
         self::assertResponseStatusCodeSame(422);

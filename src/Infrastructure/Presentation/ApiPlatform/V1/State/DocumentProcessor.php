@@ -33,18 +33,14 @@ final readonly class DocumentProcessor implements ProcessorInterface
         $file = $request?->files->get('file');
         $input->file = $file instanceof UploadedFile ? $file : null;
 
-        $ownerId = $request?->request->get('ownerId');
-        $input->ownerId = \is_string($ownerId) ? $ownerId : null;
-
         $this->validator->validate($input);
 
-        if (null === $input->file || null === $input->ownerId) {
+        if (null === $input->file) {
             throw new UnprocessableEntityHttpException('Missing required document parameters.');
         }
 
         try {
             $document = $this->useCase->execute(new StoreDocumentCommand(
-                ownerId: $input->ownerId,
                 content: $input->file->getContent(),
             ));
         } catch (\InvalidArgumentException $e) {

@@ -9,8 +9,6 @@ doctrine:
         types:
             document_id:
                 class: App\Infrastructure\Persistence\Doctrine\Type\DocumentIdType
-            owner_id:
-                class: App\Infrastructure\Persistence\Doctrine\Type\OwnerIdType
             file_hash:
                 class: App\Infrastructure\Persistence\Doctrine\Type\FileHashType
             storage_key:
