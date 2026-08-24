@@ -10,7 +10,7 @@
         </id>
 
         <field name="ownerId" type="owner_id" length="255" column="owner_id"/>
-        <field name="metadata" type="document_metadata"/>
+        <field name="metadata" type="json"/>
         <field name="fileHash" type="file_hash" length="64" column="file_hash"/>
         <field name="wrappedDataKey" type="wrapped_data_key" column="wrapped_data_key"/>
         <field name="storageKey" type="storage_key" column="storage_key"/>

@@ -47,17 +47,10 @@ final class DocumentResource
     #[Assert\NotBlank]
     public ?string $ownerId = null;
 
-    #[Assert\NotBlank]
-    public ?string $country = null;
-
-    #[Assert\NotNull]
-    #[Assert\Positive]
-    public ?int $retentionYears = null;
-
     /**
      * @var array<string, mixed>
      */
-    public array $attributes = [];
+    public array $metadata = [];
 
     public ?string $fileHash = null;
 
@@ -70,9 +63,7 @@ final class DocumentResource
         $resource = new self();
         $resource->id = $document->id()->value;
         $resource->ownerId = $document->ownerId()->value;
-        $resource->country = $document->metadata()->country;
-        $resource->retentionYears = $document->metadata()->retentionYears;
-        $resource->attributes = $document->metadata()->attributes;
+        $resource->metadata = $document->metadata();
         $resource->fileHash = $document->fileHash()->value;
         $resource->storageKey = $document->storageKey()->value;
         $resource->createdAt = $document->createdAt()->format(\DateTimeInterface::ATOM);

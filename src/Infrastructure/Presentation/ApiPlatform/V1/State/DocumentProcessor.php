@@ -36,39 +36,31 @@ final readonly class DocumentProcessor implements ProcessorInterface
         $ownerId = $request?->request->get('ownerId');
         $input->ownerId = \is_string($ownerId) ? $ownerId : null;
 
-        $country = $request?->request->get('country');
-        $input->country = \is_string($country) ? $country : null;
-
-        $retentionYears = $request?->request->get('retentionYears');
-        $input->retentionYears = is_numeric($retentionYears) ? (int) $retentionYears : null;
-
-        $rawAttributes = $request?->request->all('attributes');
-        if (empty($rawAttributes)) {
-            $rawAttributes = $request?->request->get('attributes');
+        $rawMetadata = $request?->request->all('metadata');
+        if (empty($rawMetadata)) {
+            $rawMetadata = $request?->request->get('metadata');
         }
-        $attributes = [];
-        if (\is_array($rawAttributes)) {
-            foreach ($rawAttributes as $k => $v) {
+        $metadata = [];
+        if (\is_array($rawMetadata)) {
+            foreach ($rawMetadata as $k => $v) {
                 if (\is_string($k)) {
-                    $attributes[$k] = $v;
+                    $metadata[$k] = $v;
                 }
             }
         }
-        $input->attributes = $attributes;
+        $input->metadata = $metadata;
 
         $this->validator->validate($input);
 
-        if (null === $input->file || null === $input->ownerId || null === $input->country || null === $input->retentionYears) {
+        if (null === $input->file || null === $input->ownerId) {
             throw new UnprocessableEntityHttpException('Missing required document parameters.');
         }
 
         try {
             $document = $this->useCase->execute(new StoreDocumentCommand(
                 ownerId: $input->ownerId,
-                country: $input->country,
-                retentionYears: $input->retentionYears,
                 content: $input->file->getContent(),
-                attributes: $input->attributes,
+                metadata: $input->metadata,
             ));
         } catch (\InvalidArgumentException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), $e);

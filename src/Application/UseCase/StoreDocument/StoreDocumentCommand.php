@@ -7,13 +7,11 @@ namespace App\Application\UseCase\StoreDocument;
 final readonly class StoreDocumentCommand
 {
     /**
-     * @param array<string, mixed> $attributes
+     * @param array<string, mixed> $metadata
      */
     public function __construct(
         public string $ownerId,
-        public string $country,
-        public int $retentionYears,
         public string $content,
-        public array $attributes = [],
+        public array $metadata = [],
     ) {}
 }

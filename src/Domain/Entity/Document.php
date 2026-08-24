@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain\Entity;
 
 use App\Domain\ValueObject\DocumentId;
-use App\Domain\ValueObject\DocumentMetadata;
 use App\Domain\ValueObject\FileHash;
 use App\Domain\ValueObject\OwnerId;
 use App\Domain\ValueObject\StorageKey;
@@ -18,20 +17,26 @@ use App\Domain\ValueObject\WrappedDataKey;
  */
 final class Document
 {
+    /**
+     * @param array<string, mixed> $metadata
+     */
     private function __construct(
         private readonly DocumentId $id,
         private readonly OwnerId $ownerId,
-        private readonly DocumentMetadata $metadata,
+        private readonly array $metadata,
         private readonly FileHash $fileHash,
         private readonly WrappedDataKey $wrappedDataKey,
         private readonly StorageKey $storageKey,
         private readonly \DateTimeImmutable $createdAt,
     ) {}
 
+    /**
+     * @param array<string, mixed> $metadata
+     */
     public static function create(
         DocumentId $id,
         OwnerId $ownerId,
-        DocumentMetadata $metadata,
+        array $metadata,
         FileHash $fileHash,
         WrappedDataKey $wrappedDataKey,
         StorageKey $storageKey,
@@ -57,7 +62,10 @@ final class Document
         return $this->ownerId;
     }
 
-    public function metadata(): DocumentMetadata
+    /**
+     * @return array<string, mixed>
+     */
+    public function metadata(): array
     {
         return $this->metadata;
     }

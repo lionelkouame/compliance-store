@@ -32,9 +32,9 @@ final class DocumentApiTest extends ApiTestCase
             'extra' => [
                 'parameters' => [
                     'ownerId' => 'usr_123456789',
-                    'country' => 'FRA',
-                    'retentionYears' => '5',
-                    'attributes' => [
+                    'metadata' => [
+                        'country' => 'FRA',
+                        'retentionYears' => 5,
                         'category' => 'identity',
                     ],
                 ],
@@ -47,9 +47,9 @@ final class DocumentApiTest extends ApiTestCase
         self::assertResponseStatusCodeSame(201);
         self::assertJsonContains([
             'ownerId' => 'usr_123456789',
-            'country' => 'FRA',
-            'retentionYears' => 5,
-            'attributes' => [
+            'metadata' => [
+                'country' => 'FRA',
+                'retentionYears' => '5',
                 'category' => 'identity',
             ],
         ]);
@@ -69,8 +69,6 @@ final class DocumentApiTest extends ApiTestCase
             'extra' => [
                 'parameters' => [
                     'ownerId' => 'usr_123456789',
-                    'country' => 'FRA',
-                    'retentionYears' => '5',
                 ],
             ],
         ]);
