@@ -15,7 +15,7 @@ SYMFONY  = $(PHP) bin/console
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build refresh up start down logs sh bash test deptrac phpstan composer vendor sf cc setup-dns setup-hooks
+.PHONY        : help build refresh up start down logs sh bash test deptrac phpstan composer vendor sf cc setup-dns setup-hooks website-build
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -88,3 +88,7 @@ sf: ## List all Symfony commands or pass the parameter "c=" to run a given comma
 
 cc: c=c:c ## Clear the cache
 cc: sf
+
+## —— Website 📖 ———————————————————————————————————————————————————————————————
+website-build: ## Build the Docusaurus website (website/)
+	@cd website && npm ci && npm run build

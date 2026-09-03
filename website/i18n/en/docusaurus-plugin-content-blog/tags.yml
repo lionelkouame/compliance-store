@@ -1,0 +1,19 @@
+genese:
+  label: Genesis
+  permalink: /genese
+  description: Why this project, the starting intentions
+
+fondations:
+  label: Foundations
+  permalink: /fondations
+  description: The architectural choices that set the frame
+
+epreuves:
+  label: Trials
+  permalink: /epreuves
+  description: Bugs, rewrites, decisions we own or regret
+
+aujourdhui:
+  label: Today
+  permalink: /aujourdhui
+  description: Current state of the project, milestone recaps

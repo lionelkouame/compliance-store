@@ -1,0 +1,30 @@
+{
+  "link.title.Documentation": {
+    "message": "Documentation",
+    "description": "The title of the footer links column with title=Documentation in the footer"
+  },
+  "link.title.Projet": {
+    "message": "Project",
+    "description": "The title of the footer links column with title=Projet in the footer"
+  },
+  "link.item.label.Introduction": {
+    "message": "Introduction",
+    "description": "The label of footer link with label=Introduction linking to /docs/intro"
+  },
+  "link.item.label.Architecture": {
+    "message": "Architecture",
+    "description": "The label of footer link with label=Architecture linking to /docs/architecture"
+  },
+  "link.item.label.Code source": {
+    "message": "Source code",
+    "description": "The label of footer link with label=Code source linking to https://github.com/lionelkouame/compliance-store"
+  },
+  "link.item.label.Journal de bord": {
+    "message": "Changelog",
+    "description": "The label of footer link with label=Journal de bord linking to /blog"
+  },
+  "copyright": {
+    "message": "Copyright © 2026 Compliance Store. Built with Docusaurus.",
+    "description": "The footer copyright"
+  }
+}

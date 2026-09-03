@@ -1,0 +1,19 @@
+genese:
+  label: Genèse
+  permalink: /genese
+  description: Pourquoi ce projet, les intentions de départ
+
+fondations:
+  label: Fondations
+  permalink: /fondations
+  description: Les choix d'architecture qui posent le cadre
+
+epreuves:
+  label: Épreuves
+  permalink: /epreuves
+  description: Bugs, refontes, décisions qu'on assume ou qu'on regrette
+
+aujourdhui:
+  label: Aujourd'hui
+  permalink: /aujourdhui
+  description: État courant du projet, bilans d'étape
