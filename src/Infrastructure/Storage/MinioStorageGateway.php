@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace App\Infrastructure\Storage;
 
 use App\Domain\Port\Gateway\StorageGatewayInterface;
-use App\Domain\ValueObject\StorageKey;
+use App\Domain\ValueObject\DocumentId;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 
 /**
  * Zero Trust Storage (ADR 0002) adapter storing already-encrypted document
  * bytes on a MinIO/S3-compatible bucket via Flysystem.
+ *
+ * The physical object key is derived here from the document id (ADR 0009);
+ * it is never modeled in the domain.
  */
 final readonly class MinioStorageGateway implements StorageGatewayInterface
 {
@@ -19,8 +22,10 @@ final readonly class MinioStorageGateway implements StorageGatewayInterface
         private FilesystemOperator $documentsStorage,
     ) {}
 
-    public function store(StorageKey $key, string $ciphertext): void
+    public function store(DocumentId $id, string $ciphertext): void
     {
+        $key = StorageKey::forDocument($id);
+
         try {
             $this->documentsStorage->write($key->value, $ciphertext);
         } catch (FilesystemException $e) {
@@ -28,8 +33,10 @@ final readonly class MinioStorageGateway implements StorageGatewayInterface
         }
     }
 
-    public function read(StorageKey $key): string
+    public function read(DocumentId $id): string
     {
+        $key = StorageKey::forDocument($id);
+
         try {
             return $this->documentsStorage->read($key->value);
         } catch (FilesystemException $e) {

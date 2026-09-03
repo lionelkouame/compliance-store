@@ -11,8 +11,6 @@ doctrine:
                 class: App\Infrastructure\Persistence\Doctrine\Type\DocumentIdType
             file_hash:
                 class: App\Infrastructure\Persistence\Doctrine\Type\FileHashType
-            storage_key:
-                class: App\Infrastructure\Persistence\Doctrine\Type\StorageKeyType
             wrapped_data_key:
                 class: App\Infrastructure\Persistence\Doctrine\Type\WrappedDataKeyType
     orm:

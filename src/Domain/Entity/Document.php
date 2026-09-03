@@ -6,7 +6,6 @@ namespace App\Domain\Entity;
 
 use App\Domain\ValueObject\DocumentId;
 use App\Domain\ValueObject\FileHash;
-use App\Domain\ValueObject\StorageKey;
 use App\Domain\ValueObject\WrappedDataKey;
 
 /**
@@ -20,7 +19,6 @@ final class Document
         private readonly DocumentId $id,
         private readonly FileHash $fileHash,
         private readonly WrappedDataKey $wrappedDataKey,
-        private readonly StorageKey $storageKey,
         private readonly \DateTimeImmutable $createdAt,
     ) {}
 
@@ -28,13 +26,11 @@ final class Document
         DocumentId $id,
         FileHash $fileHash,
         WrappedDataKey $wrappedDataKey,
-        StorageKey $storageKey,
     ): self {
         return new self(
             id: $id,
             fileHash: $fileHash,
             wrappedDataKey: $wrappedDataKey,
-            storageKey: $storageKey,
             createdAt: new \DateTimeImmutable('now', new \DateTimeZone('UTC')),
         );
     }
@@ -52,11 +48,6 @@ final class Document
     public function wrappedDataKey(): WrappedDataKey
     {
         return $this->wrappedDataKey;
-    }
-
-    public function storageKey(): StorageKey
-    {
-        return $this->storageKey;
     }
 
     public function createdAt(): \DateTimeImmutable

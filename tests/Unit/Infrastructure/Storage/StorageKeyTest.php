@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\ValueObject;
+namespace App\Tests\Unit\Infrastructure\Storage;
 
 use App\Domain\ValueObject\DocumentId;
-use App\Domain\ValueObject\StorageKey;
+use App\Infrastructure\Storage\StorageKey;
 use PHPUnit\Framework\TestCase;
 
 final class StorageKeyTest extends TestCase

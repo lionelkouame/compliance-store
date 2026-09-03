@@ -46,8 +46,6 @@ final class DocumentResource
 
     public ?string $fileHash = null;
 
-    public ?string $storageKey = null;
-
     public ?string $createdAt = null;
 
     public static function fromEntity(Document $document): self
@@ -55,7 +53,6 @@ final class DocumentResource
         $resource = new self();
         $resource->id = $document->id()->value;
         $resource->fileHash = $document->fileHash()->value;
-        $resource->storageKey = $document->storageKey()->value;
         $resource->createdAt = $document->createdAt()->format(\DateTimeInterface::ATOM);
 
         return $resource;

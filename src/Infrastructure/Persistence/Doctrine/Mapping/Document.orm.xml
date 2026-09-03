@@ -11,7 +11,6 @@
 
         <field name="fileHash" type="file_hash" length="64" column="file_hash"/>
         <field name="wrappedDataKey" type="wrapped_data_key" column="wrapped_data_key"/>
-        <field name="storageKey" type="storage_key" column="storage_key"/>
         <field name="createdAt" type="datetime_immutable" column="created_at"/>
     </entity>
 </doctrine-mapping>

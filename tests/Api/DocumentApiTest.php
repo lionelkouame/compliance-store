@@ -40,8 +40,8 @@ final class DocumentApiTest extends ApiTestCase
 
         $data = $response->toArray();
         self::assertArrayNotHasKey('wrappedDataKey', $data);
+        self::assertArrayNotHasKey('storageKey', $data);
         self::assertNotEmpty($data['fileHash']);
-        self::assertNotEmpty($data['storageKey']);
     }
 
     public function testItRejectsAMissingFile(): void

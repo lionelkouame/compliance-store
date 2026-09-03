@@ -30,7 +30,7 @@ final class StoreDocumentUseCaseTest extends TestCase
 
         $storage = $this->createMock(StorageGatewayInterface::class);
         $storage->expects(self::once())->method('store')->with(
-            self::callback(static fn ($key) => 'documents/660e8400-e29b-41d4-a716-446655440000' === $key->value),
+            self::callback(static fn ($id) => '660e8400-e29b-41d4-a716-446655440000' === $id->value),
             'cipher-bytes',
         );
 
@@ -51,6 +51,6 @@ final class StoreDocumentUseCaseTest extends TestCase
             content: 'plaintext content',
         ));
 
-        self::assertSame('documents/660e8400-e29b-41d4-a716-446655440000', $document->storageKey()->value);
+        self::assertSame('660e8400-e29b-41d4-a716-446655440000', $document->id()->value);
     }
 }
