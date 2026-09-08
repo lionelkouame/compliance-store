@@ -1,0 +1,37 @@
+# @name getStorageSpace
+### Get Storage Space by ID
+GET {{apiUrl}}/storage-spaces/{{storageSpaceId}}
+Accept: application/ld+json
+# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+%}
+
+###
+
+# @name getStorageSpaceNotFound
+### Get Storage Space - Unknown ID (expect 404)
+GET {{apiUrl}}/storage-spaces/00000000-0000-0000-0000-000000000000
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 404 Not Found", function() {
+        client.assert(response.status === 404, "Expected 404 Not Found");
+    });
+%}
+
+###
+
+# @name listStorageSpaces
+### List Storage Spaces
+GET {{apiUrl}}/storage-spaces
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+%}

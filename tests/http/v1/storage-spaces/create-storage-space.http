@@ -1,0 +1,53 @@
+# @name createStorageSpace
+### Create Storage Space
+POST {{apiUrl}}/storage-spaces
+Content-Type: application/json
+Accept: application/ld+json
+# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
+
+{
+  "code": "EU-WEST-1",
+  "name": "EU West Primary"
+}
+
+> {%
+    client.test("Status code is 201 Created", function() {
+        client.assert(response.status === 201, "Expected 201 Created");
+    });
+    client.global.set("storageSpaceId", response.body.id);
+%}
+
+###
+
+# @name createStorageSpaceMissingFields
+### Create Storage Space - Missing Fields (expect 422)
+POST {{apiUrl}}/storage-spaces
+Content-Type: application/json
+Accept: application/ld+json
+
+{}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name createStorageSpaceDuplicateCode
+### Create Storage Space - Duplicate Code (expect 409)
+POST {{apiUrl}}/storage-spaces
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "code": "EU-WEST-1",
+  "name": "Another EU West"
+}
+
+> {%
+    client.test("Status code is 409 Conflict", function() {
+        client.assert(response.status === 409, "Expected 409 Conflict");
+    });
+%}

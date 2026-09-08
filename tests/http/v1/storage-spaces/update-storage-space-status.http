@@ -1,0 +1,55 @@
+# @name archiveStorageSpace
+### Change Storage Space Status - Archive
+PATCH {{apiUrl}}/storage-spaces/{{storageSpaceId}}
+Content-Type: application/merge-patch+json
+Accept: application/ld+json
+# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
+
+{
+  "status": "archived"
+}
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+    client.test("Status is archived", function() {
+        client.assert(response.body.status === "archived", "Expected status archived");
+    });
+%}
+
+###
+
+# @name changeStorageSpaceStatusInvalidValue
+### Change Storage Space Status - Invalid Value (expect 422)
+PATCH {{apiUrl}}/storage-spaces/{{storageSpaceId}}
+Content-Type: application/merge-patch+json
+Accept: application/ld+json
+
+{
+  "status": "bogus"
+}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name changeStorageSpaceStatusNotFound
+### Change Storage Space Status - Unknown ID (expect 404)
+PATCH {{apiUrl}}/storage-spaces/00000000-0000-0000-0000-000000000000
+Content-Type: application/merge-patch+json
+Accept: application/ld+json
+
+{
+  "status": "active"
+}
+
+> {%
+    client.test("Status code is 404 Not Found", function() {
+        client.assert(response.status === 404, "Expected 404 Not Found");
+    });
+%}

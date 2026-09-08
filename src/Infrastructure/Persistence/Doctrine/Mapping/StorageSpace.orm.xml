@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Entity\StorageSpace" table="storage_space">
+        <id name="id" type="storage_space_id" length="36">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="code" type="storage_space_code" length="64" column="code" unique="true"/>
+        <field name="name" type="storage_space_name" length="255" column="name"/>
+        <field name="status" type="string" enum-type="App\Domain\ValueObject\StorageSpaceStatus" length="20" column="status"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+    </entity>
+</doctrine-mapping>
