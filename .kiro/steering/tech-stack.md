@@ -2,7 +2,7 @@
 inclusion: always
 ---
 
-## Stack technique
+# Stack technique
 
 | Brique | Version | Note |
 | :--- | :--- | :--- |
@@ -46,13 +46,13 @@ invoquer `php`, `composer` ou `vendor/bin/*` directement depuis l'hôte.
 
 Contrôlée mécaniquement par `deptrac.yaml` — ce n'est pas une convention, c'est un test :
 
-```
+```bash
 Domain          → rien   (PHP pur : ni Symfony, ni Doctrine, ni API Platform)
 Application     → Domain
 Infrastructure  → Domain, Application, Symfony, Doctrine, ApiPlatform
 ```
 
-```
+```text
 src/
 ├── Domain/          Entity · ValueObject · Event · Exception
 │   └── Port/        Gateway · Repository · Service · Clock · Event · Notification

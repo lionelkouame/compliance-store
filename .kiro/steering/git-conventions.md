@@ -2,11 +2,11 @@
 inclusion: always
 ---
 
-## Conventions git & GitHub
+# Conventions git & GitHub
 
-### Commits — Conventional Commits
+## Commits — Conventional Commits
 
-```
+```text
 <type>(<portée optionnelle>): <description à l'impératif, en anglais>
 ```
 
@@ -29,16 +29,16 @@ Le corps du message explique le **pourquoi**, pas le quoi — le diff dit déjà
 > Ce dépôt est **public**. Un message de commit ne cite jamais la roadmap privée,
 > l'association, ni un arbitrage stratégique. Il cite une issue publique ou un ADR.
 
-### Branches
+## Branches
 
-```
+```text
 features/<numéro-issue>-<slug>     features/34-us-refacto-infrastructure
 fix/<slug>                         fix/document-read-empty-payload
 ```
 
 Jamais de commit direct sur `main`.
 
-### Pull requests
+## Pull requests
 
 Le gabarit `.github/PULL_REQUEST_TEMPLATE.md` est obligatoire. En particulier :
 
@@ -48,7 +48,7 @@ Le gabarit `.github/PULL_REQUEST_TEMPLATE.md` est obligatoire. En particulier :
 
 La CI (`.github/workflows/ci.yaml`) rejoue tests + lint. Une PR rouge ne se discute pas.
 
-### Issues
+## Issues
 
 Deux gabarits : `epic.yml` (objectif métier, sans détail d'implémentation) et
 `user_story.yml` (une capacité livrable). Les user stories se rattachent à leur epic
@@ -57,15 +57,15 @@ via **Add sub-issue**.
 Une issue publique se rédige de façon **autoportante** : compréhensible par un
 contributeur externe qui n'a accès ni à la roadmap ni à la spec privée.
 
-### Git hooks
+## Git hooks
 
 ```bash
 make setup-hooks     # active .githooks — à faire une fois par clone ou worktree
 ```
 
-### Interdits sans validation humaine
+## Interdits sans validation humaine
 
-```
+```text
 ✗ merge d'une PR          ✗ push sur main          ✗ push --force
 ✗ tag ou release          ✗ suppression de branche distante
 ```

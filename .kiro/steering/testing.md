@@ -2,11 +2,11 @@
 inclusion: always
 ---
 
-## Stratégie de tests
+# Stratégie de tests
 
 PHPUnit `^13.3` — configuration `phpunit.dist.xml`, bootstrap `tests/bootstrap.php`.
 
-```
+```text
 tests/
 ├── Unit/           miroir de src/ — Domain, Application, Infrastructure
 │   ├── Domain/ValueObject/     invariants, cas limites, rejets
