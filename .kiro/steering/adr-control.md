@@ -1,12 +1,6 @@
 ---
 inclusion: always
 ---
-<!------------------------------------------------------------------------------------
-   Add rules to this file or a short description and have Kiro refine them for you.
-   
-   Learn about inclusion modes: https://kiro.dev/docs/steering/#inclusion-modes
--------------------------------------------------------------------------------------> 
-
 # Architecture Decision Records (ADR)
 
 Before proposing or implementing any change that touches the architecture, consult the project's ADRs below. They record the accepted architectural decisions and their rationale. Respect these decisions; if a change would contradict one, flag it and propose a new ADR rather than silently diverging.
