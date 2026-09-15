@@ -15,7 +15,7 @@ SYMFONY  = $(PHP) bin/console
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build refresh up start down logs sh bash test deptrac phpstan composer vendor sf cc setup-dns setup-hooks website-build
+.PHONY        : help build refresh up start down logs sh bash test test-db deptrac phpstan composer vendor sf cc setup-dns setup-hooks website-build
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -61,9 +61,17 @@ bash: ## Connect to the FrankenPHP container via bash so up and down arrows go t
 	@$(PHP_CONT) bash
 
 test: ## Start tests with phpunit, pass the parameter "c=" to add options to phpunit, example: make test c="--group e2e --stop-on-failure"
-test: deptrac phpstan
+test: deptrac phpstan test-db
 	@$(eval c ?=)
 	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/phpunit $(c)
+
+# Aligne la base et le cache de test sur le code courant, comme le fait la CI avant PHPUnit.
+# Sans ça, un schéma laissé par une branche précédente fait échouer des tests sans rapport
+# avec le code en cours — le gate devient un oracle peu fiable.
+test-db: ## Resynchronise la base et le cache de l'environnement de test
+	@$(PHP_CONT) bin/console -e test doctrine:database:create --if-not-exists --quiet
+	@$(PHP_CONT) bin/console -e test doctrine:schema:update --force --quiet
+	@$(PHP_CONT) bin/console -e test cache:clear --quiet
 
 ## —— Qualité 🧪 ————————————————————————————————————————————————————————————————
 deptrac: ## Vérifie le respect des couches Clean Architecture (Domain/Application/Infrastructure)
