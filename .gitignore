@@ -28,3 +28,7 @@ http-client.private.env.json
 ###> deptrac/deptrac ###
 /.deptrac.cache
 ###< deptrac/deptrac ###
+
+# Kiro workspace configuration (steering, hooks, specs) is maintained outside this
+# repository and installed locally; it is never committed.
+/.kiro/
