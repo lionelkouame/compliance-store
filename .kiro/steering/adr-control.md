@@ -29,3 +29,5 @@ The ADRs are referenced (not duplicated) from `docs/architecture/adr/`:
 #[[file:../../docs/architecture/adr/0009-document-value-objects-compliance-relevance.md]]
 
 #[[file:../../docs/architecture/adr/0010-binary-responses-escape-state-provider-contract.md]]
+
+#[[file:../../docs/architecture/adr/0011-binary-responses-served-by-state-providers.md]]
