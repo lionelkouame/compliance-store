@@ -2,70 +2,70 @@
 inclusion: always
 ---
 
-# Conventions git & GitHub
+# Git and GitHub conventions
 
 ## Commits — Conventional Commits
 
 ```text
-<type>(<portée optionnelle>): <description à l'impératif, en anglais>
+<type>(<optional scope>): <imperative description, in English>
 ```
 
 | Type | Usage |
 | :--- | :--- |
-| `feat` | nouvelle capacité fonctionnelle |
-| `fix` | correction de bug |
-| `refactor` | réorganisation sans changement de comportement |
-| `test` | ajout ou correction de tests seuls |
+| `feat` | new functional capability |
+| `fix` | bug fix |
+| `refactor` | restructuring without behaviour change |
+| `test` | tests only |
 | `docs` | documentation, ADR, steering |
-| `chore` | dépendances, outillage, CI |
+| `chore` | dependencies, tooling, CI |
 
-Référence d'issue quand elle existe : `feat: #40 prevent domain leak through StorageKey`.
+Reference the issue when there is one: `feat: #40 prevent domain leak through StorageKey`.
 
-**Un commit = une tâche du `tasks.md` = un gate vert.** Ne jamais grouper deux tâches,
-ne jamais commiter sur un gate rouge.
+**One commit = one task of `tasks.md` = one green gate.** Never group two tasks, never
+commit on a red gate.
 
-Le corps du message explique le **pourquoi**, pas le quoi — le diff dit déjà le quoi.
+The message body explains **why**, not what — the diff already says what.
 
-> Ce dépôt est **public**. Un message de commit ne cite jamais la roadmap privée,
-> l'association, ni un arbitrage stratégique. Il cite une issue publique ou un ADR.
+> This repository is **public**. A commit message never cites non-public planning or
+> strategic trade-offs. It cites a public issue or an ADR.
 
 ## Branches
 
 ```text
-features/<numéro-issue>-<slug>     features/34-us-refacto-infrastructure
+features/<issue-number>-<slug>     features/34-us-refacto-infrastructure
 fix/<slug>                         fix/document-read-empty-payload
 ```
 
-Jamais de commit direct sur `main`.
+Never commit directly on `main`.
 
 ## Pull requests
 
-Le gabarit `.github/PULL_REQUEST_TEMPLATE.md` est obligatoire. En particulier :
+The `.github/PULL_REQUEST_TEMPLATE.md` template is mandatory. In particular:
 
-- `Closes #<issue>` renseigné ;
-- section « How was this tested? » : **coller la sortie de `make test`**, pas la décrire ;
-- « No unrelated changes bundled in » : une PR = un périmètre.
+- `Closes #<issue>` filled in;
+- "How was this tested?": **paste the output of `make test`**, do not describe it;
+- "No unrelated changes bundled in": one PR = one scope.
 
-La CI (`.github/workflows/ci.yaml`) rejoue tests + lint. Une PR rouge ne se discute pas.
+CI (`.github/workflows/ci.yaml`) replays tests and lint. A red PR is not up for discussion.
 
 ## Issues
 
-Deux gabarits : `epic.yml` (objectif métier, sans détail d'implémentation) et
-`user_story.yml` (une capacité livrable). Les user stories se rattachent à leur epic
-via **Add sub-issue**.
+Two templates: `epic.yml` (business goal, no implementation detail) and `user_story.yml`
+(one deliverable capability). User stories are attached to their epic through
+**Add sub-issue**.
 
-Une issue publique se rédige de façon **autoportante** : compréhensible par un
-contributeur externe qui n'a accès ni à la roadmap ni à la spec privée.
+A public issue is written to be **self-contained**: understandable by an external
+contributor with no access to anything outside this repository.
 
 ## Git hooks
 
 ```bash
-make setup-hooks     # active .githooks — à faire une fois par clone ou worktree
+make setup-hooks     # enables .githooks — once per clone or worktree
 ```
 
-## Interdits sans validation humaine
+## Forbidden without human approval
 
 ```text
-✗ merge d'une PR          ✗ push sur main          ✗ push --force
-✗ tag ou release          ✗ suppression de branche distante
+✗ merging a PR           ✗ pushing to main          ✗ push --force
+✗ tag or release         ✗ deleting a remote branch
 ```

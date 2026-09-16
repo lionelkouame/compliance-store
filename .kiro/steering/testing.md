@@ -2,70 +2,70 @@
 inclusion: always
 ---
 
-# Stratégie de tests
+# Testing strategy
 
 PHPUnit `^13.3` — configuration `phpunit.dist.xml`, bootstrap `tests/bootstrap.php`.
 
 ```text
 tests/
-├── Unit/           miroir de src/ — Domain, Application, Infrastructure
-│   ├── Domain/ValueObject/     invariants, cas limites, rejets
-│   ├── Application/UseCase/    orchestration, ports bouchonnés
-│   └── Infrastructure/         adaptateurs isolés
-└── Api/            tests fonctionnels API Platform bout en bout
+├── Unit/           mirrors src/ — Domain, Application, Infrastructure
+│   ├── Domain/ValueObject/     invariants, edge cases, rejections
+│   ├── Application/UseCase/    orchestration, stubbed ports
+│   └── Infrastructure/         isolated adapters
+└── Api/            end-to-end API Platform functional tests
 ```
 
-Convention de nommage : `<ClasseSousTest>Test.php`, dans le dossier miroir de la classe.
+Naming convention: `<ClassUnderTest>Test.php`, in the folder mirroring the class.
 
 ---
 
-## Configuration stricte — à connaître avant d'écrire un test
+## Strict configuration — know it before writing a test
 
-`phpunit.dist.xml` échoue sur **dépréciation, notice et warning** :
+`phpunit.dist.xml` fails on **deprecation, notice and warning**:
 
 ```xml
 failOnDeprecation="true"  failOnNotice="true"  failOnWarning="true"
 ```
 
-Une dépréciation émise par du code de production **casse la suite**. Ne jamais la faire
-taire : corriger l'appel, ou ouvrir la discussion dans la PR.
+A deprecation raised by production code **breaks the suite**. Never silence it: fix the
+call, or raise the discussion in the PR.
 
 ---
 
-## Ce qu'on teste, par couche
+## What to test, per layer
 
-| Couche | Ce qui doit être couvert | Doubles |
+| Layer | What must be covered | Doubles |
 | :--- | :--- | :--- |
-| `Domain/ValueObject` | invariant respecté, **et chaque motif de rejet** | aucun |
-| `Domain/Entity` | transitions d'état, règles métier | aucun |
-| `Application/UseCase` | orchestration, propagation d'erreur | ports bouchonnés |
-| `Infrastructure` | traduction technique (chiffrement, mapping, stockage) | au plus près du réel |
-| `Api` | contrat HTTP : code de statut, forme du corps, en-têtes | — |
+| `Domain/ValueObject` | invariant holds, **and every rejection reason** | none |
+| `Domain/Entity` | state transitions, business rules | none |
+| `Application/UseCase` | orchestration, error propagation | stubbed ports |
+| `Infrastructure` | technical translation (encryption, mapping, storage) | as close to real as possible |
+| `Api` | HTTP contract: status code, body shape, headers | — |
 
-**Un Value Object sans test de rejet n'est pas testé.** Son intérêt est précisément de
-refuser les valeurs invalides ; vérifier seulement le cas nominal ne prouve rien.
+**A Value Object without a rejection test is not tested.** Its whole point is to refuse
+invalid values; checking only the nominal case proves nothing.
 
 ---
 
-## Lien avec les exigences
+## Link with requirements
 
-Chaque critère d'acceptation EARS d'une spec (`.kiro/specs/<key>/requirements.md`)
-correspond à **au moins un test**. Le test cite l'exigence couverte :
+Every EARS acceptance criterion of a spec (`.kiro/specs/<feature>/requirements.md`)
+maps to **at least one test**. The test cites the requirement it covers:
 
 ```php
 /**
- * Exigence 3.2 — dépôt refusé si aucun cadre légal applicable.
+ * Requirement 3.2 — storage refused when no legal framework applies.
  */
 public function testStoreIsRejectedWhenNoLegalFrameworkApplies(): void
 ```
 
-C'est ce lien qui permet à un agent de savoir quand il a fini : toutes les exigences
-sont couvertes, `make test` est vert.
+This link is what tells an agent it is done: every requirement is covered and
+`make test` is green.
 
 ---
 
-## Test d'abord
+## Test first
 
-Pour toute tâche issue d'un `tasks.md` : **écrire le test avant l'implémentation**.
-Le test échoue d'abord pour la bonne raison, puis passe. Un test écrit après coup
-valide ce que le code fait, pas ce qu'il devait faire.
+For any task coming from a `tasks.md`: **write the test before the implementation**.
+The test first fails for the right reason, then passes. A test written afterwards
+validates what the code does, not what it was supposed to do.
