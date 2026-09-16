@@ -17,6 +17,11 @@ updates:
       prefix: "chore"
     cooldown:
       default-days: 7
+    ignore:
+      # ORM 3.7 needs doctrine/dbal ^4.5, which is not released yet: the schema
+      # commands fail at boot. Drop this entry once DBAL 4.5 is out.
+      - dependency-name: doctrine/orm
+        versions: [">=3.7.0"]
 
   - package-ecosystem: github-actions
     directory: /
