@@ -24,8 +24,11 @@ additive, technical/vendor logic that can never weaken the native core, and RegE
 the opposite of optional.
 
 Lionel has now decided, independently of that classification, to build the regulation
-engine as a **separate external application** (Go) rather than as in-process PHP inside
-`compliance-store`'s domain. This ADR exists to write that decision down explicitly rather
+engine as a **separate external application**, in its own repository, rather than as
+in-process PHP inside `compliance-store`'s domain. Its implementation language is not
+decided — PHP and Go are both on the table — and is deliberately left open by this ADR;
+what is decided is the process boundary, not the stack. This ADR exists to write that
+decision down explicitly rather
 than let `reg-engine-core` be designed against a native-core assumption ADR 0001 no longer
 reflects — the lot 1a design is in progress under this exact assumption at the time of
 writing.
@@ -45,7 +48,8 @@ self-contained product on its own, not a component that only works when paired w
 The regulation engine — the stateless ternary evaluator (`reg-engine-core`, lot 1a), the
 simulation operation built on it (`reg-engine-simulation`, lot 1b), **and the rule catalog**
 (`reg-catalog`, lot 2: attributes, frameworks, roles, lock types, versioned rules) — is
-extracted into an external, standalone application, outside `compliance-store`, in Go.
+extracted into an external, standalone application, outside `compliance-store`, in a
+language and repository of its own (not decided by this ADR).
 `compliance-store` consumes it as a **provider**, through a dedicated gateway interface
 (`RegulationEngineGatewayInterface`), following the same Provider Extension Port shape ADR
 0001 already defines — but applied here to what ADR 0001 called the native core, which this
@@ -131,6 +135,8 @@ its rule-classification table only — that edit is left for the gate, not done 
 3. **Versioning and release discipline** for a contract now shared across independent
    consumer projects, not just `compliance-store` and one external service — a breaking
    change on the engine side has a blast radius beyond this repo.
+4. **Implementation language.** Deliberately not decided by this ADR — PHP and Go are both
+   candidates. Whichever is chosen, condition 1 (generic contract) still applies.
 
 ---
 
