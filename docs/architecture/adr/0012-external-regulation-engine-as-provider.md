@@ -63,9 +63,9 @@ already used in `spec-v2.md` — subject, rule, lock type, regulatory framework,
 are generic by construction (§1 of `spec-v2.md`: "aucun régulateur, rôle, verrou ni classe
 de stockage n'est codé en dur"). `compliance-store` maps its own concepts (a document, a
 storage space) onto that vocabulary at the gateway boundary; the engine never needs to know
-what a "document" is. Multi-tenancy (isolating one consumer project's catalog from
-another's) is a concrete requirement of this constraint, not a nice-to-have — see open
-question 2 below.
+what a "document" is. How that isolation is implemented (tenant identifier, deployment per
+consumer, or otherwise) is a downstream design concern for the engine itself, not decided
+here.
 
 ### 2. Fail-closed is non-negotiable
 
@@ -125,18 +125,12 @@ its rule-classification table only — that edit is left for the gate, not done 
 
 ## Open questions for Lionel (to close before `reg-engine-core` design resumes)
 
-1. **Multi-tenancy shape.** If other projects will use the same engine, how is one
-   consumer's catalog kept separate from another's — a tenant identifier on every call, a
-   deployment per consumer, something else? This is now load-bearing given the reuse goal,
-   not a detail.
-2. **Failure-mode detail.** Timeout budget, retry policy, and what "blocked" surfaces as to
-   the caller of `reg-engine-simulation` — a 422, a 503, something else. *(Still open —
-   Lionel: "je ne sais pas encore".)*
-3. **Versioning and release discipline** for a contract now shared across independent
-   consumer projects, not just `compliance-store` and one external service — a breaking
-   change on the engine side has a blast radius beyond this repo.
-4. **Implementation language.** Deliberately not decided by this ADR — PHP and Go are both
+1. **Implementation language.** Deliberately not decided by this ADR — PHP and Go are both
    candidates. Whichever is chosen, condition 1 (generic contract) still applies.
+
+Multi-tenancy shape, failure-mode detail, and contract versioning are real questions, but
+they are engine **design** decisions, not architecture decisions for `compliance-store` —
+they belong in `reg-engine-core`'s `design.md`, not in this ADR.
 
 ---
 
