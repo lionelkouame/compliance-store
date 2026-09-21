@@ -30,8 +30,7 @@ decided — PHP and Go are both on the table — and is deliberately left open b
 what is decided is the process boundary, not the stack. This ADR exists to write that
 decision down explicitly rather
 than let `reg-engine-core` be designed against a native-core assumption ADR 0001 no longer
-reflects — the lot 1a design is in progress under this exact assumption at the time of
-writing.
+reflects — its design is in progress under this exact assumption at the time of writing.
 
 **Rationale (2026-09-21):** the goal is not merely to move code out of `compliance-store`.
 The regulation engine is meant to become a **generic compliance/rules engine**, usable by
@@ -45,9 +44,9 @@ self-contained product on its own, not a component that only works when paired w
 
 ## Decision
 
-The regulation engine — the stateless ternary evaluator (`reg-engine-core`, lot 1a), the
-simulation operation built on it (`reg-engine-simulation`, lot 1b), **and the rule catalog**
-(`reg-catalog`, lot 2: attributes, frameworks, roles, lock types, versioned rules) — is
+The regulation engine — the stateless ternary evaluator (`reg-engine-core`), the
+simulation operation built on it (`reg-engine-simulation`), **and the rule catalog**
+(`reg-catalog`: attributes, frameworks, roles, lock types, versioned rules) — is
 extracted into an external, standalone application, outside `compliance-store`, in a
 language and repository of its own (not decided by this ADR).
 `compliance-store` consumes it as a **provider**, through a dedicated gateway interface
@@ -75,14 +74,15 @@ unreachable, times out, or returns a malformed response, `compliance-store` MUST
 evaluation as **blocked**, never as an implicit pass. Unavailability of the regulation
 engine is a compliance incident, not a bypass.
 
-### 3. Scope — evaluation and catalog; document-bound lots stay open
+### 3. Scope — evaluation and catalog; document-bound components stay open
 
-This ADR moves lots 1a, 1b and 2 (evaluator + catalog) external. It does *not* decide where
-lots 3–4 live:
+This ADR moves the evaluator, the simulation operation and the catalog
+(`reg-engine-core`, `reg-engine-simulation`, `reg-catalog`) external. It does *not* decide
+where the document-bound components live:
 
-* `reg-document-attributes` (lot 3) — document-scoped attribute *values*, referencing the
+* `reg-document-attributes` — document-scoped attribute *values*, referencing the
   external catalog by identifier.
-* `reg-execution` (lot 4) — document state, purge, immutable audit trail.
+* `reg-execution` — document state, purge, immutable audit trail.
 
 Both touch document storage and envelope encryption (ADR 0002) directly, which argues for
 keeping them native to `compliance-store` even though the catalog they reference lives
@@ -108,7 +108,8 @@ specifically are no longer classified as native core.
 
 Following the project's convention (ADR 0010/0011), **ADR 0001's status is not edited
 here.** Once this ADR is accepted, ADR 0001 should be marked `Superseded by ADR 0012` for
-its rule-classification table only — that edit is left for the gate, not done silently.
+its rule-classification table only — that edit is left for a deliberate follow-up change,
+not done silently.
 
 ---
 
@@ -119,7 +120,7 @@ its rule-classification table only — that edit is left for the gate, not done 
 * An implicit pass when the external engine is unreachable (condition 2).
 * Baking any `compliance-store`-specific concept into the engine's public contract
   (condition 1).
-* A decision on where lots 3–4 live (condition 3).
+* A decision on where `reg-document-attributes` and `reg-execution` live (condition 3).
 
 ---
 
@@ -138,8 +139,8 @@ they belong in `reg-engine-core`'s `design.md`, not in this ADR.
 
 ### Positive
 
-* Matches the stateless shape already chosen for lot 1b (`reg-engine-simulation`) — no
-  architectural surprise there, just a change of address.
+* Matches the stateless shape already chosen for `reg-engine-simulation` — no architectural
+  surprise there, just a change of address.
 * Decouples the evaluator's and catalog's release cadence and language from
   `compliance-store`.
 * **Reusable beyond this project**, which was the actual goal — a generic engine is a more
@@ -147,9 +148,9 @@ they belong in `reg-engine-core`'s `design.md`, not in this ADR.
 
 ### Negative
 
-* **Reopens `reg-engine-core`'s design.** It was being conceived (G2, `archi-guardian`) on
-  the native-core assumption; that work restarts against this ADR once accepted, now also
-  carrying the catalog (lot 2) instead of deferring it.
+* **Reopens `reg-engine-core`'s design.** It was being actively designed on the native-core
+  assumption; that work restarts against this ADR once accepted, now also carrying the
+  catalog (`reg-catalog`) instead of deferring it.
 * **New failure mode.** A network dependency now sits on the path of every regulatory
   decision; condition 2 bounds the risk but does not remove the operational burden (health
   checks, timeouts, on-call surface).
