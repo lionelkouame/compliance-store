@@ -1,0 +1,211 @@
+# @name registerIdentityDocument
+### Register Identity Document
+POST {{apiUrl}}/identity-documents
+Content-Type: application/json
+Accept: application/ld+json
+# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
+
+{
+  "type": "Passport",
+  "country": "FRA",
+  "number": "18AB12345",
+  "expiresAt": "2035-01-31"
+}
+
+> {%
+    client.test("Status code is 201 Created", function() {
+        client.assert(response.status === 201, "Expected 201 Created");
+    });
+    client.test("Response returns the registered passport", function() {
+        client.assert(!!response.body.id, "Expected an id");
+        client.assert(response.body.type === "Passport", "Expected type Passport");
+        client.assert(response.body.number === "18AB12345", "Expected number 18AB12345");
+    });
+    client.global.set("identityDocumentId", response.body.id);
+%}
+
+###
+
+# @name registerIdentityDocumentMissingFields
+### Register Identity Document - Missing Fields (expect 422)
+POST {{apiUrl}}/identity-documents
+Content-Type: application/json
+Accept: application/ld+json
+
+{}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name registerIdentityDocumentExpired
+### Register Identity Document - Expired (expect 422)
+POST {{apiUrl}}/identity-documents
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "type": "Passport",
+  "country": "FRA",
+  "number": "99ZZ00000",
+  "expiresAt": "2020-01-01"
+}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name registerIdentityDocumentDuplicate
+### Register Identity Document - Duplicate (expect 409)
+POST {{apiUrl}}/identity-documents
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "type": "Passport",
+  "country": "FRA",
+  "number": "18AB12345",
+  "expiresAt": "2035-01-31"
+}
+
+> {%
+    client.test("Status code is 409 Conflict", function() {
+        client.assert(response.status === 409, "Expected 409 Conflict");
+    });
+%}
+
+###
+
+# @name registerIdentityDocumentNationalCard
+### Register Identity Document - National Card, same number as the passport (expect 201)
+POST {{apiUrl}}/identity-documents
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "type": "NationalCard",
+  "country": "FRA",
+  "number": "18AB12345",
+  "expiresAt": "2035-01-31"
+}
+
+> {%
+    client.test("Status code is 201 Created", function() {
+        client.assert(response.status === 201, "Expected 201 Created");
+    });
+    client.test("Response returns the registered national card", function() {
+        client.assert(response.body.type === "NationalCard", "Expected type NationalCard");
+        client.assert(response.body.country === "FRA", "Expected country FRA");
+        client.assert(response.body.number === "18AB12345", "Expected number 18AB12345");
+        client.assert(response.body.expiresAt === "2035-01-31", "Expected expiresAt 2035-01-31");
+        client.assert(!!response.body.createdAt, "Expected a createdAt");
+    });
+%}
+
+###
+
+# @name registerIdentityDocumentInvalidType
+### Register Identity Document - Unknown Type (expect 422)
+POST {{apiUrl}}/identity-documents
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "type": "DrivingLicence",
+  "country": "FRA",
+  "number": "77CD54321",
+  "expiresAt": "2035-01-31"
+}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name registerIdentityDocumentInvalidCountry
+### Register Identity Document - Country not ISO alpha-3 (expect 422)
+POST {{apiUrl}}/identity-documents
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "type": "Passport",
+  "country": "FR",
+  "number": "77CD54321",
+  "expiresAt": "2035-01-31"
+}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name registerIdentityDocumentInvalidNumber
+### Register Identity Document - Number with forbidden characters (expect 422)
+POST {{apiUrl}}/identity-documents
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "type": "Passport",
+  "country": "FRA",
+  "number": "77-cd-54321",
+  "expiresAt": "2035-01-31"
+}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name registerIdentityDocumentInvalidDate
+### Register Identity Document - Impossible Date (expect 422)
+POST {{apiUrl}}/identity-documents
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "type": "Passport",
+  "country": "FRA",
+  "number": "77CD54321",
+  "expiresAt": "2035-02-30"
+}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name registerIdentityDocumentMalformedJson
+### Register Identity Document - Malformed JSON (expect 422)
+POST {{apiUrl}}/identity-documents
+Content-Type: application/json
+Accept: application/ld+json
+
+{"type": "Passport",
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}

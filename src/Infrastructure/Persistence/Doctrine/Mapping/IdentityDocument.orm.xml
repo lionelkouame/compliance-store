@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Entity\IdentityDocument" table="identity_document">
+        <unique-constraints>
+            <unique-constraint name="uniq_identity_document_type_country_number" columns="type,country,number"/>
+        </unique-constraints>
+
+        <id name="id" type="identity_document_id" length="36">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="type" type="string" enum-type="App\Domain\ValueObject\IdentityDocumentType" length="20" column="type"/>
+        <field name="country" type="country_code" length="3" column="country"/>
+        <field name="number" type="identity_document_number" length="20" column="number"/>
+        <field name="expiresAt" type="date_immutable" column="expires_at"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+    </entity>
+</doctrine-mapping>

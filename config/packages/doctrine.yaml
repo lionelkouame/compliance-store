@@ -19,6 +19,12 @@ doctrine:
                 class: App\Infrastructure\Persistence\Doctrine\Type\StorageSpaceCodeType
             storage_space_name:
                 class: App\Infrastructure\Persistence\Doctrine\Type\StorageSpaceNameType
+            identity_document_id:
+                class: App\Infrastructure\Persistence\Doctrine\Type\IdentityDocumentIdType
+            identity_document_number:
+                class: App\Infrastructure\Persistence\Doctrine\Type\IdentityDocumentNumberType
+            country_code:
+                class: App\Infrastructure\Persistence\Doctrine\Type\CountryCodeType
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
