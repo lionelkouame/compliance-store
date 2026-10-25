@@ -77,7 +77,7 @@ jobs:
       - name: PHPStan
         run: vendor/bin/phpstan analyse --no-interaction --memory-limit=512M
       - name: Lint Code Base
-        uses: super-linter/super-linter@v8
+        uses: super-linter/super-linter@v9
         env:
           DEFAULT_BRANCH: main
           FILTER_REGEX_EXCLUDE: .*vendor/.*
