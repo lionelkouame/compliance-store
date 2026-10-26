@@ -16,4 +16,9 @@ interface StorageGatewayInterface
     public function store(DocumentId $id, string $ciphertext): void;
 
     public function read(DocumentId $id): string;
+
+    /**
+     * Removes the ciphertext. Deleting a document that is not stored is not an error.
+     */
+    public function delete(DocumentId $id): void;
 }

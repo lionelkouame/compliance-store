@@ -37,8 +37,9 @@ final readonly class IdentityDocument
     ): self {
         $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
 
-        // A document is valid through its whole expiry day.
-        if ($expiresAt->format('Y-m-d') < $now->format('Y-m-d')) {
+        // A document is valid through its whole expiry day. Both calendar days
+        // are compared in UTC so the caller's timezone cannot shift the result.
+        if ($expiresAt->setTimezone($now->getTimezone())->format('Y-m-d') < $now->format('Y-m-d')) {
             throw new IdentityDocumentExpiredException($expiresAt);
         }
 

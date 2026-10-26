@@ -3,7 +3,7 @@
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
-# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
+Authorization: Bearer {{apiKey}}
 
 {
   "type": "Passport",
@@ -31,6 +31,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {}
 
@@ -47,6 +48,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {
   "type": "Passport",
@@ -68,6 +70,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {
   "type": "Passport",
@@ -89,6 +92,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {
   "type": "NationalCard",
@@ -117,6 +121,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {
   "type": "DrivingLicence",
@@ -138,6 +143,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {
   "type": "Passport",
@@ -159,6 +165,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {
   "type": "Passport",
@@ -180,6 +187,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {
   "type": "Passport",
@@ -201,6 +209,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {"type": "Passport",
 

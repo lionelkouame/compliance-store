@@ -10,11 +10,14 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class StorageSpaceApiTest extends ApiTestCase
 {
+    use ApiClientFixture;
+
     protected static ?bool $alwaysBootKernel = true;
 
     protected function setUp(): void
     {
         parent::setUp();
+        self::clearApiClients();
 
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
         $entityManager->createQuery('DELETE FROM '.StorageSpace::class)->execute();
@@ -22,7 +25,7 @@ final class StorageSpaceApiTest extends ApiTestCase
 
     public function testItCreatesAStorageSpace(): void
     {
-        $client = static::createClient();
+        $client = self::createAuthenticatedClient();
 
         $response = $client->request('POST', '/api/v1/storage-spaces', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -40,7 +43,7 @@ final class StorageSpaceApiTest extends ApiTestCase
 
     public function testItRejectsMissingFields(): void
     {
-        $client = static::createClient();
+        $client = self::createAuthenticatedClient();
 
         $client->request('POST', '/api/v1/storage-spaces', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -52,7 +55,7 @@ final class StorageSpaceApiTest extends ApiTestCase
 
     public function testItRejectsADuplicateCode(): void
     {
-        $client = static::createClient();
+        $client = self::createAuthenticatedClient();
 
         $client->request('POST', '/api/v1/storage-spaces', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -70,7 +73,7 @@ final class StorageSpaceApiTest extends ApiTestCase
 
     public function testItGetsAndListsStorageSpaces(): void
     {
-        $client = static::createClient();
+        $client = self::createAuthenticatedClient();
 
         $created = $client->request('POST', '/api/v1/storage-spaces', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -86,7 +89,7 @@ final class StorageSpaceApiTest extends ApiTestCase
 
     public function testItReturns404ForAnUnknownStorageSpace(): void
     {
-        $client = static::createClient();
+        $client = self::createAuthenticatedClient();
 
         $client->request('GET', '/api/v1/storage-spaces/00000000-0000-0000-0000-000000000000');
 
@@ -95,7 +98,7 @@ final class StorageSpaceApiTest extends ApiTestCase
 
     public function testItChangesAStorageSpaceStatus(): void
     {
-        $client = static::createClient();
+        $client = self::createAuthenticatedClient();
 
         $created = $client->request('POST', '/api/v1/storage-spaces', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -113,7 +116,7 @@ final class StorageSpaceApiTest extends ApiTestCase
 
     public function testItRejectsAnInvalidStatusTransition(): void
     {
-        $client = static::createClient();
+        $client = self::createAuthenticatedClient();
 
         $created = $client->request('POST', '/api/v1/storage-spaces', [
             'headers' => ['Content-Type' => 'application/json'],

@@ -19,4 +19,14 @@ final readonly class WrappedDataKey
             throw new \InvalidArgumentException('A wrapped data key cannot be empty.');
         }
     }
+
+    /**
+     * Keeps the secret out of var_dump()/print_r() output and debug logs.
+     *
+     * @return array<string, string>
+     */
+    public function __debugInfo(): array
+    {
+        return ['encryptedDataKey' => '***'];
+    }
 }

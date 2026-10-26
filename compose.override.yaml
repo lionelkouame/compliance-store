@@ -18,10 +18,15 @@ services:
     environment:
       FRANKENPHP_WORKER_CONFIG: watch
       FRANKENPHP_SITE_CONFIG: hot_reload
-      MERCURE_EXTRA_DIRECTIVES: demo
+      # "demo" a été retiré du module Mercure embarqué dans FrankenPHP >= 1.13 : la directive fait planter Caddy au démarrage.
+      MERCURE_EXTRA_DIRECTIVES: "${MERCURE_EXTRA_DIRECTIVES:-}"
       # See https://xdebug.org/docs/all_settings#mode
       XDEBUG_MODE: "${XDEBUG_MODE:-develop}"
       APP_ENV: "${APP_ENV:-dev}"
+      # Dev-only credentials. The master key below is public (committed): never reuse it outside dev/test.
+      AWS_S3_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+      AWS_S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      DOCUMENT_MASTER_KEY: ${DOCUMENT_MASTER_KEY:-vfG1iHN+WGD349gkmo5+8aaoX0+i7HNo6ttivkyPnE0=}
     extra_hosts:
       # Ensure that host.docker.internal is correctly defined on Linux
       - host.docker.internal:host-gateway
@@ -32,5 +37,11 @@ services:
 ###> doctrine/doctrine-bundle ###
   database:
     ports:
-      - "5432"
+      - "${POSTGRES_PORT:-5432}:5432"
 ###< doctrine/doctrine-bundle ###
+
+  # Published in dev only so the host can inspect the bucket; prod reaches MinIO/S3 over the network.
+  minio:
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"

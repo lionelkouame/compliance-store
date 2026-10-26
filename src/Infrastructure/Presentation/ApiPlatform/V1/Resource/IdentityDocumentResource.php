@@ -17,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Post(
             uriTemplate: '/identity-documents',
+            security: "is_granted('ROLE_OPERATOR')",
             openapi: new Operation(
                 tags: ['V1 - Identity Documents'],
                 summary: 'Register an identity document',

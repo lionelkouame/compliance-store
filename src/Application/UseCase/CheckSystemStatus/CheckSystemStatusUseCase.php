@@ -6,12 +6,16 @@ namespace App\Application\UseCase\CheckSystemStatus;
 
 use App\Domain\ValueObject\SystemStatus;
 
-final class CheckSystemStatusUseCase
+final readonly class CheckSystemStatusUseCase
 {
-    const string STATUS_OK = 'OK';
+    public const string STATUS_OK = 'OK';
+
+    /**
+     * Both values are bound in config/services.yaml (kernel environment and API version).
+     */
     public function __construct(
-        private string $environment = 'dev',
-        private string $version = '1.0.0',
+        private string $environment,
+        private string $version,
     ) {}
 
     public function execute(): SystemStatus

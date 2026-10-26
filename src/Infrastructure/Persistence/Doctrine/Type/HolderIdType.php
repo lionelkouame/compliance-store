@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Type;
 
 use App\Domain\ValueObject\HolderId;
-use App\Domain\ValueObject\StorageSpaceId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\StringType;
 
 final class HolderIdType extends StringType
@@ -15,7 +15,15 @@ final class HolderIdType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?HolderId
     {
-        return \is_string($value) ? HolderId::fromString($value) : null;
+        if (null === $value || $value instanceof HolderId) {
+            return $value;
+        }
+
+        if (!\is_string($value)) {
+            throw InvalidType::new($value, self::class, ['null', 'string', HolderId::class]);
+        }
+
+        return HolderId::fromString($value);
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -24,6 +32,14 @@ final class HolderIdType extends StringType
             return null;
         }
 
-        return $value instanceof HolderId ? $value->value : (\is_string($value) ? $value : null);
+        if ($value instanceof HolderId) {
+            return $value->value;
+        }
+
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        throw InvalidType::new($value, self::class, ['null', 'string', HolderId::class]);
     }
 }

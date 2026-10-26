@@ -1,0 +1,47 @@
+# @name registerHolder
+### Register a holder (V1)
+POST {{apiUrl}}/holders
+Content-Type: application/json
+Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
+
+{
+  "holderName": "Ada Lovelace",
+  "birthDate": "1990-01-01",
+  "email": "ada.lovelace@example.com"
+}
+
+> {%
+    client.test("Status code is 201 Created", function() {
+        client.assert(response.status === 201, "Expected 201 Created");
+    });
+    client.global.set("holderId", response.body.id);
+%}
+
+###
+
+# @name getHolder
+### Get the holder registered above (V1)
+GET {{apiUrl}}/holders/{{holderId}}
+Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+%}
+
+###
+
+# @name getUnknownHolder
+### Get an unknown holder (expect 404)
+GET {{apiUrl}}/holders/00000000-0000-0000-0000-000000000000
+Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
+
+> {%
+    client.test("Status code is 404 Not Found", function() {
+        client.assert(response.status === 404, "Expected 404");
+    });
+%}

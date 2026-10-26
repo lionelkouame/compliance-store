@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Post(
             uriTemplate: '/storage-spaces',
+            security: "is_granted('ROLE_ADMIN')",
             openapi: new Operation(
                 tags: ['V1 - Storage Spaces'],
                 summary: 'Create a storage space',
@@ -32,7 +33,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             processor: CreateStorageSpaceProcessor::class,
         ),
         new GetCollection(
+            // The use case returns the whole table: do not advertise page/itemsPerPage parameters.
+            paginationEnabled: false,
             uriTemplate: '/storage-spaces',
+            security: "is_granted('ROLE_READER')",
             openapi: new Operation(
                 tags: ['V1 - Storage Spaces'],
                 summary: 'List storage spaces',
@@ -42,6 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Get(
             uriTemplate: '/storage-spaces/{id}',
+            security: "is_granted('ROLE_READER')",
             openapi: new Operation(
                 tags: ['V1 - Storage Spaces'],
                 summary: 'Get a storage space',
@@ -51,6 +56,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Patch(
             uriTemplate: '/storage-spaces/{id}',
+            security: "is_granted('ROLE_ADMIN')",
             openapi: new Operation(
                 tags: ['V1 - Storage Spaces'],
                 summary: 'Change a storage space status',

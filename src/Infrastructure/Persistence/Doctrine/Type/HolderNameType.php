@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Doctrine\Type;
 
 use App\Domain\ValueObject\HolderName;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\StringType;
 
 final class HolderNameType extends StringType
@@ -14,7 +15,15 @@ final class HolderNameType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?HolderName
     {
-        return \is_string($value) ?  new HolderName($value) : null;
+        if (null === $value || $value instanceof HolderName) {
+            return $value;
+        }
+
+        if (!\is_string($value)) {
+            throw InvalidType::new($value, self::class, ['null', 'string', HolderName::class]);
+        }
+
+        return new HolderName($value);
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +32,14 @@ final class HolderNameType extends StringType
             return null;
         }
 
-        return $value instanceof HolderName ? $value->value : (\is_string($value) ? $value : null);
+        if ($value instanceof HolderName) {
+            return $value->value;
+        }
+
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        throw InvalidType::new($value, self::class, ['null', 'string', HolderName::class]);
     }
 }

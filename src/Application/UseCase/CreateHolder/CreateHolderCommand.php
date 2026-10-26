@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\UseCase\CreateHolder;
 
 final readonly class CreateHolderCommand
@@ -8,7 +10,5 @@ final readonly class CreateHolderCommand
         public string $holderName,
         public string $birthDate,
         public string $email,
-    ){
-
-    }
+    ) {}
 }

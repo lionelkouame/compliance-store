@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Doctrine\Type;
 
 use App\Domain\ValueObject\StorageSpaceName;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\StringType;
 
 final class StorageSpaceNameType extends StringType
@@ -14,7 +15,15 @@ final class StorageSpaceNameType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?StorageSpaceName
     {
-        return \is_string($value) ? new StorageSpaceName($value) : null;
+        if (null === $value || $value instanceof StorageSpaceName) {
+            return $value;
+        }
+
+        if (!\is_string($value)) {
+            throw InvalidType::new($value, self::class, ['null', 'string', StorageSpaceName::class]);
+        }
+
+        return new StorageSpaceName($value);
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +32,14 @@ final class StorageSpaceNameType extends StringType
             return null;
         }
 
-        return $value instanceof StorageSpaceName ? $value->value : (\is_string($value) ? $value : null);
+        if ($value instanceof StorageSpaceName) {
+            return $value->value;
+        }
+
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        throw InvalidType::new($value, self::class, ['null', 'string', StorageSpaceName::class]);
     }
 }

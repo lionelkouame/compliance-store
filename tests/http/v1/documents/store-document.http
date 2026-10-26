@@ -1,9 +1,36 @@
-# @name storeKycCniDocument
-### Store Sensitive KYC Document - CNI (Carte Nationale d'Identité)
+# @name storeDocument
+### Store an encrypted document for a registered holder (run Holders/post.http first: it sets {{holderId}})
 POST {{apiUrl}}/documents
 Content-Type: multipart/form-data; boundary=ComplianceStoreBoundary
 Accept: application/ld+json
-# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
+Authorization: Bearer {{apiKey}}
+
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="holderId"
+
+{{holderId}}
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="file"; filename="passport.png"
+Content-Type: image/png
+
+< ../../passport.png
+--ComplianceStoreBoundary--
+
+> {%
+    client.test("Status code is 201 Created", function() {
+        client.assert(response.status === 201, "Expected 201 Created");
+    });
+    client.global.set("documentId", response.body.id);
+%}
+
+###
+
+# @name storeDocumentWithoutHolder
+### Store a document without holderId (expect 422)
+POST {{apiUrl}}/documents
+Content-Type: multipart/form-data; boundary=ComplianceStoreBoundary
+Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 --ComplianceStoreBoundary
 Content-Disposition: form-data; name="file"; filename="passport.png"
@@ -12,39 +39,8 @@ Content-Type: image/png
 < ../../passport.png
 --ComplianceStoreBoundary--
 
-###
-
-# @name storeKycPassportDocument
-### Store Sensitive KYC Document - PASSPORT
-POST {{apiUrl}}/documents
-Content-Type: application/json
-Accept: application/ld+json
-Authorization: Bearer {{jwtToken}}
-
-{
-  "metadata": {
-    "country": "FRA",
-    "passportNumber": "20AA12345",
-    "holderName": "Jean Dupont",
-    "expirationDate": "2032-05-15",
-    "retentionYears": 5
-  }
-}
-
-###
-
-# @name storeKycProofOfAddressDocument
-### Store Sensitive KYC Document - JUSTIFICATIF_DOMICILE (Proof of Address)
-POST {{apiUrl}}/documents
-Content-Type: application/json
-Accept: application/ld+json
-Authorization: Bearer {{jwtToken}}
-
-{
-  "metadata": {
-    "country": "FRA",
-    "issueDate": "2026-07-01",
-    "issuer": "EDF",
-    "retentionYears": 5
-  }
-}
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422");
+    });
+%}

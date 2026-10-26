@@ -4,3 +4,8 @@ lionel:
   url: https://github.com/lionelkouame
   image_url: https://github.com/lionelkouame.png
   page: true
+
+hiro:
+  name: Hiro
+  title: Contributor
+  page: true

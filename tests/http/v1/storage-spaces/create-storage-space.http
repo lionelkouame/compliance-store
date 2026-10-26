@@ -3,7 +3,7 @@
 POST {{apiUrl}}/storage-spaces
 Content-Type: application/json
 Accept: application/ld+json
-# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
+Authorization: Bearer {{apiKey}}
 
 {
   "code": "EU-WEST-1",
@@ -24,6 +24,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/storage-spaces
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {}
 
@@ -40,6 +41,7 @@ Accept: application/ld+json
 POST {{apiUrl}}/storage-spaces
 Content-Type: application/json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {
   "code": "EU-WEST-1",

@@ -16,6 +16,14 @@ final class StorageSpaceNameTest extends TestCase
         self::assertSame('EU West Primary', $name->value);
     }
 
+    public function testStoresTheTrimmedValue(): void
+    {
+        $name = new StorageSpaceName('  EU West Primary  ');
+
+        self::assertSame('EU West Primary', $name->value);
+        self::assertTrue($name->equals(new StorageSpaceName('EU West Primary')));
+    }
+
     public function testRejectsAnEmptyName(): void
     {
         $this->expectException(\InvalidArgumentException::class);

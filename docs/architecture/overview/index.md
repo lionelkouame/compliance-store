@@ -8,26 +8,33 @@ Compliance Store adopte les principes de la **Clean Architecture** (Robert C. Ma
 
 ```text
 src/
-├── Domain/                   # COUCHE DOMAINE (Métier pur, zéro dépendance externe)
-│   ├── Entity/                # Entités & Agrégats (Document, Policy, Rule) — n'exposent que des Value Objects
-│   ├── ValueObject/           # Objets de valeur immuables (DocumentId, DocumentType, Hash) et leurs collections
-│   ├── Service/                # Services de domaine sans état
-│   ├── Event/                # Événements métier (DocumentStoredEvent, DocumentPurgedEvent)
-│   ├── Exception/            # Exceptions métier
-│   └── Port/                 # Contrats d'interfaces (Ports Hexagonaux)
-│       ├── Gateway/          # StorageGatewayInterface, CipherGatewayInterface...
-│       ├── Repository/       # DocumentRepositoryInterface...
-│       ├── Event/            # EventPublisherInterface...
-│       └── Clock/            # ClockInterface (PSR-20)
+├── Domain/                        # COUCHE DOMAINE (métier pur, zéro dépendance externe)
+│   ├── Entity/                    # Agrégats : Document, Holder, IdentityDocument, StorageSpace, AuditEvent
+│   ├── ValueObject/               # Objets de valeur immuables (DocumentId, HolderId, BirthDate, FileHash, EncryptedPayload…)
+│   ├── Exception/                 # Exceptions métier (HolderNotFoundException, StorageSpaceCodeAlreadyExistsException…)
+│   ├── Event/                     # Réservé : événements métier (vide à ce jour)
+│   └── Port/                      # Contrats d'interfaces (ports hexagonaux)
+│       ├── Gateway/               # CipherGatewayInterface, StorageGatewayInterface
+│       ├── Repository/            # DocumentRepositoryInterface, HolderRepositoryInterface…
+│       ├── Service/               # IdValidatorInterface, AuditTrailInterface, générateurs d'identifiants
+│       ├── Clock/                 # Réservé : horloge injectable (vide à ce jour)
+│       ├── Event/                 # Réservé : publication d'événements (vide à ce jour)
+│       └── Notification/          # Réservé : notifications (vide à ce jour)
 │
-├── Application/              # COUCHE APPLICATION (Orchestration des cas d'usage)
-│   ├── UseCase/              # StoreDocumentUseCase, ConsultDocumentUseCase
-│   └── Dto/                  # UploadDocumentInput, DocumentOutput
+├── Application/                   # COUCHE APPLICATION (orchestration des cas d'usage)
+│   ├── UseCase/                   # Un dossier par cas d'usage : StoreDocument, ConsultDocument, CreateHolder, AnonymizeHolder, ListAuditEvents…
+│   │                              # chaque dossier porte son UseCase et sa Command (DTO d'entrée)
+│   └── Dto/                       # Réservé (vide à ce jour)
 │
-└── Infrastructure/           # COUCHE INFRASTRUCTURE (Implémentations techniques)
-    ├── Gateway/              # MinioStorageGateway, SodiumCipherGateway
-    ├── Persistence/          # Repositories Doctrine (PostgreSQL)
-    └── ApiPlatform/          # State Processors / Providers API Platform
+└── Infrastructure/                # COUCHE INFRASTRUCTURE (implémentations techniques)
+    ├── Gateway/                   # SodiumCipherGateway (chiffrement d'enveloppe Libsodium)
+    ├── Storage/                   # MinioStorageGateway (Flysystem S3), StorageKey
+    ├── Persistence/Doctrine/      # Repositories Doctrine, Mapping/ (XML), Type/ (types DBAL des Value Objects)
+    ├── Service/                   # Générateurs d'UUID et validateur d'identifiants (Symfony Uid)
+    ├── Security/                  # ApiClient (clé d'API hachée), ApiKeyTokenHandler, ApiKeyEntryPoint, Mapping/ (ADR 0013)
+    ├── Audit/                     # SecurityAwareAuditTrail (acteur = client d'API authentifié)
+    ├── Console/                   # app:api-client:create, app:api-client:revoke
+    └── Presentation/ApiPlatform/  # V1/Resource/ (ressources API Platform) et V1/State/ (providers et processors)
 ```
 
 ---

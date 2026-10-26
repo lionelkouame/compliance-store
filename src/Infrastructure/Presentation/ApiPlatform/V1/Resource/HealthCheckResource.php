@@ -14,6 +14,8 @@ use ApiPlatform\OpenApi\Model\Operation;
     operations: [
         new Get(
             uriTemplate: '/health',
+            // Liveness probe: reachable without an API key (security.yaml access_control).
+            security: "is_granted('PUBLIC_ACCESS')",
             openapi: new Operation(
                 tags: ['V1 - System'],
                 summary: 'Check API health status (V1)',

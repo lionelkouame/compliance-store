@@ -2,7 +2,7 @@
 ### Get Storage Space by ID
 GET {{apiUrl}}/storage-spaces/{{storageSpaceId}}
 Accept: application/ld+json
-# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
+Authorization: Bearer {{apiKey}}
 
 > {%
     client.test("Status code is 200 OK", function() {
@@ -16,6 +16,7 @@ Accept: application/ld+json
 ### Get Storage Space - Unknown ID (expect 404)
 GET {{apiUrl}}/storage-spaces/00000000-0000-0000-0000-000000000000
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 > {%
     client.test("Status code is 404 Not Found", function() {
@@ -29,6 +30,7 @@ Accept: application/ld+json
 ### List Storage Spaces
 GET {{apiUrl}}/storage-spaces
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 > {%
     client.test("Status code is 200 OK", function() {

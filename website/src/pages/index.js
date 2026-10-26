@@ -18,7 +18,7 @@ function HomepageHeader() {
         </Heading>
         <p className="hero__subtitle">
           <Translate id="homepage.tagline">
-            Un journal de bord open source sur la conformité documentaire
+            Un coffre-fort open source pour documents sensibles, et son journal de bord
           </Translate>
         </p>
         <div className={styles.buttons}>

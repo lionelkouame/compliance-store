@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Application\UseCase\CreateHolder;
+declare(strict_types=1);
 
+namespace App\Application\UseCase\CreateHolder;
 
 use App\Domain\Entity\Holder;
 use App\Domain\Exception\HolderAlreadyExistsException;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
+use App\Domain\Port\Service\AuditTrailInterface;
 use App\Domain\Port\Service\GeneratorInterface;
+use App\Domain\ValueObject\AuditAction;
 use App\Domain\ValueObject\BirthDate;
 use App\Domain\ValueObject\Email;
 use App\Domain\ValueObject\HolderId;
@@ -15,29 +18,37 @@ use App\Domain\ValueObject\HolderName;
 final readonly class CreateHolderUseCase
 {
     public function __construct(
-        private GeneratorInterface $generatorUuid,
-        private HolderRepositoryInterface $holderRepository
-    ){}
+        private GeneratorInterface $idGenerator,
+        private HolderRepositoryInterface $holders,
+        private AuditTrailInterface $auditTrail,
+    ) {}
 
-    public function execute(CreateHolderCommand $command) : void
+    /**
+     * @throws HolderAlreadyExistsException when another holder already uses this email
+     * @throws \InvalidArgumentException    when the name, the birth date or the email is invalid
+     */
+    public function execute(CreateHolderCommand $command): Holder
     {
-        $value = $this->generatorUuid->generate();
-        $holderId = HolderId::fromString($value);
-        $birthDate = BirthDate::fromString($command->birthDate);
+        $holderId = HolderId::fromString($this->idGenerator->generate());
         $holderName = new HolderName($command->holderName);
+        $birthDate = BirthDate::fromString($command->birthDate);
         $email = new Email($command->email);
 
-        if (null !== $this->holderRepository->findByEmail($email->value)) {
-            throw new HolderAlreadyExistsException($holderId);
+        if (null !== $this->holders->findByEmail($email->value)) {
+            throw HolderAlreadyExistsException::withEmail($email);
         }
 
         $holder = Holder::register(
-            $holderId,
-            $holderName,
-            $birthDate,
-            $email
+            id: $holderId,
+            name: $holderName,
+            birthDate: $birthDate,
+            email: $email,
         );
 
-        $this->holderRepository->add($holder);
+        $this->holders->add($holder);
+
+        $this->auditTrail->record(AuditAction::HolderRegistered, $holderId->value);
+
+        return $holder;
     }
 }

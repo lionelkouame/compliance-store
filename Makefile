@@ -15,7 +15,7 @@ SYMFONY  = $(PHP) bin/console
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build refresh up start down logs sh bash test test-db deptrac phpstan composer vendor sf cc migration-diff migration-generate migrate migration-up migration-down setup-dns setup-hooks website-build
+.PHONY        : help build refresh up start down logs sh bash test test-db deptrac phpstan composer vendor sf cc migration-diff migration-generate migrate migration-up migration-down migrate-all setup-dns setup-hooks website-build
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -71,6 +71,7 @@ test: deptrac phpstan test-db
 test-db: ## Resynchronise la base et le cache de l'environnement de test
 	@$(PHP_CONT) bin/console -e test doctrine:database:create --if-not-exists --quiet
 	@$(PHP_CONT) bin/console -e test doctrine:schema:update --force --quiet
+	@$(PHP_CONT) bin/console -e test doctrine:schema:validate --quiet
 	@$(PHP_CONT) bin/console -e test cache:clear --quiet
 
 ## —— Qualité 🧪 ————————————————————————————————————————————————————————————————
@@ -86,7 +87,7 @@ composer: ## Run composer, pass the parameter "c=" to run a given command, examp
 	@$(COMPOSER) $(c)
 
 vendor: ## Install vendors according to the current composer.lock file
-vendor: c=install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction
+vendor: c=install --prefer-dist --no-progress --no-interaction
 vendor: composer
 
 ## —— Symfony 🎵 ———————————————————————————————————————————————————————————————
@@ -115,7 +116,8 @@ migration-down: ## Exécute le down d'une migration, example: make migration-dow
 	@test -n "$(v)" || (echo "Usage: make migration-down v=Version20261024020529" && exit 1)
 	@$(SYMFONY) doctrine:migrations:execute "DoctrineMigrations\\$(v)" --down --no-interaction
 
-migrate-all: migration-diff migration-generate migrate
+migrate-all: ## Génère la migration des différences avec la base puis l'applique
+migrate-all: migration-diff migrate
 
 ## —— Website 📖 ———————————————————————————————————————————————————————————————
 website-build: ## Build the Docusaurus website (website/)

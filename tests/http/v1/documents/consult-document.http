@@ -1,8 +1,36 @@
-# @name consultKycDocument
-### Consult Stored KYC Document by ID
-GET {{apiUrl}}/documents/doc_kyc_123456789
+# @name getDocument
+### Metadata of the document stored by store-document.http
+GET {{apiUrl}}/documents/{{documentId}}
 Accept: application/ld+json
-# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
+Authorization: Bearer {{apiKey}}
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+%}
+
+###
+
+# @name listHolderDocuments
+### Every document of the holder
+GET {{apiUrl}}/holders/{{holderId}}/documents
+Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+%}
+
+###
+
+# @name downloadDocumentContent
+### Decrypted content (ROLE_OPERATOR, audited). Accept must allow application/octet-stream.
+GET {{apiUrl}}/documents/{{documentId}}/content
+Accept: application/octet-stream
+Authorization: Bearer {{apiKey}}
 
 > {%
     client.test("Status code is 200 OK", function() {

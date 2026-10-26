@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject;
 
-use App\Domain\Port\Service\IdValidatorInterface;
-
 /**
  * The birth date of a Holder (data subject).
  *
@@ -18,6 +16,9 @@ final readonly class BirthDate
 
     public function __construct(\DateTimeImmutable $value)
     {
+        // Normalise to UTC first so the calendar day never depends on the
+        // timezone the caller happened to use.
+        $value = $value->setTimezone(new \DateTimeZone('UTC'));
         $today = new \DateTimeImmutable('today', new \DateTimeZone('UTC'));
 
         if ($value->format('Y-m-d') >= $today->format('Y-m-d')) {
@@ -35,9 +36,23 @@ final readonly class BirthDate
         return $this->value->format('Y-m-d') === $other->value->format('Y-m-d');
     }
 
+    /**
+     * @param string $value a calendar day in Y-m-d format
+     *
+     * @throws \InvalidArgumentException when the string is not a valid Y-m-d date
+     */
     public static function fromString(string $value): self
     {
-        $date = \DateTimeImmutable::createFromFormat('Y-m-d', $value);
+        // "!" resets the unspecified fields (time) to zero so only the day matters.
+        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value, new \DateTimeZone('UTC'));
+
+        if (false === $date || $date->format('Y-m-d') !== $value) {
+            throw new \InvalidArgumentException(\sprintf(
+                'The birth date "%s" is not a valid date in Y-m-d format.',
+                $value,
+            ));
+        }
+
         return new self($date);
     }
 

@@ -28,7 +28,9 @@ doctrine:
             holder_id:
                 class: App\Infrastructure\Persistence\Doctrine\Type\HolderIdType
             holder_name:
-                class:  App\Infrastructure\Persistence\Doctrine\Type\HolderNameType
+                class: App\Infrastructure\Persistence\Doctrine\Type\HolderNameType
+            birth_date:
+                class: App\Infrastructure\Persistence\Doctrine\Type\BirthDateType
             email:
                 class: App\Infrastructure\Persistence\Doctrine\Type\EmailType
     orm:
@@ -44,6 +46,13 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Infrastructure/Persistence/Doctrine/Mapping'
                 prefix: 'App\Domain\Entity'
                 alias: App
+            # Technical entities that never enter the domain (API clients, see security.yaml).
+            AppSecurity:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Infrastructure/Security/Mapping'
+                prefix: 'App\Infrastructure\Security'
+                alias: AppSecurity
 
 when@test:
     doctrine:

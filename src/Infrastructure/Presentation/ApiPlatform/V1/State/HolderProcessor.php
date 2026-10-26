@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Presentation\ApiPlatform\V1\State;
 
 use ApiPlatform\Metadata\Operation;
@@ -7,18 +9,24 @@ use ApiPlatform\State\ProcessorInterface;
 use ApiPlatform\Validator\ValidatorInterface;
 use App\Application\UseCase\CreateHolder\CreateHolderCommand;
 use App\Application\UseCase\CreateHolder\CreateHolderUseCase;
+use App\Domain\Exception\HolderAlreadyExistsException;
 use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\HolderResource;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
+/**
+ * @implements ProcessorInterface<mixed, HolderResource>
+ */
 final readonly class HolderProcessor implements ProcessorInterface
 {
     public function __construct(
+        private CreateHolderUseCase $useCase,
         private RequestStack $requestStack,
         private ValidatorInterface $validator,
-        private CreateHolderUseCase $useCase,
     ) {}
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): HolderResource
     {
         $request = $this->requestStack->getCurrentRequest();
         $payload = json_decode($request?->getContent() ?? '', true);
@@ -31,19 +39,22 @@ final readonly class HolderProcessor implements ProcessorInterface
 
         $this->validator->validate($input);
 
+        if (null === $input->holderName || null === $input->birthDate || null === $input->email) {
+            throw new UnprocessableEntityHttpException('Missing required holder parameters.');
+        }
 
         try {
-            $command = new CreateHolderCommand(
+            $holder = $this->useCase->execute(new CreateHolderCommand(
                 holderName: $input->holderName,
                 birthDate: $input->birthDate,
                 email: $input->email,
-            );
-            $this->useCase->execute($command);
-            die;
+            ));
+        } catch (HolderAlreadyExistsException $e) {
+            throw new ConflictHttpException($e->getMessage(), $e);
+        } catch (\InvalidArgumentException $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage(), $e);
         }
-        catch (\InvalidArgumentException $e) {
 
-        }
+        return HolderResource::fromEntity($holder);
     }
-
 }

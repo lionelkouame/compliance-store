@@ -1,0 +1,36 @@
+security:
+    # Clients are machines identified by an API key (ApiClient): no password anywhere.
+    providers:
+        api_clients:
+            entity:
+                class: App\Infrastructure\Security\ApiClient
+                property: name
+
+    # ROLE_ADMIN manages storage spaces and GDPR erasure, ROLE_OPERATOR registers
+    # holders and stores documents, ROLE_READER only reads.
+    role_hierarchy:
+        ROLE_OPERATOR: ROLE_READER
+        ROLE_ADMIN: ROLE_OPERATOR
+
+    firewalls:
+        dev:
+            # Ensure dev tools and static assets are always allowed
+            pattern: ^/(_profiler|_wdt|assets|build)/
+            security: false
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: api_clients
+            # "Authorization: Bearer cs_..." (RFC 6750). Missing, unknown or revoked key: 401.
+            entry_point: App\Infrastructure\Security\ApiKeyEntryPoint
+            access_token:
+                token_handler: App\Infrastructure\Security\ApiKeyTokenHandler
+                realm: 'Compliance Store API'
+
+    # Note: Only the *first* matching rule is applied.
+    # Each operation also declares its own "security" expression (role) in the resource class.
+    access_control:
+        - { path: ^/api/docs, roles: PUBLIC_ACCESS }
+        - { path: ^/api/contexts, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/health$, roles: PUBLIC_ACCESS }
+        - { path: ^/api, roles: ROLE_READER }

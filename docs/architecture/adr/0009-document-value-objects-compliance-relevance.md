@@ -116,4 +116,3 @@ Based on the above, the minimum set of `Document` fields relevant to a complianc
 
 ### Negative
 * None of this ADR's classification is enforced by code yet (no compliance-facing DTO/resource exists today to apply it to) — it's a decision to guide the next piece of work that builds one, not a completed implementation.
-</content>

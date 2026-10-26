@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Doctrine\Type;
 
 use App\Domain\ValueObject\DocumentId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\StringType;
 
 final class DocumentIdType extends StringType
@@ -14,7 +15,15 @@ final class DocumentIdType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?DocumentId
     {
-        return \is_string($value) ? DocumentId::fromString($value) : null;
+        if (null === $value || $value instanceof DocumentId) {
+            return $value;
+        }
+
+        if (!\is_string($value)) {
+            throw InvalidType::new($value, self::class, ['null', 'string', DocumentId::class]);
+        }
+
+        return DocumentId::fromString($value);
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +32,14 @@ final class DocumentIdType extends StringType
             return null;
         }
 
-        return $value instanceof DocumentId ? $value->value : (\is_string($value) ? $value : null);
+        if ($value instanceof DocumentId) {
+            return $value->value;
+        }
+
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        throw InvalidType::new($value, self::class, ['null', 'string', DocumentId::class]);
     }
 }

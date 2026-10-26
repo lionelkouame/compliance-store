@@ -29,7 +29,8 @@ final readonly class MinioStorageGateway implements StorageGatewayInterface
         try {
             $this->documentsStorage->write($key->value, $ciphertext);
         } catch (FilesystemException $e) {
-            throw new \RuntimeException(\sprintf('Unable to store the document at "%s": %s', $key->value, $e->getMessage()), previous: $e);
+            // The adapter message may expose the endpoint or bucket: keep it in $previous only (ADR 0011).
+            throw new \RuntimeException(\sprintf('Unable to store the document at "%s".', $key->value), previous: $e);
         }
     }
 
@@ -41,6 +42,18 @@ final readonly class MinioStorageGateway implements StorageGatewayInterface
             return $this->documentsStorage->read($key->value);
         } catch (FilesystemException $e) {
             throw new \RuntimeException(\sprintf('Unable to read the document at "%s".', $key->value), previous: $e);
+        }
+    }
+
+    public function delete(DocumentId $id): void
+    {
+        $key = StorageKey::forDocument($id);
+
+        try {
+            // Flysystem's delete() is idempotent: a missing object is not an error.
+            $this->documentsStorage->delete($key->value);
+        } catch (FilesystemException $e) {
+            throw new \RuntimeException(\sprintf('Unable to delete the document at "%s".', $key->value), previous: $e);
         }
     }
 }

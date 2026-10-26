@@ -12,6 +12,10 @@ final readonly class StorageSpaceId implements IdentifierInterface
         public string $value,
         ?IdValidatorInterface $validator = null,
     ) {
+        if ('' === $this->value) {
+            throw new \InvalidArgumentException('An ID cannot be empty.');
+        }
+
         if (null !== $validator && !$validator->isValid($this->value)) {
             throw new \InvalidArgumentException(\sprintf(
                 'The ID "%s" is not valid.',

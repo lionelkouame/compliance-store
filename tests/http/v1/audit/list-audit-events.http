@@ -1,0 +1,25 @@
+# @name listAuditEvents
+### List the latest audit events (ROLE_ADMIN)
+GET {{apiUrl}}/audit-events?limit=20
+Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+%}
+
+###
+
+# @name listAuditEventsForHolder
+### Audit events of the holder registered by holders/post.http
+GET {{apiUrl}}/audit-events?subjectId={{holderId}}
+Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+%}

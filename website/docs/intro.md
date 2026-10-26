@@ -4,16 +4,21 @@ sidebar_position: 1
 
 # Introduction
 
-**Compliance Store** est un projet open source qui explore comment stocker et gérer des documents dans un contexte de conformité réglementaire, avec une architecture pensée pour rester testable, découplée et évolutive.
+**Compliance Store** est une API open source qui sert de coffre-fort pour des documents personnels sensibles : pièces d'identité, passeports, justificatifs. Elle enregistre la personne concernée, chiffre chaque document avant de le stocker, vérifie son intégrité à chaque consultation, applique le droit à l'effacement du RGPD et garde une trace de toutes les actions.
 
-Ce site n'est pas la documentation technique exhaustive du dépôt (celle-ci vit dans `docs/` à la racine du code, aux côtés des ADR). C'est plutôt un espace de communication :
+Elle ne s'utilise pas directement devant un écran : ce sont d'autres logiciels (un back-office, un outil de vérification d'identité, un batch) qui l'appellent, chacun avec sa propre clé d'API et ses propres droits.
 
-- des **pages de documentation** qui donnent une vue d'ensemble accessible du projet et de ses choix d'architecture ;
-- un **journal de bord** (le blog) qui raconte les refactos, les décisions techniques et les moments clés du projet, au fil de l'eau.
+## Ce que ce site contient
+
+Ce site n'est pas la documentation technique exhaustive du dépôt (celle-ci vit dans `docs/` à la racine du code, aux côtés des ADR). C'est un espace de communication :
+
+- [Ce que fait l'application](./fonctionnalites.md) : les fonctions, les rôles, les protections et les limites actuelles, sans jargon.
+- [Architecture](./architecture.md) : les trois couches du code et la règle de dépendance.
+- [Histoire du projet](./histoire.md) : les moments qui comptent, par arc plutôt que par date.
+- [Journal de bord](/blog) : tout, dans l'ordre chronologique.
 
 ## Pour aller plus loin
 
-- [Histoire du projet](./histoire.md) — la sélection des moments qui comptent, par arc plutôt que par date.
-- [Vue d'ensemble de l'architecture](./architecture.md)
 - [Code source sur GitHub](https://github.com/lionelkouame/compliance-store)
-- [Journal de bord](/blog) — tout, dans l'ordre chronologique.
+- [Documents de travail d'octobre 2026](https://github.com/Hiro-hunter-dev-job/tontonlionelAPI/tree/main/docs/correctifs) : rapports détaillés, présentation générale et documentation technique complète
+- [Décisions d'architecture (ADR)](https://github.com/lionelkouame/compliance-store/tree/main/docs/architecture/adr)

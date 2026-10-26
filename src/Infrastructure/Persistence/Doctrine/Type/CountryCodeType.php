@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Doctrine\Type;
 
 use App\Domain\ValueObject\CountryCode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\StringType;
 
 final class CountryCodeType extends StringType
@@ -14,7 +15,15 @@ final class CountryCodeType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?CountryCode
     {
-        return \is_string($value) ? new CountryCode($value) : null;
+        if (null === $value || $value instanceof CountryCode) {
+            return $value;
+        }
+
+        if (!\is_string($value)) {
+            throw InvalidType::new($value, self::class, ['null', 'string', CountryCode::class]);
+        }
+
+        return new CountryCode($value);
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +32,14 @@ final class CountryCodeType extends StringType
             return null;
         }
 
-        return $value instanceof CountryCode ? $value->value : (\is_string($value) ? $value : null);
+        if ($value instanceof CountryCode) {
+            return $value->value;
+        }
+
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        throw InvalidType::new($value, self::class, ['null', 'string', CountryCode::class]);
     }
 }

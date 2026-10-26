@@ -362,7 +362,7 @@
     "description": "The title of the tag list page"
   },
   "homepage.tagline": {
-    "message": "An open source changelog on document compliance"
+    "message": "An open source vault for sensitive documents, and its changelog"
   },
   "homepage.cta": {
     "message": "Read the docs"
@@ -371,21 +371,21 @@
     "message": "Documentation and changelog for the Compliance Store open source project."
   },
   "homepage.features.cleanArchitecture.title": {
-    "message": "Clean architecture"
+    "message": "Clean architecture, recorded decisions"
   },
   "homepage.features.cleanArchitecture.description": {
-    "message": "Clean Architecture and Domain-Driven Design: the business domain stays independent of any framework, testable and easy to evolve."
-  },
-  "homepage.features.documentedDecisions.title": {
-    "message": "Documented decisions"
-  },
-  "homepage.features.documentedDecisions.description": {
-    "message": "Every architectural choice is tracked in ADRs. This site gives an accessible, up-to-date overview, without unnecessary jargon."
+    "message": "Clean Architecture and Domain-Driven Design: the business domain stays independent of any framework. Thirteen ADRs record every choice."
   },
   "homepage.features.changelog.title": {
     "message": "Changelog"
   },
   "homepage.features.changelog.description": {
-    "message": "Refactors, changes of direction, lessons learned: the blog tells the story of the project as it evolves."
+    "message": "Refactors, fixes, changes of direction: the blog tells the story of the project as it evolves."
+  },
+  "homepage.features.vault.title": {
+    "message": "A vault for sensitive documents"
+  },
+  "homepage.features.vault.description": {
+    "message": "Envelope encryption, integrity checked on every consultation, GDPR erasure down to key destruction, audit trail, API keys and roles."
   }
 }

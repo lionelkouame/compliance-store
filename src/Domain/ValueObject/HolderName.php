@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject;
 
+/**
+ * Display name of a Holder. Surrounding whitespace is not significant: the
+ * value is stored trimmed so that equality and the 255-character limit apply
+ * to what is actually persisted.
+ */
 final readonly class HolderName
 {
-    public function __construct(
-        public string $value,
-    ) {
-        $trimmed = trim($this->value);
+    public string $value;
+
+    public function __construct(string $value)
+    {
+        $trimmed = trim($value);
 
         if ('' === $trimmed) {
             throw new \InvalidArgumentException('A holder name cannot be empty.');
@@ -18,6 +24,8 @@ final readonly class HolderName
         if (mb_strlen($trimmed) > 255) {
             throw new \InvalidArgumentException('A holder name cannot exceed 255 characters.');
         }
+
+        $this->value = $trimmed;
     }
 
     public function equals(self $other): bool

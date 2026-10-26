@@ -3,7 +3,7 @@
 PATCH {{apiUrl}}/storage-spaces/{{storageSpaceId}}
 Content-Type: application/merge-patch+json
 Accept: application/ld+json
-# Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
+Authorization: Bearer {{apiKey}}
 
 {
   "status": "archived"
@@ -25,6 +25,7 @@ Accept: application/ld+json
 PATCH {{apiUrl}}/storage-spaces/{{storageSpaceId}}
 Content-Type: application/merge-patch+json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {
   "status": "bogus"
@@ -43,6 +44,7 @@ Accept: application/ld+json
 PATCH {{apiUrl}}/storage-spaces/00000000-0000-0000-0000-000000000000
 Content-Type: application/merge-patch+json
 Accept: application/ld+json
+Authorization: Bearer {{apiKey}}
 
 {
   "status": "active"

@@ -12,6 +12,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 final class IdentityDocumentApiTest extends ApiTestCase
 {
+    use ApiClientFixture;
+
     protected static ?bool $alwaysBootKernel = true;
 
     private const PASSPORT = [
@@ -24,6 +26,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        self::clearApiClients();
 
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
         $entityManager->createQuery('DELETE FROM '.IdentityDocument::class)->execute();
@@ -31,7 +34,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
     public function testItRegistersAnIdentityDocument(): void
     {
-        $response = static::createClient()->request('POST', '/api/v1/identity-documents', [
+        $response = self::createAuthenticatedClient()->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => self::PASSPORT,
         ]);
@@ -48,7 +51,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
     public function testItRejectsMissingFields(): void
     {
-        static::createClient()->request('POST', '/api/v1/identity-documents', [
+        self::createAuthenticatedClient()->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [],
         ]);
@@ -58,7 +61,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
     public function testItRejectsAnInvalidCountry(): void
     {
-        static::createClient()->request('POST', '/api/v1/identity-documents', [
+        self::createAuthenticatedClient()->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => ['country' => 'FR'] + self::PASSPORT,
         ]);
@@ -68,7 +71,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
     public function testItRejectsAnExpiredDocument(): void
     {
-        static::createClient()->request('POST', '/api/v1/identity-documents', [
+        self::createAuthenticatedClient()->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => ['expiresAt' => '2020-01-01'] + self::PASSPORT,
         ]);
@@ -78,7 +81,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
     public function testItRejectsADuplicateDocument(): void
     {
-        $client = static::createClient();
+        $client = self::createAuthenticatedClient();
 
         $client->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -96,7 +99,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
     public function testItPersistsTheRegisteredIdentityDocument(): void
     {
-        $data = static::createClient()->request('POST', '/api/v1/identity-documents', [
+        $data = self::createAuthenticatedClient()->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => self::PASSPORT,
         ])->toArray();
@@ -116,7 +119,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
     public function testItReturnsTheCreationDate(): void
     {
-        $data = static::createClient()->request('POST', '/api/v1/identity-documents', [
+        $data = self::createAuthenticatedClient()->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => self::PASSPORT,
         ])->toArray();
@@ -127,7 +130,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
     public function testItRegistersANationalCard(): void
     {
-        $response = static::createClient()->request('POST', '/api/v1/identity-documents', [
+        $response = self::createAuthenticatedClient()->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => ['type' => 'NationalCard'] + self::PASSPORT,
         ]);
@@ -140,7 +143,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
     {
         $today = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format('Y-m-d');
 
-        static::createClient()->request('POST', '/api/v1/identity-documents', [
+        self::createAuthenticatedClient()->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => ['expiresAt' => $today] + self::PASSPORT,
         ]);
@@ -170,7 +173,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
     #[DataProvider('invalidPayloads')]
     public function testItRejectsAnInvalidPayload(array $override): void
     {
-        static::createClient()->request('POST', '/api/v1/identity-documents', [
+        self::createAuthenticatedClient()->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $override + self::PASSPORT,
         ]);
@@ -180,7 +183,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
     public function testItRejectsAMalformedJsonBody(): void
     {
-        static::createClient()->request('POST', '/api/v1/identity-documents', [
+        self::createAuthenticatedClient()->request('POST', '/api/v1/identity-documents', [
             'headers' => ['Content-Type' => 'application/json'],
             'body' => '{"type": "Passport",',
         ]);
@@ -190,7 +193,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
     public function testItAllowsTheSameNumberForAnotherCountryOrType(): void
     {
-        $client = static::createClient();
+        $client = self::createAuthenticatedClient();
 
         foreach ([self::PASSPORT, ['country' => 'DEU'] + self::PASSPORT, ['type' => 'NationalCard'] + self::PASSPORT] as $payload) {
             $client->request('POST', '/api/v1/identity-documents', [

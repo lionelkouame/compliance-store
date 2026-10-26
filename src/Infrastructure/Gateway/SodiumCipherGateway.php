@@ -44,19 +44,31 @@ final readonly class SodiumCipherGateway implements CipherGatewayInterface
         );
     }
 
+    /**
+     * @throws \RuntimeException when the data is truncated, corrupted or was not produced with this master key
+     */
     public function decrypt(EncryptedPayload $payload, WrappedDataKey $wrappedDataKey): string
     {
-        [$keyNonce, $encryptedDataKey] = $this->splitNonce($wrappedDataKey->encryptedDataKey);
+        [$keyNonce, $encryptedDataKey] = $this->splitNonce($wrappedDataKey->encryptedDataKey, 'wrapped data key');
+        [$fileNonce, $ciphertext] = $this->splitNonce($payload->ciphertext, 'encrypted payload');
 
-        $dataKey = sodium_crypto_secretbox_open($encryptedDataKey, $keyNonce, $this->masterKey);
+        try {
+            $dataKey = sodium_crypto_secretbox_open($encryptedDataKey, $keyNonce, $this->masterKey);
+        } catch (\SodiumException $e) {
+            throw new \RuntimeException('Unable to unwrap the document data key: the data is malformed.', previous: $e);
+        }
+
         if (false === $dataKey) {
             throw new \RuntimeException('Unable to unwrap the document data key: the master key does not match or the data is corrupted.');
         }
 
-        [$fileNonce, $ciphertext] = $this->splitNonce($payload->ciphertext);
-
-        $plaintext = sodium_crypto_secretbox_open($ciphertext, $fileNonce, $dataKey);
-        sodium_memzero($dataKey);
+        try {
+            $plaintext = sodium_crypto_secretbox_open($ciphertext, $fileNonce, $dataKey);
+        } catch (\SodiumException $e) {
+            throw new \RuntimeException('Unable to decrypt the document: the data is malformed.', previous: $e);
+        } finally {
+            sodium_memzero($dataKey);
+        }
 
         if (false === $plaintext) {
             throw new \RuntimeException('Unable to decrypt the document: the data key does not match or the data is corrupted.');
@@ -66,10 +78,21 @@ final readonly class SodiumCipherGateway implements CipherGatewayInterface
     }
 
     /**
+     * Splits "nonce . secretbox" blobs, refusing anything too short to hold a
+     * nonce and an authentication tag (sodium would throw instead of returning false).
+     *
      * @return array{0: string, 1: string} [nonce, remainder]
+     *
+     * @throws \RuntimeException when the blob is shorter than nonce + MAC
      */
-    private function splitNonce(string $value): array
+    private function splitNonce(string $value, string $what): array
     {
+        $minimum = \SODIUM_CRYPTO_SECRETBOX_NONCEBYTES + \SODIUM_CRYPTO_SECRETBOX_MACBYTES;
+
+        if (\strlen($value) < $minimum) {
+            throw new \RuntimeException(\sprintf('The %s is truncated: at least %d bytes are expected.', $what, $minimum));
+        }
+
         return [
             substr($value, 0, \SODIUM_CRYPTO_SECRETBOX_NONCEBYTES),
             substr($value, \SODIUM_CRYPTO_SECRETBOX_NONCEBYTES),

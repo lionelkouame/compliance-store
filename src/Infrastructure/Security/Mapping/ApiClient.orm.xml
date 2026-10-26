@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Infrastructure\Security\ApiClient" table="api_client">
+        <unique-constraints>
+            <unique-constraint name="uniq_api_client_name" columns="name"/>
+            <unique-constraint name="uniq_api_client_key_hash" columns="key_hash"/>
+        </unique-constraints>
+
+        <id name="id" type="string" length="36">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="name" type="string" length="100" column="name"/>
+        <!-- SHA-256 of the clear API key, hex encoded. The clear key is never stored. -->
+        <field name="keyHash" type="string" length="64" column="key_hash"/>
+        <field name="roles" type="json" column="roles"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+        <field name="revokedAt" type="datetime_immutable" column="revoked_at" nullable="true"/>
+    </entity>
+</doctrine-mapping>

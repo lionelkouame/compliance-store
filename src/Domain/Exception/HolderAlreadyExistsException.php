@@ -1,14 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Exception;
 
-use App\Domain\ValueObject\HolderId;
+use App\Domain\ValueObject\Email;
 
-class HolderAlreadyExistsException extends \DomainException
+final class HolderAlreadyExistsException extends \DomainException
 {
-    public function __construct(HolderId $holderId)
+    private function __construct(string $message)
     {
-        parent::__construct(\sprintf('A holder with string "%s" already exists.', $holderId));
+        parent::__construct($message);
     }
 
+    /**
+     * The email identifies a holder: two holders cannot share it.
+     */
+    public static function withEmail(Email $email): self
+    {
+        return new self(\sprintf('A holder with email "%s" already exists.', $email->value));
+    }
 }

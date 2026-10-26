@@ -11,7 +11,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Compliance Store',
-  tagline: 'Un journal de bord open source sur la conformité documentaire',
+  tagline: 'Un coffre-fort open source pour documents sensibles, et son journal de bord',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -20,15 +20,15 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://lionelkouame.github.io',
+  url: 'https://hiro-hunter-dev-job.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/compliance-store/',
+  baseUrl: '/tontonlionelAPI/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'lionelkouame', // Usually your GitHub org/user name.
-  projectName: 'compliance-store', // Usually your repo name.
+  organizationName: 'Hiro-hunter-dev-job', // Usually your GitHub org/user name.
+  projectName: 'tontonlionelAPI', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -56,7 +56,7 @@ const config = {
         docs: {
           sidebarPath: './sidebars.js',
           editUrl:
-            'https://github.com/lionelkouame/compliance-store/tree/main/website/',
+            'https://github.com/Hiro-hunter-dev-job/tontonlionelAPI/tree/main/website/',
         },
         blog: {
           showReadingTime: true,
@@ -65,7 +65,7 @@ const config = {
             xslt: true,
           },
           editUrl:
-            'https://github.com/lionelkouame/compliance-store/tree/main/website/',
+            'https://github.com/Hiro-hunter-dev-job/tontonlionelAPI/tree/main/website/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -106,7 +106,7 @@ const config = {
             position: 'right',
           },
           {
-            href: 'https://github.com/lionelkouame/compliance-store',
+            href: 'https://github.com/Hiro-hunter-dev-job/tontonlionelAPI',
             label: 'GitHub',
             position: 'right',
           },
@@ -123,6 +123,10 @@ const config = {
                 to: '/docs/intro',
               },
               {
+                label: 'Ce que fait l\'application',
+                to: '/docs/fonctionnalites',
+              },
+              {
                 label: 'Architecture',
                 to: '/docs/architecture',
               },
@@ -133,7 +137,7 @@ const config = {
             items: [
               {
                 label: 'Code source',
-                href: 'https://github.com/lionelkouame/compliance-store',
+                href: 'https://github.com/Hiro-hunter-dev-job/tontonlionelAPI',
               },
               {
                 label: 'Journal de bord',

@@ -10,9 +10,9 @@
 ## Context  
 
 We want to review the infrastructure folder to follow better the convention of clean architecture (Separation of concerns).
-The folder ApiPlatform is directly in the Infrasctructure root.
-the  doctrine files is directtly in the persistence root folder.  
-The folder Gateway contain the storage external service.
+The folder ApiPlatform is directly in the Infrastructure root.
+The Doctrine files are directly in the Persistence root folder.
+The folder Gateway contains the storage external service.
 ```text
 Infrastructure/
 ├─ ApiPlatform/
@@ -20,13 +20,13 @@ Infrastructure/
 ├─ Persistence/
 ```
 
-We want to go even further in the technical separation end description of each service.
+We want to go even further in the technical separation and description of each service.
 
 ## Decision
 
 ### Add the presentation folder
 
-- The presentation folder represent the presentation layer who emebeded all services you exepose the application to the outside word.
+- The presentation folder represent the presentation layer which embeds all the services that expose the application to the outside world.
 
 - The Persistence folder currently holds the Doctrine files directly. We want to add a Doctrine folder inside Persistence to better follow the clean architecture rules.
 

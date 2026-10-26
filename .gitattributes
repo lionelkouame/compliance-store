@@ -13,5 +13,8 @@
 bin/console text eol=lf
 composer.lock text eol=lf merge=ours
 
+*.gif binary
 *.ico binary
+*.jpeg binary
+*.jpg binary
 *.png binary

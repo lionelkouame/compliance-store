@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <!-- Append-only trail: the application never updates nor deletes these rows. -->
+    <entity name="App\Domain\Entity\AuditEvent" table="audit_event">
+        <indexes>
+            <index name="idx_audit_event_subject" columns="subject_id,occurred_at"/>
+            <index name="idx_audit_event_occurred_at" columns="occurred_at"/>
+        </indexes>
+
+        <id name="id" type="string" length="36">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="action" type="string" enum-type="App\Domain\ValueObject\AuditAction" length="40" column="action"/>
+        <field name="subjectId" type="string" length="36" column="subject_id"/>
+        <field name="actor" type="string" length="100" column="actor"/>
+        <field name="occurredAt" type="datetime_immutable" column="occurred_at"/>
+    </entity>
+</doctrine-mapping>
