@@ -7,7 +7,7 @@ use App\Domain\Port\Service\IdValidatorInterface;
 trait IdentifierTrait
 {
     public function __construct(
-        public string $value,
+        public readonly string $value,
         ?IdValidatorInterface $validator = null,
     ) {
         if (null !== $validator && !$validator->isValid($this->value)) {

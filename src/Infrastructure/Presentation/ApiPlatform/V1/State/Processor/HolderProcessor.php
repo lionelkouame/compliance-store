@@ -7,9 +7,13 @@ use ApiPlatform\State\ProcessorInterface;
 use ApiPlatform\Validator\ValidatorInterface;
 use App\Application\UseCase\CreateHolder\CreateHolderCommand;
 use App\Application\UseCase\CreateHolder\CreateHolderUseCase;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\DocumentResource;
 use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\HolderResource;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * @implements ProcessorInterface<mixed, DocumentResource>
+ */
 final readonly class HolderProcessor implements ProcessorInterface
 {
     public function __construct(
@@ -39,11 +43,12 @@ final readonly class HolderProcessor implements ProcessorInterface
                 email: $input->email,
             );
             $this->useCase->execute($command);
-            die;
         }
         catch (\InvalidArgumentException $e) {
 
         }
+
+        return HolderResource::fromEntity($input);
     }
 
 }

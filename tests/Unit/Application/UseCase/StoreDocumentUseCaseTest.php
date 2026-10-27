@@ -49,7 +49,7 @@ final class StoreDocumentUseCaseTest extends TestCase
 
         $document = $useCase->execute(new StoreDocumentCommand(
             content: 'plaintext content',
-            holderId: '770e8400-e29b-41d4-a716-446655440111',
+            holderEmail: '770e8400-e29b-41d4-a716-446655440111',
         ));
 
         self::assertSame('660e8400-e29b-41d4-a716-446655440000', $document->id()->value);

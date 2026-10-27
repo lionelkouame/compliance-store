@@ -11,7 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<StorageSpace>
+ * @extends ServiceEntityRepository<Holder>
  */
 final class HolderRepository extends ServiceEntityRepository implements HolderRepositoryInterface
 {

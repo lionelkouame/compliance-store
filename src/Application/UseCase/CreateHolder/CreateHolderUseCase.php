@@ -19,7 +19,7 @@ final readonly class CreateHolderUseCase
         private HolderRepositoryInterface $holderRepository
     ){}
 
-    public function execute(CreateHolderCommand $command) : void
+    public function execute(CreateHolderCommand $command) : Holder
     {
         $value = $this->generatorUuid->generate();
         $holderId = HolderId::fromString($value);
@@ -39,5 +39,7 @@ final readonly class CreateHolderUseCase
         );
 
         $this->holderRepository->add($holder);
+
+        return  $holder;
     }
 }

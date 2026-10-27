@@ -14,7 +14,7 @@ final readonly class BirthDate
 {
     public \DateTimeImmutable $value;
 
-    public function __construct(\DateTimeImmutable $value)
+    public function __construct(\DateTimeImmutable  $value)
     {
         $today = new \DateTimeImmutable('today', new \DateTimeZone('UTC'));
 
@@ -36,6 +36,11 @@ final readonly class BirthDate
     public static function fromString(string $value): self
     {
         $date = \DateTimeImmutable::createFromFormat('Y-m-d', $value);
+
+        if (false === $date) {
+            throw new \InvalidArgumentException(\sprintf('The birth date "%s" is not valid.', $value));
+        }
+
         return new self($date);
     }
 

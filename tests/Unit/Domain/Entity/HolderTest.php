@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Domain\Entity;
 
 use App\Domain\Entity\Holder;
 use App\Domain\Exception\Holder\InvalidHolderStatusTransitionException;
+use App\Domain\ValueObject\Document\Email;
 use App\Domain\ValueObject\Generic\BirthDate;
 use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\ValueObject\Holder\HolderName;
@@ -19,6 +20,7 @@ final class HolderTest extends TestCase
         $holder = $this->register();
 
         self::assertSame(HolderStatus::Active, $holder->status());
+        self::assertSame('ada@example.com', (string) $holder->email());
         self::assertSame('UTC', $holder->createdAt()->getTimezone()->getName());
         self::assertNull($holder->consentCollectedAt());
         self::assertNull($holder->erasureRequestedAt());
@@ -80,6 +82,7 @@ final class HolderTest extends TestCase
             id: HolderId::fromString('770e8400-e29b-41d4-a716-446655440111'),
             name: new HolderName('Ada Lovelace'),
             birthDate: new BirthDate(new \DateTimeImmutable('1990-01-01', new \DateTimeZone('UTC'))),
+            email: new Email('ada@example.com'),
             consentCollectedAt: $consentCollectedAt,
         );
     }
