@@ -9,7 +9,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Domain\Entity\Document;
-use App\Infrastructure\Presentation\ApiPlatform\V1\State\DocumentProcessor;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\DocumentProcessor;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 

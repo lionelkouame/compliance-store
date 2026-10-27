@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
-use App\Domain\ValueObject\StorageSpaceCode;
-use App\Domain\ValueObject\StorageSpaceId;
-use App\Domain\ValueObject\StorageSpaceName;
-use App\Domain\ValueObject\StorageSpaceStatus;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceStatus;
 
 final readonly class StorageSpace
 {

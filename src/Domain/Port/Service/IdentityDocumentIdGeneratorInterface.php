@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Port\Service;
 
-use App\Domain\ValueObject\IdentifierInterface;
-use App\Domain\ValueObject\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
 
 /**
  * Domain port for generating unique identity document identifiers.

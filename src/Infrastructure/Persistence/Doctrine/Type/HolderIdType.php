@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Type;
 
-use App\Domain\ValueObject\HolderId;
-use App\Domain\ValueObject\StorageSpaceId;
+use App\Domain\ValueObject\Holder\HolderId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
 

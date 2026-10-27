@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Domain\ValueObject;
 
-use App\Domain\ValueObject\FileHash;
+use App\Domain\ValueObject\Document\FileHash;
 use PHPUnit\Framework\TestCase;
 
 final class FileHashTest extends TestCase

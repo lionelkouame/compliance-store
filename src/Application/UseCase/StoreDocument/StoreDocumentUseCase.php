@@ -9,8 +9,8 @@ use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
 use App\Domain\Port\Service\DocumentIdGeneratorInterface;
-use App\Domain\ValueObject\FileHash;
-use App\Domain\ValueObject\HolderId;
+use App\Domain\ValueObject\Document\FileHash;
+use App\Domain\ValueObject\Holder\HolderId;
 
 final readonly class StoreDocumentUseCase
 {

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\Entity;
 
 use App\Domain\Entity\Holder;
-use App\Domain\Exception\InvalidHolderStatusTransitionException;
-use App\Domain\ValueObject\BirthDate;
-use App\Domain\ValueObject\HolderId;
-use App\Domain\ValueObject\HolderName;
-use App\Domain\ValueObject\HolderStatus;
+use App\Domain\Exception\Holder\InvalidHolderStatusTransitionException;
+use App\Domain\ValueObject\Generic\BirthDate;
+use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Holder\HolderName;
+use App\Domain\ValueObject\Holder\HolderStatus;
 use PHPUnit\Framework\TestCase;
 
 final class HolderTest extends TestCase

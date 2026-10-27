@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
-use App\Domain\Exception\InvalidHolderStatusTransitionException;
-use App\Domain\ValueObject\BirthDate;
-use App\Domain\ValueObject\Email;
-use App\Domain\ValueObject\HolderId;
-use App\Domain\ValueObject\HolderName;
-use App\Domain\ValueObject\HolderStatus;
+use App\Domain\Exception\Holder\InvalidHolderStatusTransitionException;
+use App\Domain\ValueObject\Document\Email;
+use App\Domain\ValueObject\Generic\BirthDate;
+use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Holder\HolderName;
+use App\Domain\ValueObject\Holder\HolderStatus;
 
 /**
  * The natural person a sensitive document belongs to (data subject under

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Infrastructure\Gateway;
 
 use App\Domain\Port\Gateway\CipherGatewayInterface;
-use App\Domain\ValueObject\EncryptedPayload;
-use App\Domain\ValueObject\EncryptionEnvelope;
-use App\Domain\ValueObject\WrappedDataKey;
+use App\Domain\ValueObject\Document\WrappedDataKey;
+use App\Domain\ValueObject\Generic\EncryptedPayload;
+use App\Domain\ValueObject\Generic\EncryptionEnvelope;
 
 /**
  * Envelope encryption (ADR 0002) using Libsodium secretbox: each document is

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Service;
 
 use App\Domain\Port\Service\DocumentIdGeneratorInterface;
-use App\Domain\ValueObject\DocumentId;
+use App\Domain\ValueObject\Document\DocumentId;
 use Symfony\Component\Uid\Uuid;
 
 /**

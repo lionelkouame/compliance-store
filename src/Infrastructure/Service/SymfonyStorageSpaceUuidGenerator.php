@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Service;
 
 use App\Domain\Port\Service\StorageSpaceIdGeneratorInterface;
-use App\Domain\ValueObject\StorageSpaceId;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use Symfony\Component\Uid\Uuid;
 
 /**

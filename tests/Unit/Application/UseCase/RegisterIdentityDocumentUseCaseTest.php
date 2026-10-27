@@ -7,13 +7,13 @@ namespace App\Tests\Unit\Application\UseCase;
 use App\Application\UseCase\RegisterIdentityDocument\RegisterIdentityDocumentCommand;
 use App\Application\UseCase\RegisterIdentityDocument\RegisterIdentityDocumentUseCase;
 use App\Domain\Entity\IdentityDocument;
-use App\Domain\Exception\IdentityDocumentAlreadyExistsException;
+use App\Domain\Exception\IdentityDocument\IdentityDocumentAlreadyExistsException;
 use App\Domain\Port\Repository\IdentityDocumentRepositoryInterface;
 use App\Domain\Port\Service\IdentityDocumentIdGeneratorInterface;
-use App\Domain\ValueObject\CountryCode;
-use App\Domain\ValueObject\IdentityDocumentId;
-use App\Domain\ValueObject\IdentityDocumentNumber;
-use App\Domain\ValueObject\IdentityDocumentType;
+use App\Domain\ValueObject\Document\IdentityDocumentType;
+use App\Domain\ValueObject\Generic\CountryCode;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

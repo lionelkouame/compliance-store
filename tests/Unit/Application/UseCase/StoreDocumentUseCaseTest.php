@@ -10,10 +10,10 @@ use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
 use App\Domain\Port\Service\DocumentIdGeneratorInterface;
-use App\Domain\ValueObject\DocumentId;
-use App\Domain\ValueObject\EncryptedPayload;
-use App\Domain\ValueObject\EncryptionEnvelope;
-use App\Domain\ValueObject\WrappedDataKey;
+use App\Domain\ValueObject\Document\DocumentId;
+use App\Domain\ValueObject\Document\WrappedDataKey;
+use App\Domain\ValueObject\Generic\EncryptedPayload;
+use App\Domain\ValueObject\Generic\EncryptionEnvelope;
 use PHPUnit\Framework\TestCase;
 
 final class StoreDocumentUseCaseTest extends TestCase

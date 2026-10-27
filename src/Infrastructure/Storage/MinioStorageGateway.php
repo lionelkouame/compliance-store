@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Storage;
 
 use App\Domain\Port\Gateway\StorageGatewayInterface;
-use App\Domain\ValueObject\DocumentId;
+use App\Domain\ValueObject\Document\DocumentId;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 

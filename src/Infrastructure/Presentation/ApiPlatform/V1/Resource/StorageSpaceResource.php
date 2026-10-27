@@ -12,10 +12,10 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Domain\Entity\StorageSpace;
-use App\Infrastructure\Presentation\ApiPlatform\V1\State\ChangeStorageSpaceStatusProcessor;
-use App\Infrastructure\Presentation\ApiPlatform\V1\State\CreateStorageSpaceProcessor;
-use App\Infrastructure\Presentation\ApiPlatform\V1\State\GetStorageSpaceProvider;
-use App\Infrastructure\Presentation\ApiPlatform\V1\State\ListStorageSpacesProvider;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\ChangeStorageSpaceStatusProcessor;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\CreateStorageSpaceProcessor;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\GetStorageSpaceProvider;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\ListStorageSpacesProvider;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(

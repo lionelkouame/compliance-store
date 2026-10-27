@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\Entity;
 
 use App\Domain\Entity\IdentityDocument;
-use App\Domain\Exception\IdentityDocumentExpiredException;
-use App\Domain\ValueObject\CountryCode;
-use App\Domain\ValueObject\IdentityDocumentId;
-use App\Domain\ValueObject\IdentityDocumentNumber;
-use App\Domain\ValueObject\IdentityDocumentType;
+use App\Domain\Exception\IdentityDocument\IdentityDocumentExpiredException;
+use App\Domain\ValueObject\Document\IdentityDocumentType;
+use App\Domain\ValueObject\Generic\CountryCode;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
 use PHPUnit\Framework\TestCase;
 
 final class IdentityDocumentTest extends TestCase

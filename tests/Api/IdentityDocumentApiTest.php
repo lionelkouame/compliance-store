@@ -6,7 +6,7 @@ namespace App\Tests\Api;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Domain\Entity\IdentityDocument;
-use App\Domain\ValueObject\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 

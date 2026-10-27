@@ -6,10 +6,10 @@ namespace App\Infrastructure\Presentation\ApiPlatform\V1\Resource;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
-use App\Domain\Entity\Holder;
-use App\Infrastructure\Presentation\ApiPlatform\V1\State\HolderProcessor;
-use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\OpenApi\Model\Operation;
+use App\Domain\Entity\Holder;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\HolderProcessor;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * No operation is exposed yet: they will be declared here once the matching

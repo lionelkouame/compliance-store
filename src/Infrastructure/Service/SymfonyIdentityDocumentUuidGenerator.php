@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Service;
 
 use App\Domain\Port\Service\IdentityDocumentIdGeneratorInterface;
-use App\Domain\ValueObject\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
 use Symfony\Component\Uid\Uuid;
 
 /**

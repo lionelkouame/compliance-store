@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Domain\ValueObject;
 
-use App\Domain\ValueObject\StorageSpaceName;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
 use PHPUnit\Framework\TestCase;
 
 final class StorageSpaceNameTest extends TestCase

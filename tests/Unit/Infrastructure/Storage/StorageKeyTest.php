@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Infrastructure\Storage;
 
-use App\Domain\ValueObject\DocumentId;
+use App\Domain\ValueObject\Document\DocumentId;
 use App\Infrastructure\Storage\StorageKey;
 use PHPUnit\Framework\TestCase;
 
