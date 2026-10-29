@@ -38,7 +38,7 @@ final class StoreDocumentUseCaseTest extends TestCase
         $documents->expects(self::once())->method('add');
 
         $idGenerator = $this->createStub(DocumentIdGeneratorInterface::class);
-        $idGenerator->method('generate')->willReturn(DocumentId::fromString('660e8400-e29b-41d4-a716-446655440000'));
+        $idGenerator->method('generate')->willReturn(DocumentId::make('660e8400-e29b-41d4-a716-446655440000'));
 
         $useCase = new StoreDocumentUseCase(
             cipher: $cipher,

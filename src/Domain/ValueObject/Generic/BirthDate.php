@@ -33,7 +33,7 @@ final readonly class BirthDate
         return $this->value->format('Y-m-d') === $other->value->format('Y-m-d');
     }
 
-    public static function fromString(string $value): self
+    public static function make(string $value): self
     {
         $date = \DateTimeImmutable::createFromFormat('Y-m-d', $value);
 

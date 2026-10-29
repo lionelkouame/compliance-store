@@ -14,7 +14,7 @@ final class DocumentIdType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?DocumentId
     {
-        return \is_string($value) ? DocumentId::fromString($value) : null;
+        return \is_string($value) ? DocumentId::make($value) : null;
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string

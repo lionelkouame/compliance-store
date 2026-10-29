@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\Holder;
 
+use App\Domain\ValueObject\TextValueObjectTrait;
+
 final readonly class HolderName
 {
     public function __construct(
@@ -28,5 +30,13 @@ final readonly class HolderName
     public function __toString(): string
     {
         return $this->value;
+    }
+    public static function make(string $value): self
+    {
+        if (trim($value) === '') {
+            throw new \InvalidArgumentException('Storage space name cannot be empty.');
+        }
+
+        return new self($value);
     }
 }

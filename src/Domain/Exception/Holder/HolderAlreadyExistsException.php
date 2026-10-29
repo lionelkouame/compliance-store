@@ -6,9 +6,9 @@ use App\Domain\ValueObject\Holder\HolderId;
 
 class HolderAlreadyExistsException extends \DomainException
 {
-    public function __construct(HolderId $holderId)
+    public function __construct(string $email)
     {
-        parent::__construct(\sprintf('A holder with string "%s" already exists.', $holderId));
+        parent::__construct(\sprintf('A holder with string "%s" already exists.', $email));
     }
 
 }

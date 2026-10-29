@@ -29,13 +29,13 @@ final readonly class StoreDocumentUseCase
         $envelope = $this->cipher->encrypt($command->content);
 
         $id = $this->idGenerator->generate();
-        $documentId = DocumentId::fromString($id);
+        $documentId = DocumentId::make($id);
 
         $this->storage->store($documentId, $envelope->payload->ciphertext);
 
         $document = Document::create(
             id: $documentId,
-            holderId: HolderId::fromString('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c'),
+            holderId: HolderId::make('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c'),
             fileHash: $fileHash,
             wrappedDataKey: $envelope->wrappedDataKey,
         );

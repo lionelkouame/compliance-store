@@ -78,8 +78,8 @@ final class HolderTest extends TestCase
 
     private function register(?\DateTimeImmutable $consentCollectedAt = null): Holder
     {
-        return Holder::register(
-            id: HolderId::fromString('770e8400-e29b-41d4-a716-446655440111'),
+        return Holder::create(
+            id: HolderId::make('770e8400-e29b-41d4-a716-446655440111'),
             name: new HolderName('Ada Lovelace'),
             birthDate: new BirthDate(new \DateTimeImmutable('1990-01-01', new \DateTimeZone('UTC'))),
             email: new Email('ada@example.com'),

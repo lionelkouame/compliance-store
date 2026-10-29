@@ -15,6 +15,6 @@ final readonly class SymfonyDocumentUuidGenerator implements DocumentIdGenerator
 {
     public function generate(): DocumentId
     {
-        return DocumentId::fromString(Uuid::v7()->toRfc4122());
+        return DocumentId::make(Uuid::v7()->toRfc4122());
     }
 }

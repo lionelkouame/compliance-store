@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\StorageSpace;
 
+use App\Domain\ValueObject\TextValueObjectTrait;
+
 final readonly class StorageSpaceName
 {
     public function __construct(

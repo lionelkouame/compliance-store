@@ -29,4 +29,13 @@ final readonly class Email
     {
         return $this->value;
     }
+
+    public static function make(string $value): self
+    {
+        if (trim($value) === '') {
+            throw new \InvalidArgumentException('Storage space name cannot be empty.');
+        }
+
+        return new self($value);
+    }
 }

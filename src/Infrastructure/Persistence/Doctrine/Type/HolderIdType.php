@@ -14,7 +14,7 @@ final class HolderIdType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?HolderId
     {
-        return \is_string($value) ? HolderId::fromString($value) : null;
+        return \is_string($value) ? HolderId::make($value) : null;
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string

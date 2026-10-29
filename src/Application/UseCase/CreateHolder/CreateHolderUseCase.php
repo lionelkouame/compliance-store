@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\UseCase\CreateHolder;
 
 
@@ -19,19 +21,18 @@ final readonly class CreateHolderUseCase
         private HolderRepositoryInterface $holderRepository
     ){}
 
-    public function execute(CreateHolderCommand $command) : Holder
+    public function execute(CreateHolderRequest $request) : CreateHolderResponse
     {
-        $value = $this->generatorUuid->generate();
-        $holderId = HolderId::fromString($value);
-        $birthDate = BirthDate::fromString($command->birthDate);
-        $holderName = new HolderName($command->holderName);
-        $email = new Email($command->email);
+        $holderId = HolderId::make($this->generatorUuid->generate());
+        $birthDate = BirthDate::make($request->birthDate);
+        $holderName = HolderName::make($request->holderName);
+        $email = Email::make($request->email);
 
         if (null !== $this->holderRepository->findByEmail($email->value)) {
-            throw new HolderAlreadyExistsException($holderId);
+            throw new HolderAlreadyExistsException($email->value);
         }
 
-        $holder = Holder::register(
+        $holder = Holder::create(
             $holderId,
             $holderName,
             $birthDate,
@@ -40,6 +41,6 @@ final readonly class CreateHolderUseCase
 
         $this->holderRepository->add($holder);
 
-        return  $holder;
+        return new CreateHolderResponse($holder->id());
     }
 }

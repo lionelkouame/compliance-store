@@ -18,7 +18,7 @@ trait IdentifierTrait
         }
     }
 
-    public static function fromString(string $value, ?IdValidatorInterface $validator = null): self
+    public static function make(string $value, ?IdValidatorInterface $validator = null): self
     {
         return new self($value, $validator);
     }

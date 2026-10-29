@@ -39,7 +39,7 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
     public function testExecuteRejectsADuplicateDocument(): void
     {
         $existing = IdentityDocument::create(
-            id: IdentityDocumentId::fromString(self::ID),
+            id: IdentityDocumentId::make(self::ID),
             type: IdentityDocumentType::Passport,
             country: new CountryCode('FRA'),
             number: new IdentityDocumentNumber('18AB12345'),
@@ -79,7 +79,7 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
     private function useCase(IdentityDocumentRepositoryInterface $identityDocuments): RegisterIdentityDocumentUseCase
     {
         $idGenerator = $this->createStub(IdentityDocumentIdGeneratorInterface::class);
-        $idGenerator->method('generate')->willReturn(IdentityDocumentId::fromString(self::ID));
+        $idGenerator->method('generate')->willReturn(IdentityDocumentId::make(self::ID));
 
         return new RegisterIdentityDocumentUseCase(
             identityDocuments: $identityDocuments,

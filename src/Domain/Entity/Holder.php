@@ -39,7 +39,7 @@ final readonly class Holder
         private ?\DateTimeImmutable $anonymizedAt,
     ) {}
 
-    public static function register(
+    public static function create(
         HolderId $id,
         HolderName $name,
         BirthDate $birthDate,
