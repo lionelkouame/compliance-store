@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\Holder;
 
-use ApiPlatform\State\ProviderInterface;
 use ApiPlatform\Metadata\Operation;
-use App\Application\UseCase\GetHolderByEmail\GetHolderByEmailRequest;
-use App\Application\UseCase\GetHolderByEmail\GetHolderByEmailResponse;
-use App\Application\UseCase\GetHolderByEmail\GetHolderByEmailUseCase;
+use ApiPlatform\State\ProviderInterface;
+use App\Application\UseCase\Holder\GetHolderByEmail\GetHolderByEmailRequest;
+use App\Application\UseCase\Holder\GetHolderByEmail\GetHolderByEmailResponse;
+use App\Application\UseCase\Holder\GetHolderByEmail\GetHolderByEmailUseCase;
 
 /**
  * @implements ProviderInterface<GetHolderByEmailResponse>

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\UseCase\GetHolderByEmail;
+namespace App\Application\UseCase\Holder\GetHolderByEmail;
 
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 
