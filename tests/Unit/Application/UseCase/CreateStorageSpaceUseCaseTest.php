@@ -9,7 +9,7 @@ use App\Application\UseCase\CreateStorageSpace\CreateStorageSpaceUseCase;
 use App\Domain\Entity\StorageSpace;
 use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
-use App\Domain\Port\Service\StorageSpaceIdGeneratorInterface;
+use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
@@ -24,8 +24,8 @@ final class CreateStorageSpaceUseCaseTest extends TestCase
         $storageSpaces->method('findByCode')->willReturn(null);
         $storageSpaces->expects(self::once())->method('save');
 
-        $idGenerator = $this->createStub(StorageSpaceIdGeneratorInterface::class);
-        $idGenerator->method('generate')->willReturn(StorageSpaceId::fromString('660e8400-e29b-41d4-a716-446655440000'));
+        $idGenerator = $this->createStub(GeneratorInterface::class);
+        $idGenerator->method('generate')->willReturn('660e8400-e29b-41d4-a716-446655440000');
 
         $useCase = new CreateStorageSpaceUseCase(
             storageSpaces: $storageSpaces,
@@ -55,7 +55,7 @@ final class CreateStorageSpaceUseCaseTest extends TestCase
         $storageSpaces->method('findByCode')->willReturn($existing);
         $storageSpaces->expects(self::never())->method('save');
 
-        $idGenerator = $this->createStub(StorageSpaceIdGeneratorInterface::class);
+        $idGenerator = $this->createStub(GeneratorInterface::class);
 
         $useCase = new CreateStorageSpaceUseCase(
             storageSpaces: $storageSpaces,

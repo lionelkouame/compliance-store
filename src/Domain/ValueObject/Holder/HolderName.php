@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\Holder;
 
-use App\Domain\ValueObject\TextValueObjectTrait;
-
 final readonly class HolderName
 {
     public function __construct(

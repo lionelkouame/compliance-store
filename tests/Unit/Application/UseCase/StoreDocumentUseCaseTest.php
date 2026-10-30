@@ -9,8 +9,7 @@ use App\Application\UseCase\StoreDocument\StoreDocumentUseCase;
 use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
-use App\Domain\Port\Service\DocumentIdGeneratorInterface;
-use App\Domain\ValueObject\Document\DocumentId;
+use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ValueObject\Document\WrappedDataKey;
 use App\Domain\ValueObject\Generic\EncryptedPayload;
 use App\Domain\ValueObject\Generic\EncryptionEnvelope;
@@ -37,8 +36,8 @@ final class StoreDocumentUseCaseTest extends TestCase
         $documents = $this->createMock(DocumentRepositoryInterface::class);
         $documents->expects(self::once())->method('add');
 
-        $idGenerator = $this->createStub(DocumentIdGeneratorInterface::class);
-        $idGenerator->method('generate')->willReturn(DocumentId::make('660e8400-e29b-41d4-a716-446655440000'));
+        $idGenerator = $this->createStub(GeneratorInterface::class);
+        $idGenerator->method('generate')->willReturn('660e8400-e29b-41d4-a716-446655440000');
 
         $useCase = new StoreDocumentUseCase(
             cipher: $cipher,
@@ -49,10 +48,9 @@ final class StoreDocumentUseCaseTest extends TestCase
 
         $document = $useCase->execute(new StoreDocumentCommand(
             content: 'plaintext content',
-            holderEmail: '770e8400-e29b-41d4-a716-446655440111',
         ));
 
         self::assertSame('660e8400-e29b-41d4-a716-446655440000', $document->id()->value);
-        self::assertSame('770e8400-e29b-41d4-a716-446655440111', $document->holderId()->value);
+        self::assertSame('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c', $document->holderId()->value);
     }
 }
