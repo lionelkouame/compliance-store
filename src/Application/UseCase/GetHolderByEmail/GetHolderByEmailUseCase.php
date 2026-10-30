@@ -12,10 +12,14 @@ readonly class GetHolderByEmailUseCase
        private HolderRepositoryInterface $repository
     ){}
 
-    public function execute(GetHolderByEmailRequest $holderEmailRequest): GetHolderByEmailResponse
+    public function execute(GetHolderByEmailRequest $holderEmailRequest): ?GetHolderByEmailResponse
     {
         $holder = $this->repository
             ->findByEmail($holderEmailRequest->email);
+
+        if (null === $holder) {
+            return null;
+        }
 
         return new GetHolderByEmailResponse($holder);
     }
