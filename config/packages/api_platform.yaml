@@ -6,6 +6,7 @@ api_platform:
     formats:
         jsonld: ['application/ld+json']
         json: ['application/json']
+        multipart: ['multipart/form-data']
     mapping:
         paths:
             - '%kernel.project_dir%/src/Infrastructure/Presentation/ApiPlatform/V1/Resource'

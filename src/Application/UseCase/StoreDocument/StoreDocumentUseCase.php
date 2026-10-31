@@ -23,13 +23,11 @@ final readonly class StoreDocumentUseCase
         private GeneratorInterface $idGenerator,
     ) {}
 
-    public function execute(StoreDocumentCommand $command): Document
+    public function execute(StoreDocumentRequest $storeDocumentRequest): StoreDocumentResponse
     {
-        $fileHash = FileHash::fromPlaintext($command->content);
-        $envelope = $this->cipher->encrypt($command->content);
-
-        $id = $this->idGenerator->generate();
-        $documentId = DocumentId::make($id);
+        $fileHash = FileHash::fromPlaintext($storeDocumentRequest->content);
+        $envelope = $this->cipher->encrypt($storeDocumentRequest->content);
+        $documentId = DocumentId::make($this->idGenerator->generate());
 
         $this->storage->store($documentId, $envelope->payload->ciphertext);
 
@@ -42,6 +40,12 @@ final readonly class StoreDocumentUseCase
 
         $this->documents->add($document);
 
-        return $document;
+        return new StoreDocumentResponse(
+            id: $documentId->value,
+            holderId: $document->holderId()->value,
+            fileHash: $fileHash->value,
+            wrappedDataKey: $document->wrappedDataKey()->encryptedDataKey,
+            createdAt: $document->createdAt()->format(\DateTimeInterface::ATOM),
+        );
     }
 }

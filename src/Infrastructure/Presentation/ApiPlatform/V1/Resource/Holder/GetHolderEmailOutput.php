@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Presentation\ApiPlatform\V1\Resource\Holder;
 
 use Symfony\Component\Validator\Constraints as Assert;

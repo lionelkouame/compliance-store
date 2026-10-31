@@ -12,5 +12,4 @@ final readonly class CreateHolderResponse implements UseCaseResponseInterface
     public function __construct(
         public HolderId $holderId,
     ){}
-
 }
