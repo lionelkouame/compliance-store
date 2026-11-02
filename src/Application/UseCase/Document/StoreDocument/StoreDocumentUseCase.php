@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Application\UseCase\StoreDocument;
+namespace App\Application\UseCase\Document\StoreDocument;
 
 use App\Domain\Entity\Document;
 use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
-use App\Domain\Port\Service\DocumentIdGeneratorInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ValueObject\Document\DocumentId;
 use App\Domain\ValueObject\Document\FileHash;

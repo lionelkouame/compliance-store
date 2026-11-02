@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Application\UseCase;
 
-use App\Application\UseCase\StoreDocument\StoreDocumentCommand;
-use App\Application\UseCase\StoreDocument\StoreDocumentUseCase;
+use App\Application\UseCase\Document\StoreDocument\StoreDocumentCommand;
+use App\Application\UseCase\Document\StoreDocument\StoreDocumentUseCase;
 use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
