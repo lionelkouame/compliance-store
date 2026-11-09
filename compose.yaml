@@ -2,6 +2,11 @@
 services:
   php:
     restart: unless-stopped
+    # Waiting on the one-shot bucket job also lets `docker compose up --wait`
+    # treat its normal exit as success instead of a failed container.
+    depends_on:
+      minio-init:
+        condition: service_completed_successfully
     environment:
       SERVER_NAME: ${SERVER_NAME:-compliance-store.loc, localhost}, php:80
       DEFAULT_URI: ${DEFAULT_URI:-https://compliance-store.loc:${HTTPS_PORT:-443}}
