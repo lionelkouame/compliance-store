@@ -16,12 +16,12 @@ en oublier est la principale source d'erreurs.
 
 ### PHP
 
-| Rôle | Fichier | Clé | Valeur actuelle |
-|------|---------|-----|-----------------|
-| Runtime (image Docker) | `Dockerfile` | `FROM dunglas/frankenphp:1-php8.5` | branche `8.5` |
-| Résolveur Composer | `composer.json` | `require.php` | `>=8.4` |
-| Plateforme figée (CI/lock) | `composer.json` | `config.platform.php` | `8.4.1` |
-| Pipeline CI | `.github/workflows/ci.yaml` | `php-version` | `8.4` |
+| Rôle                       | Fichier                     | Clé                                | Valeur actuelle |
+| -------------------------- | --------------------------- | ---------------------------------- | --------------- |
+| Runtime (image Docker)     | `Dockerfile`                | `FROM dunglas/frankenphp:1-php8.5` | branche `8.5`   |
+| Résolveur Composer         | `composer.json`             | `require.php`                      | `>=8.4`         |
+| Plateforme figée (CI/lock) | `composer.json`             | `config.platform.php`              | `8.4.1`         |
+| Pipeline CI                | `.github/workflows/ci.yaml` | `php-version`                      | `8.4`           |
 
 > 💡 **Point d'attention actuel** : l'image Docker suit la branche `8.5` (le
 > conteneur tourne donc en PHP 8.5.x), alors que `composer.json` et la CI
@@ -31,10 +31,10 @@ en oublier est la principale source d'erreurs.
 
 ### Symfony
 
-| Rôle | Fichier | Clé | Valeur actuelle |
-|------|---------|-----|-----------------|
-| Contrainte des composants | `composer.json` | `require."symfony/*"` | `8.1.*` |
-| Contrainte Flex | `composer.json` | `extra.symfony.require` | `8.1.*` |
+| Rôle                      | Fichier         | Clé                     | Valeur actuelle |
+| ------------------------- | --------------- | ----------------------- | --------------- |
+| Contrainte des composants | `composer.json` | `require."symfony/*"`   | `8.1.*`         |
+| Contrainte Flex           | `composer.json` | `extra.symfony.require` | `8.1.*`         |
 
 Le champ `extra.symfony.require` indique à Symfony Flex quelle version installer
 pour **tous** les paquets `symfony/*`. Il doit toujours rester aligné avec les
@@ -225,11 +225,11 @@ docker compose exec php composer install
 
 ## 6. Récapitulatif des fichiers à modifier
 
-| Mise à jour | Fichiers impactés |
-|-------------|-------------------|
-| Patch PHP (même branche) | *(aucun — rebuild `--pull` suffit)* |
-| Version PHP mineure/majeure | `Dockerfile`, `composer.json`, `.github/workflows/ci.yaml` |
-| Version Symfony | `composer.json` (`require`, `require-dev`, `extra.symfony.require`) |
+| Mise à jour                 | Fichiers impactés                                                   |
+| --------------------------- | ------------------------------------------------------------------- |
+| Patch PHP (même branche)    | *(aucun — rebuild `--pull` suffit)*                                 |
+| Version PHP mineure/majeure | `Dockerfile`, `composer.json`, `.github/workflows/ci.yaml`          |
+| Version Symfony             | `composer.json` (`require`, `require-dev`, `extra.symfony.require`) |
 
 ---
 
