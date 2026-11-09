@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Application\UseCase\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusCommand;
 use App\Application\UseCase\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusUseCase;
+use App\Domain\Exception\InvalidDataException;
 use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpaceResource;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -48,7 +49,7 @@ final readonly class ChangeStorageSpaceStatusProcessor implements ProcessorInter
             ));
         } catch (StorageSpaceNotFoundException $e) {
             throw new NotFoundHttpException($e->getMessage(), $e);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidDataException|\InvalidArgumentException $e) {
             throw new UnprocessableEntityHttpException($e->getMessage(), $e);
         }
 

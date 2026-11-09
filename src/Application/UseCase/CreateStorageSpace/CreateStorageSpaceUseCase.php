@@ -24,7 +24,7 @@ final readonly class CreateStorageSpaceUseCase
         $code = new StorageSpaceCode($command->code);
 
         if (null !== $this->storageSpaces->findByCode($code)) {
-            throw new StorageSpaceCodeAlreadyExistsException($code);
+            throw new StorageSpaceCodeAlreadyExistsException();
         }
         $storageSpaceId = StorageSpaceId::fromString($this->idGenerator->generate());
         $storageSpace = StorageSpace::create(

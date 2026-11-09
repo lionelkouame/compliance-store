@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domain\Exception\IdentityDocument;
 
+use App\Domain\Exception\AlreadyExistException;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
 use App\Domain\ValueObject\Generic\CountryCode;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
 
-final class IdentityDocumentAlreadyExistsException extends \DomainException
+final class IdentityDocumentAlreadyExistsException extends AlreadyExistException
 {
     public function __construct(IdentityDocumentType $type, CountryCode $country, IdentityDocumentNumber $number)
     {

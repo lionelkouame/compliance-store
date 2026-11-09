@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase\Holder\CreateHolder;
 
-
 use App\Domain\Entity\Holder;
 use App\Domain\Exception\Holder\HolderAlreadyExistsException;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
@@ -30,7 +29,7 @@ final readonly class CreateHolderUseCase
         $email = Email::make($request->email);
 
         if (null !== $this->holderRepository->findByEmail($email->value)) {
-            throw new HolderAlreadyExistsException($email->value);
+            throw new HolderAlreadyExistsException();
         }
 
         $holder = Holder::create(

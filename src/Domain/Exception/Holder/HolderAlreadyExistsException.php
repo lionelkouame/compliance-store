@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Exception\Holder;
 
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\Exception\AlreadyExistException;
 
-class HolderAlreadyExistsException extends \DomainException
+class HolderAlreadyExistsException extends AlreadyExistException
 {
-    public function __construct(string $email)
+    public function __construct()
     {
-        parent::__construct(\sprintf('A holder with string "%s" already exists.', $email));
+        parent::__construct('A holder with string already exists.');
     }
-
 }

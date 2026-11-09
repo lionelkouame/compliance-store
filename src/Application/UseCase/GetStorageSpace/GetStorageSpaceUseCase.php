@@ -24,7 +24,7 @@ final readonly class GetStorageSpaceUseCase
         $storageSpace = $this->storageSpaces->get($storageSpaceId);
 
         if (null === $storageSpace) {
-            throw new StorageSpaceNotFoundException($storageSpaceId);
+            throw new StorageSpaceNotFoundException();
         }
 
         return $storageSpace;

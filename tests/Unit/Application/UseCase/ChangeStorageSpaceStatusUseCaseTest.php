@@ -7,6 +7,7 @@ namespace App\Tests\Unit\Application\UseCase;
 use App\Application\UseCase\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusCommand;
 use App\Application\UseCase\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusUseCase;
 use App\Domain\Entity\StorageSpace;
+use App\Domain\Exception\StorageSpace\InvalidStatusStorageException;
 use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
@@ -89,7 +90,7 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
             idValidator: $idValidator,
         );
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidStatusStorageException::class);
 
         $useCase->execute(new ChangeStorageSpaceStatusCommand(
             id: '660e8400-e29b-41d4-a716-446655440000',

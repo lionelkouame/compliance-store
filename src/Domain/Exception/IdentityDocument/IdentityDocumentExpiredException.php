@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Exception\IdentityDocument;
 
-final class IdentityDocumentExpiredException extends \DomainException
+use App\Domain\Exception\InvalidDataException;
+
+final class IdentityDocumentExpiredException extends InvalidDataException
 {
     public function __construct(\DateTimeImmutable $expiresAt)
     {
