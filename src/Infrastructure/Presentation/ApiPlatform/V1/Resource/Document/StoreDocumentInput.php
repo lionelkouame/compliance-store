@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Presentation\ApiPlatform\V1\Resource\Document;
 
-use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class StoreDocumentInput
 {
-    #[ApiProperty(identifier: true)]
-    public ?string $id = null;
-
     /**
      * With `deserialize: false`, API Platform never populates these fields
      * itself: DocumentProcessor reads them from the raw request and
@@ -21,9 +17,5 @@ class StoreDocumentInput
     #[Assert\NotNull(message: 'A valid "file" upload is required.')]
     #[Assert\File]
     public ?UploadedFile $file = null;
-
-    public ?string $fileHash = null;
-
-    public ?string $createdAt = null;
 
 }

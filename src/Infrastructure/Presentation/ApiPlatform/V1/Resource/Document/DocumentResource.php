@@ -14,7 +14,6 @@ use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\StoreDocument
     operations: [
         new Post(
             uriTemplate: '/documents',
-            inputFormats: ['multipart' => ['multipart/form-data']],
             openapi: new Operation(
                 tags: self::TagDocumentSection,
                 summary: 'Store a document',
@@ -22,10 +21,11 @@ use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\StoreDocument
             ),
             input: StoreDocumentInput::class,
             output: StoreDocumentOutput::class,
-            deserialize: false,
+            deserialize: true,
             processor: StoreDocumentProcessor::class,
         ),
     ],
+    inputFormats: ['multipart' => ['multipart/form-data']],
     routePrefix: '/v1',
 )]
 final class DocumentResource

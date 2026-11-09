@@ -12,11 +12,21 @@ namespace App\Domain\ValueObject\Generic;
  */
 final readonly class EncryptedPayload
 {
-    public function __construct(
-        public string $ciphertext,
+    private function __construct(
+        private string $value,
     ) {
-        if ('' === $this->ciphertext) {
+        if ('' === $this->value) {
             throw new \InvalidArgumentException('An encrypted payload ciphertext cannot be empty.');
         }
+    }
+
+    public static function make(string $value): self
+    {
+        return new self($value);
+    }
+
+    public function value(): string
+    {
+        return $this->value;
     }
 }

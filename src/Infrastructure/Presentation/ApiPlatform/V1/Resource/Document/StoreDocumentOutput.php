@@ -8,7 +8,6 @@ class StoreDocumentOutput
         public string $id,
         public string $holderId,
         public string $fileHash,
-        public string $wrappedDataKey,
         public string $createdAt,
     ){}
 }

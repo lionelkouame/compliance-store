@@ -10,4 +10,5 @@ use App\Domain\ValueObject\IdentifierTrait;
 final readonly class HolderId implements IdentifierInterface
 {
     use IdentifierTrait;
+
 }

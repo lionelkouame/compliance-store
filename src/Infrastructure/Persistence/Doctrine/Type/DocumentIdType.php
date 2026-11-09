@@ -7,6 +7,7 @@ namespace App\Infrastructure\Persistence\Doctrine\Type;
 use App\Domain\ValueObject\Document\DocumentId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
+use Webmozart\Assert\Assert;
 
 final class DocumentIdType extends StringType
 {
@@ -17,12 +18,10 @@ final class DocumentIdType extends StringType
         return \is_string($value) ? DocumentId::make($value) : null;
     }
 
-    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): string
     {
-        if (null === $value) {
-            return null;
-        }
+        Assert::isInstanceOf($value, DocumentId::class);
 
-        return $value instanceof DocumentId ? $value->value : (\is_string($value) ? $value : null);
+        return $value->value();
     }
 }

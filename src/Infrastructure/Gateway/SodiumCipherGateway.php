@@ -39,21 +39,21 @@ final readonly class SodiumCipherGateway implements CipherGatewayInterface
         sodium_memzero($dataKey);
 
         return new EncryptionEnvelope(
-            payload: new EncryptedPayload($ciphertext),
-            wrappedDataKey: new WrappedDataKey($encryptedDataKey),
+            payload: EncryptedPayload::make($ciphertext),
+            wrappedDataKey: WrappedDataKey::make($encryptedDataKey),
         );
     }
 
     public function decrypt(EncryptedPayload $payload, WrappedDataKey $wrappedDataKey): string
     {
-        [$keyNonce, $encryptedDataKey] = $this->splitNonce($wrappedDataKey->encryptedDataKey);
+        [$keyNonce, $encryptedDataKey] = $this->splitNonce($wrappedDataKey->value());
 
         $dataKey = sodium_crypto_secretbox_open($encryptedDataKey, $keyNonce, $this->masterKey);
         if (false === $dataKey) {
             throw new \RuntimeException('Unable to unwrap the document data key: the master key does not match or the data is corrupted.');
         }
 
-        [$fileNonce, $ciphertext] = $this->splitNonce($payload->ciphertext);
+        [$fileNonce, $ciphertext] = $this->splitNonce($payload->value());
 
         $plaintext = sodium_crypto_secretbox_open($ciphertext, $fileNonce, $dataKey);
         sodium_memzero($dataKey);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Application\UseCase;
 
-use App\Application\UseCase\Document\StoreDocument\StoreDocumentCommand;
+use App\Application\UseCase\Document\StoreDocument\StoreDocumentRequest;
 use App\Application\UseCase\Document\StoreDocument\StoreDocumentUseCase;
 use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
@@ -46,11 +46,12 @@ final class StoreDocumentUseCaseTest extends TestCase
             idGenerator: $idGenerator,
         );
 
-        $document = $useCase->execute(new StoreDocumentCommand(
+        $response = $useCase->execute(new StoreDocumentRequest(
             content: 'plaintext content',
         ));
 
-        self::assertSame('660e8400-e29b-41d4-a716-446655440000', $document->id()->value);
-        self::assertSame('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c', $document->holderId()->value);
+        self::assertSame('660e8400-e29b-41d4-a716-446655440000', $response->id);
+        self::assertSame('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c', $response->holderId);
     }
 }
+

@@ -6,8 +6,8 @@ use App\Domain\Port\Service\IdValidatorInterface;
 
 trait IdentifierTrait
 {
-    public function __construct(
-        public readonly string $value,
+    private function __construct(
+        private readonly string $value,
         ?IdValidatorInterface $validator = null,
     ) {
         if (null !== $validator && !$validator->isValid($this->value)) {
@@ -32,5 +32,8 @@ trait IdentifierTrait
     {
         return $this->value;
     }
-
+    public function value(): string
+    {
+        return $this->value;
+    }
 }

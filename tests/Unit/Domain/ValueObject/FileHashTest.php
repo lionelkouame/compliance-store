@@ -11,7 +11,7 @@ final class FileHashTest extends TestCase
 {
     public function testFromPlaintextComputesSha256Digest(): void
     {
-        $hash = FileHash::fromPlaintext('hello world');
+        $hash = FileHash::make('hello world');
 
         self::assertSame(hash('sha256', 'hello world'), $hash->value);
     }
@@ -24,8 +24,8 @@ final class FileHashTest extends TestCase
 
     public function testEqualsComparesValue(): void
     {
-        $a = FileHash::fromPlaintext('content');
-        $b = FileHash::fromPlaintext('content');
+        $a = FileHash::make('content');
+        $b = FileHash::make('content');
 
         self::assertTrue($a->equals($b));
     }

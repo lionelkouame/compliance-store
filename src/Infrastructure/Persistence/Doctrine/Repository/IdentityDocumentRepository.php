@@ -32,7 +32,7 @@ final class IdentityDocumentRepository extends ServiceEntityRepository implement
 
     public function get(IdentityDocumentId $id): ?IdentityDocument
     {
-        return $this->find($id->value);
+        return $this->find($id->value());
     }
 
     public function findByNumber(

@@ -24,11 +24,11 @@ final readonly class StoreDocumentUseCase
 
     public function execute(StoreDocumentRequest $storeDocumentRequest): StoreDocumentResponse
     {
-        $fileHash = FileHash::fromPlaintext($storeDocumentRequest->content);
+        $fileHash = FileHash::make($storeDocumentRequest->content);
         $envelope = $this->cipher->encrypt($storeDocumentRequest->content);
         $documentId = DocumentId::make($this->idGenerator->generate());
 
-        $this->storage->store($documentId, $envelope->payload->ciphertext);
+        $this->storage->store($documentId, $envelope->payload->value());
 
         $document = Document::create(
             id: $documentId,
@@ -40,10 +40,10 @@ final readonly class StoreDocumentUseCase
         $this->documents->add($document);
 
         return new StoreDocumentResponse(
-            id: $documentId->value,
-            holderId: $document->holderId()->value,
-            fileHash: $fileHash->value,
-            wrappedDataKey: $document->wrappedDataKey()->encryptedDataKey,
+            id: $documentId->value(),
+            holderId: $document->holderId()->value(),
+            fileHash: $fileHash->value(),
+            wrappedDataKey: $document->wrappedDataKey()->value(),
             createdAt: $document->createdAt()->format(\DateTimeInterface::ATOM),
         );
     }

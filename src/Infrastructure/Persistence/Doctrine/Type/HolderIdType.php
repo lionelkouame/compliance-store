@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Type;
 
+use App\Domain\ValueObject\Document\DocumentId;
 use App\Domain\ValueObject\Holder\HolderId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
+use Webmozart\Assert\Assert;
 
 final class HolderIdType extends StringType
 {
@@ -17,12 +19,10 @@ final class HolderIdType extends StringType
         return \is_string($value) ? HolderId::make($value) : null;
     }
 
-    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): string
     {
-        if (null === $value) {
-            return null;
-        }
+        Assert::isInstanceOf($value, HolderId::class);
 
-        return $value instanceof HolderId ? $value->value : (\is_string($value) ? $value : null);
+        return $value->value();
     }
 }
