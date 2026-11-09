@@ -20,8 +20,8 @@ final class StoreDocumentUseCaseTest extends TestCase
     public function testExecuteEncryptsStoresAndPersistsADocument(): void
     {
         $envelope = new EncryptionEnvelope(
-            payload: new EncryptedPayload('cipher-bytes'),
-            wrappedDataKey: new WrappedDataKey('wrapped-key-bytes'),
+            payload: EncryptedPayload::make('cipher-bytes'),
+            wrappedDataKey: WrappedDataKey::make('wrapped-key-bytes'),
         );
 
         $cipher = $this->createMock(CipherGatewayInterface::class);
@@ -29,7 +29,7 @@ final class StoreDocumentUseCaseTest extends TestCase
 
         $storage = $this->createMock(StorageGatewayInterface::class);
         $storage->expects(self::once())->method('store')->with(
-            self::callback(static fn ($id) => '660e8400-e29b-41d4-a716-446655440000' === $id->value),
+            self::callback(static fn ($id) => '660e8400-e29b-41d4-a716-446655440000' === $id->value()),
             'cipher-bytes',
         );
 

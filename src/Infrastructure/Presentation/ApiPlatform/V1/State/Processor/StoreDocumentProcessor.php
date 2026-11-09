@@ -11,7 +11,6 @@ use App\Application\UseCase\Document\StoreDocument\StoreDocumentRequest;
 use App\Application\UseCase\Document\StoreDocument\StoreDocumentUseCase;
 use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\Document\StoreDocumentInput;
 use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\Document\StoreDocumentOutput;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Webmozart\Assert\Assert;
 
 /**
@@ -21,7 +20,6 @@ final readonly class StoreDocumentProcessor implements ProcessorInterface
 {
     public function __construct(
         private StoreDocumentUseCase $useCase,
-        private RequestStack $requestStack,
         private ValidatorInterface $validator,
     ) {}
 
@@ -30,6 +28,7 @@ final readonly class StoreDocumentProcessor implements ProcessorInterface
         Assert::isInstanceOf($data, StoreDocumentInput::class);
 
         $this->validator->validate($data);
+        Assert::notNull($data->file);
 
         $useCaseRequest = new StoreDocumentRequest(
             $data->file->getContent(),

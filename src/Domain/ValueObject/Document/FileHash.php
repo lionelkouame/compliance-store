@@ -39,4 +39,13 @@ final readonly class FileHash
         return new self(hash('sha256', $content));
     }
 
+    /**
+     * Rebuilds a FileHash from an already-computed digest (e.g. read back
+     * from persistence), without hashing it again.
+     */
+    public static function fromDigest(string $digest): self
+    {
+        return new self($digest);
+    }
+
 }

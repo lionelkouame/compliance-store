@@ -13,13 +13,13 @@ final class FileHashTest extends TestCase
     {
         $hash = FileHash::make('hello world');
 
-        self::assertSame(hash('sha256', 'hello world'), $hash->value);
+        self::assertSame(hash('sha256', 'hello world'), $hash->value());
     }
 
-    public function testConstructorRejectsNonHexDigest(): void
+    public function testFromDigestRejectsNonHexDigest(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        new FileHash('not-a-valid-hash');
+        FileHash::fromDigest('not-a-valid-hash');
     }
 
     public function testEqualsComparesValue(): void

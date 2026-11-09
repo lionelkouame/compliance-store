@@ -28,7 +28,7 @@ final class WrappedDataKeyType extends Type
             $value = stream_get_contents($value);
         }
 
-        return \is_string($value) ? new WrappedDataKey($value) : null;
+        return \is_string($value) ? WrappedDataKey::make($value) : null;
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -37,7 +37,7 @@ final class WrappedDataKeyType extends Type
             return null;
         }
 
-        return $value instanceof WrappedDataKey ? $value->encryptedDataKey : (\is_string($value) ? $value : null);
+        return $value instanceof WrappedDataKey ? $value->value() : (\is_string($value) ? $value : null);
     }
 
     public function getBindingType(): ParameterType

@@ -56,7 +56,7 @@ final class IdentityDocumentResource
     public static function fromEntity(IdentityDocument $identityDocument): self
     {
         $resource = new self();
-        $resource->id = $identityDocument->id()->value;
+        $resource->id = $identityDocument->id()->value();
         $resource->type = $identityDocument->type()->value;
         $resource->country = $identityDocument->country()->value;
         $resource->number = $identityDocument->number()->value;

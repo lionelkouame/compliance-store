@@ -23,6 +23,6 @@ final class IdentityDocumentIdType extends StringType
             return null;
         }
 
-        return $value instanceof IdentityDocumentId ? $value->value : (\is_string($value) ? $value : null);
+        return $value instanceof IdentityDocumentId ? $value->value() : (\is_string($value) ? $value : null);
     }
 }

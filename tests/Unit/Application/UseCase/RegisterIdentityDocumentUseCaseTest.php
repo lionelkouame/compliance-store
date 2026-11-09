@@ -29,7 +29,7 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
 
         $identityDocument = $this->useCase($identityDocuments)->execute($this->command());
 
-        self::assertSame(self::ID, $identityDocument->id()->value);
+        self::assertSame(self::ID, $identityDocument->id()->value());
         self::assertSame(IdentityDocumentType::Passport, $identityDocument->type());
         self::assertSame('FRA', $identityDocument->country()->value);
         self::assertSame('18AB12345', $identityDocument->number()->value);

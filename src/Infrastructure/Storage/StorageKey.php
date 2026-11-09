@@ -25,7 +25,7 @@ final readonly class StorageKey
 
     public static function forDocument(DocumentId $id): self
     {
-        return new self(\sprintf('documents/%s', $id->value));
+        return new self(\sprintf('documents/%s', $id->value()));
     }
 
     public function equals(self $other): bool
