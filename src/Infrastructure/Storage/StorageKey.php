@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Storage;
 
-use App\Domain\ValueObject\DocumentId;
+use App\Domain\ValueObject\Document\DocumentId;
 
 /**
  * Location of a document's encrypted content in the storage backend
@@ -25,7 +25,7 @@ final readonly class StorageKey
 
     public static function forDocument(DocumentId $id): self
     {
-        return new self(\sprintf('documents/%s', $id->value));
+        return new self(\sprintf('documents/%s', $id->value()));
     }
 
     public function equals(self $other): bool

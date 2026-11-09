@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase\CheckSystemStatus;
 
-use App\Domain\ValueObject\SystemStatus;
+use App\Domain\ValueObject\Generic\SystemStatus;
 
 final class CheckSystemStatusUseCase
 {

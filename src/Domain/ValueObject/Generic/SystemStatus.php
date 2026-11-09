@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\ValueObject\Generic;
+
+final readonly class SystemStatus
+{
+    public function __construct(
+        public string $status,
+        public string $version,
+        public string $environment,
+        public \DateTimeImmutable $timestamp,
+    ) {}
+}

@@ -31,6 +31,8 @@ doctrine:
                 class:  App\Infrastructure\Persistence\Doctrine\Type\HolderNameType
             email:
                 class: App\Infrastructure\Persistence\Doctrine\Type\EmailType
+            birth_date:
+                class: App\Infrastructure\Persistence\Doctrine\Type\BirthDateType
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

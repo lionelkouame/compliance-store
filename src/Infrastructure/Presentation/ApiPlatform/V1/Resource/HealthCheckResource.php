@@ -6,8 +6,8 @@ namespace App\Infrastructure\Presentation\ApiPlatform\V1\Resource;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use App\Infrastructure\Presentation\ApiPlatform\V1\State\HealthCheckStateProvider;
 use ApiPlatform\OpenApi\Model\Operation;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\HealthCheckStateProvider;
 
 #[ApiResource(
     shortName: 'HealthCheck',

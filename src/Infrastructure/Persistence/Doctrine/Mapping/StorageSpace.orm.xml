@@ -11,7 +11,7 @@
 
         <field name="code" type="storage_space_code" length="64" column="code" unique="true"/>
         <field name="name" type="storage_space_name" length="255" column="name"/>
-        <field name="status" type="string" enum-type="App\Domain\ValueObject\StorageSpaceStatus" length="20" column="status"/>
+        <field name="status" type="string" enum-type="App\Domain\ValueObject\StorageSpace\StorageSpaceStatus" length="20" column="status"/>
         <field name="createdAt" type="datetime_immutable" column="created_at"/>
     </entity>
 </doctrine-mapping>

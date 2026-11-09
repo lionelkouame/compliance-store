@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Application\UseCase;
 
-use App\Application\UseCase\StoreDocument\StoreDocumentCommand;
-use App\Application\UseCase\StoreDocument\StoreDocumentUseCase;
+use App\Application\UseCase\Document\StoreDocument\StoreDocumentRequest;
+use App\Application\UseCase\Document\StoreDocument\StoreDocumentUseCase;
 use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
-use App\Domain\Port\Service\DocumentIdGeneratorInterface;
-use App\Domain\ValueObject\DocumentId;
-use App\Domain\ValueObject\EncryptedPayload;
-use App\Domain\ValueObject\EncryptionEnvelope;
-use App\Domain\ValueObject\WrappedDataKey;
+use App\Domain\Port\Service\GeneratorInterface;
+use App\Domain\ValueObject\Document\WrappedDataKey;
+use App\Domain\ValueObject\Generic\EncryptedPayload;
+use App\Domain\ValueObject\Generic\EncryptionEnvelope;
 use PHPUnit\Framework\TestCase;
 
 final class StoreDocumentUseCaseTest extends TestCase
@@ -21,8 +20,8 @@ final class StoreDocumentUseCaseTest extends TestCase
     public function testExecuteEncryptsStoresAndPersistsADocument(): void
     {
         $envelope = new EncryptionEnvelope(
-            payload: new EncryptedPayload('cipher-bytes'),
-            wrappedDataKey: new WrappedDataKey('wrapped-key-bytes'),
+            payload: EncryptedPayload::make('cipher-bytes'),
+            wrappedDataKey: WrappedDataKey::make('wrapped-key-bytes'),
         );
 
         $cipher = $this->createMock(CipherGatewayInterface::class);
@@ -30,15 +29,15 @@ final class StoreDocumentUseCaseTest extends TestCase
 
         $storage = $this->createMock(StorageGatewayInterface::class);
         $storage->expects(self::once())->method('store')->with(
-            self::callback(static fn ($id) => '660e8400-e29b-41d4-a716-446655440000' === $id->value),
+            self::callback(static fn ($id) => '660e8400-e29b-41d4-a716-446655440000' === $id->value()),
             'cipher-bytes',
         );
 
         $documents = $this->createMock(DocumentRepositoryInterface::class);
         $documents->expects(self::once())->method('add');
 
-        $idGenerator = $this->createStub(DocumentIdGeneratorInterface::class);
-        $idGenerator->method('generate')->willReturn(DocumentId::fromString('660e8400-e29b-41d4-a716-446655440000'));
+        $idGenerator = $this->createStub(GeneratorInterface::class);
+        $idGenerator->method('generate')->willReturn('660e8400-e29b-41d4-a716-446655440000');
 
         $useCase = new StoreDocumentUseCase(
             cipher: $cipher,
@@ -47,12 +46,12 @@ final class StoreDocumentUseCaseTest extends TestCase
             idGenerator: $idGenerator,
         );
 
-        $document = $useCase->execute(new StoreDocumentCommand(
+        $response = $useCase->execute(new StoreDocumentRequest(
             content: 'plaintext content',
-            holderId: '770e8400-e29b-41d4-a716-446655440111',
         ));
 
-        self::assertSame('660e8400-e29b-41d4-a716-446655440000', $document->id()->value);
-        self::assertSame('770e8400-e29b-41d4-a716-446655440111', $document->holderId()->value);
+        self::assertSame('660e8400-e29b-41d4-a716-446655440000', $response->id);
+        self::assertSame('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c', $response->holderId);
     }
 }
+

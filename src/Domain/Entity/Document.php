@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
-use App\Domain\ValueObject\DocumentId;
-use App\Domain\ValueObject\FileHash;
-use App\Domain\ValueObject\HolderId;
-use App\Domain\ValueObject\WrappedDataKey;
+use App\Domain\ValueObject\Document\DocumentId;
+use App\Domain\ValueObject\Document\FileHash;
+use App\Domain\ValueObject\Document\WrappedDataKey;
+use App\Domain\ValueObject\Holder\HolderId;
 
 /**
  * A sensitive document, stored encrypted (Zero Trust Storage, ADR 0002)

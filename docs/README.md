@@ -30,6 +30,7 @@ Toute la documentation technique liée à l'environnement Docker Compose, Franke
 * [Options du Template Symfony Docker](docker-infra/options.md)
 * [Configuration du DNS Local (compliance-store.loc)](docker-infra/dns.md)
 * [Guide de Déploiement en Production](docker-infra/production.md)
+* [Manuel de Mise à Jour : PHP & Symfony](docker-infra/upgrading-php-symfony.md)
 * [Configuration du Débogage avec Xdebug](docker-infra/xdebug.md)
 * [Gestion des Certificats TLS / HTTPS](docker-infra/tls.md)
 * [Ajout de Services Docker Supplémentaires](docker-infra/extra-services.md)

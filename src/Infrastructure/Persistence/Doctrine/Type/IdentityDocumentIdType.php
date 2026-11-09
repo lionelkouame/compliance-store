@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Type;
 
-use App\Domain\ValueObject\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
 
@@ -14,7 +14,7 @@ final class IdentityDocumentIdType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?IdentityDocumentId
     {
-        return \is_string($value) ? IdentityDocumentId::fromString($value) : null;
+        return \is_string($value) ? IdentityDocumentId::make($value) : null;
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +23,6 @@ final class IdentityDocumentIdType extends StringType
             return null;
         }
 
-        return $value instanceof IdentityDocumentId ? $value->value : (\is_string($value) ? $value : null);
+        return $value instanceof IdentityDocumentId ? $value->value() : (\is_string($value) ? $value : null);
     }
 }

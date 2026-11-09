@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Type;
 
-use App\Domain\ValueObject\FileHash;
+use App\Domain\ValueObject\Document\FileHash;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
 
@@ -14,7 +14,7 @@ final class FileHashType extends StringType
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?FileHash
     {
-        return \is_string($value) ? new FileHash($value) : null;
+        return \is_string($value) ? FileHash::fromDigest($value) : null;
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
@@ -23,6 +23,6 @@ final class FileHashType extends StringType
             return null;
         }
 
-        return $value instanceof FileHash ? $value->value : (\is_string($value) ? $value : null);
+        return $value instanceof FileHash ? $value->value() : (\is_string($value) ? $value : null);
     }
 }

@@ -9,7 +9,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Domain\Entity\IdentityDocument;
-use App\Infrastructure\Presentation\ApiPlatform\V1\State\RegisterIdentityDocumentProcessor;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\RegisterIdentityDocumentProcessor;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -56,7 +56,7 @@ final class IdentityDocumentResource
     public static function fromEntity(IdentityDocument $identityDocument): self
     {
         $resource = new self();
-        $resource->id = $identityDocument->id()->value;
+        $resource->id = $identityDocument->id()->value();
         $resource->type = $identityDocument->type()->value;
         $resource->country = $identityDocument->country()->value;
         $resource->number = $identityDocument->number()->value;

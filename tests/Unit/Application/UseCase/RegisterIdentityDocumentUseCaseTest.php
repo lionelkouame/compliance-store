@@ -7,13 +7,13 @@ namespace App\Tests\Unit\Application\UseCase;
 use App\Application\UseCase\RegisterIdentityDocument\RegisterIdentityDocumentCommand;
 use App\Application\UseCase\RegisterIdentityDocument\RegisterIdentityDocumentUseCase;
 use App\Domain\Entity\IdentityDocument;
-use App\Domain\Exception\IdentityDocumentAlreadyExistsException;
+use App\Domain\Exception\IdentityDocument\IdentityDocumentAlreadyExistsException;
 use App\Domain\Port\Repository\IdentityDocumentRepositoryInterface;
 use App\Domain\Port\Service\IdentityDocumentIdGeneratorInterface;
-use App\Domain\ValueObject\CountryCode;
-use App\Domain\ValueObject\IdentityDocumentId;
-use App\Domain\ValueObject\IdentityDocumentNumber;
-use App\Domain\ValueObject\IdentityDocumentType;
+use App\Domain\ValueObject\Document\IdentityDocumentType;
+use App\Domain\ValueObject\Generic\CountryCode;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -29,7 +29,7 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
 
         $identityDocument = $this->useCase($identityDocuments)->execute($this->command());
 
-        self::assertSame(self::ID, $identityDocument->id()->value);
+        self::assertSame(self::ID, $identityDocument->id()->value());
         self::assertSame(IdentityDocumentType::Passport, $identityDocument->type());
         self::assertSame('FRA', $identityDocument->country()->value);
         self::assertSame('18AB12345', $identityDocument->number()->value);
@@ -39,7 +39,7 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
     public function testExecuteRejectsADuplicateDocument(): void
     {
         $existing = IdentityDocument::create(
-            id: IdentityDocumentId::fromString(self::ID),
+            id: IdentityDocumentId::make(self::ID),
             type: IdentityDocumentType::Passport,
             country: new CountryCode('FRA'),
             number: new IdentityDocumentNumber('18AB12345'),
@@ -79,7 +79,7 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
     private function useCase(IdentityDocumentRepositoryInterface $identityDocuments): RegisterIdentityDocumentUseCase
     {
         $idGenerator = $this->createStub(IdentityDocumentIdGeneratorInterface::class);
-        $idGenerator->method('generate')->willReturn(IdentityDocumentId::fromString(self::ID));
+        $idGenerator->method('generate')->willReturn(IdentityDocumentId::make(self::ID));
 
         return new RegisterIdentityDocumentUseCase(
             identityDocuments: $identityDocuments,

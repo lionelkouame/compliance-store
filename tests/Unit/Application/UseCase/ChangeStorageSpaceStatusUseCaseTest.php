@@ -7,13 +7,13 @@ namespace App\Tests\Unit\Application\UseCase;
 use App\Application\UseCase\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusCommand;
 use App\Application\UseCase\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusUseCase;
 use App\Domain\Entity\StorageSpace;
-use App\Domain\Exception\StorageSpaceNotFoundException;
+use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
-use App\Domain\ValueObject\StorageSpaceCode;
-use App\Domain\ValueObject\StorageSpaceId;
-use App\Domain\ValueObject\StorageSpaceName;
-use App\Domain\ValueObject\StorageSpaceStatus;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceStatus;
 use PHPUnit\Framework\TestCase;
 
 final class ChangeStorageSpaceStatusUseCaseTest extends TestCase

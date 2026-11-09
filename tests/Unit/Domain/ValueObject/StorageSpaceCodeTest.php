@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Domain\ValueObject;
 
-use App\Domain\ValueObject\StorageSpaceCode;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Infrastructure\Storage;
 
-use App\Domain\ValueObject\DocumentId;
+use App\Domain\ValueObject\Document\DocumentId;
 use App\Infrastructure\Storage\StorageKey;
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +12,7 @@ final class StorageKeyTest extends TestCase
 {
     public function testForDocumentBuildsAPathFromTheDocumentId(): void
     {
-        $id = DocumentId::fromString('550e8400-e29b-41d4-a716-446655440000');
+        $id = DocumentId::make('550e8400-e29b-41d4-a716-446655440000');
 
         $key = StorageKey::forDocument($id);
 

@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\Entity;
 
 use App\Domain\Entity\IdentityDocument;
-use App\Domain\Exception\IdentityDocumentExpiredException;
-use App\Domain\ValueObject\CountryCode;
-use App\Domain\ValueObject\IdentityDocumentId;
-use App\Domain\ValueObject\IdentityDocumentNumber;
-use App\Domain\ValueObject\IdentityDocumentType;
+use App\Domain\Exception\IdentityDocument\IdentityDocumentExpiredException;
+use App\Domain\ValueObject\Document\IdentityDocumentType;
+use App\Domain\ValueObject\Generic\CountryCode;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
 use PHPUnit\Framework\TestCase;
 
 final class IdentityDocumentTest extends TestCase
 {
     public function testCreateExposesItsAttributes(): void
     {
-        $id = new IdentityDocumentId('0192f0c1-0000-7000-8000-000000000001');
+        $id = IdentityDocumentId::make('0192f0c1-0000-7000-8000-000000000001');
         $expiresAt = new \DateTimeImmutable('+5 years', new \DateTimeZone('UTC'));
 
         $document = $this->create($id, $expiresAt);
@@ -46,7 +46,7 @@ final class IdentityDocumentTest extends TestCase
     private function create(?IdentityDocumentId $id = null, ?\DateTimeImmutable $expiresAt = null): IdentityDocument
     {
         return IdentityDocument::create(
-            id: $id ?? new IdentityDocumentId('0192f0c1-0000-7000-8000-000000000001'),
+            id: $id ?? IdentityDocumentId::make('0192f0c1-0000-7000-8000-000000000001'),
             type: IdentityDocumentType::Passport,
             country: new CountryCode('FRA'),
             number: new IdentityDocumentNumber('18AB12345'),

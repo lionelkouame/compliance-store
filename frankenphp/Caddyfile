@@ -30,6 +30,9 @@
 	encode zstd br gzip
 
 	mercure {
+		# Mercure v9 requires an explicit opt-in to keep the publisher_jwt/subscriber_jwt semantics;
+		# migrate to an "issuer" block to drop compatibility mode.
+		protocol_version_compatibility 8
 		# Publisher JWT key
 		publisher_jwt {env.MERCURE_PUBLISHER_JWT_KEY} {env.MERCURE_PUBLISHER_JWT_ALG}
 		# Subscriber JWT key

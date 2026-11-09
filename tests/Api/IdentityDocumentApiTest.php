@@ -6,7 +6,7 @@ namespace App\Tests\Api;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Domain\Entity\IdentityDocument;
-use App\Domain\ValueObject\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -105,7 +105,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
         $entityManager->clear();
-        $identityDocument = $entityManager->find(IdentityDocument::class, new IdentityDocumentId($data['id']));
+        $identityDocument = $entityManager->find(IdentityDocument::class, IdentityDocumentId::make($data['id']));
 
         self::assertInstanceOf(IdentityDocument::class, $identityDocument);
         self::assertSame('Passport', $identityDocument->type()->value);

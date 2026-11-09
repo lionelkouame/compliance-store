@@ -13,7 +13,7 @@
             <generator strategy="NONE"/>
         </id>
 
-        <field name="type" type="string" enum-type="App\Domain\ValueObject\IdentityDocumentType" length="20" column="type"/>
+        <field name="type" type="string" enum-type="App\Domain\ValueObject\Document\IdentityDocumentType" length="20" column="type"/>
         <field name="country" type="country_code" length="3" column="country"/>
         <field name="number" type="identity_document_number" length="20" column="number"/>
         <field name="expiresAt" type="date_immutable" column="expires_at"/>

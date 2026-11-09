@@ -1,3 +1,4 @@
+
 # @name storeKycCniDocument
 ### Store Sensitive KYC Document - CNI (Carte Nationale d'Identité)
 POST {{apiUrl}}/documents

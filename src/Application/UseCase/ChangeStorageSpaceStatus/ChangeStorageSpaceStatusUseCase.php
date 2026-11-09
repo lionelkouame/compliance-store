@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Application\UseCase\ChangeStorageSpaceStatus;
 
 use App\Domain\Entity\StorageSpace;
-use App\Domain\Exception\StorageSpaceNotFoundException;
+use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
-use App\Domain\ValueObject\StorageSpaceId;
-use App\Domain\ValueObject\StorageSpaceStatus;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceStatus;
 
 final readonly class ChangeStorageSpaceStatusUseCase
 {
