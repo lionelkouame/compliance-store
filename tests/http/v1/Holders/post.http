@@ -4,7 +4,7 @@ Content-Type: application/json
 Accept: application/ld+json
 
 {
-    "holderName": "Lionled",
-    "birthDate": "string",
-    "createdAt": "string"
+    "holderName": "Lionel",
+    "birthDate": "2026-10-10",
+    "email": "toto2@gmail.com"
 }

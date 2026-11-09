@@ -18,7 +18,7 @@ use App\Domain\ValueObject\Holder\HolderId;
  * by the HolderId identifier rather than by an object reference: the Holder
  * aggregate does not hold the collection of its documents.
  */
-final class Document
+final  class Document
 {
     private function __construct(
         private readonly DocumentId $id,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor;
 
 use ApiPlatform\Metadata\Operation;
@@ -39,6 +41,8 @@ final readonly class CreateHolderProcessor implements ProcessorInterface
 
         $useCaseResponse = $this->useCase->execute($useCaseRequest);
 
-        return new CreateHolderOutput(identifier: $useCaseResponse->holderId);
+        return new CreateHolderOutput(
+            identifier: $useCaseResponse->readModel->id->value()
+        );
     }
 }

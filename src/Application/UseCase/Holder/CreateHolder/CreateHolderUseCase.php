@@ -9,6 +9,7 @@ use App\Domain\Entity\Holder;
 use App\Domain\Exception\Holder\HolderAlreadyExistsException;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
+use App\Domain\ReadModel\Holder\CreateHolderRead;
 use App\Domain\ValueObject\Document\Email;
 use App\Domain\ValueObject\Generic\BirthDate;
 use App\Domain\ValueObject\Holder\HolderId;
@@ -41,6 +42,8 @@ final readonly class CreateHolderUseCase
 
         $this->holderRepository->add($holder);
 
-        return new CreateHolderResponse($holder->id());
+        return new CreateHolderResponse(
+            new CreateHolderRead($holderId)
+        );
     }
 }
