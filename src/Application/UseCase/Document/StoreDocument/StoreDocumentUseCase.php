@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase\Document\StoreDocument;
 
-use App\Application\UseCase\UseCaseInterface;
 use App\Domain\Entity\Document;
 use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
@@ -13,7 +12,6 @@ use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ValueObject\Document\DocumentId;
 use App\Domain\ValueObject\Document\FileHash;
 use App\Domain\ValueObject\Holder\HolderId;
-use Webmozart\Assert\Assert;
 
 final readonly class StoreDocumentUseCase
 {
@@ -24,10 +22,8 @@ final readonly class StoreDocumentUseCase
         private GeneratorInterface $idGenerator,
     ) {}
 
-    public function execute(UseCaseInterface $storeDocumentRequest): StoreDocumentResponse
+    public function execute(StoreDocumentRequest $storeDocumentRequest): StoreDocumentResponse
     {
-        Assert::isInstanceOf($storeDocumentRequest, StoreDocumentRequest::class);
-
         $fileHash = FileHash::make($storeDocumentRequest->content);
         $envelope = $this->cipher->encrypt($storeDocumentRequest->content);
         $documentId = DocumentId::make($this->idGenerator->generate());

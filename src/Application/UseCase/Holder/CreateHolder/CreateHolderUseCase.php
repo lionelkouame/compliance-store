@@ -15,8 +15,10 @@ use App\Domain\ValueObject\Document\Email;
 use App\Domain\ValueObject\Generic\BirthDate;
 use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\ValueObject\Holder\HolderName;
-use Webmozart\Assert\Assert;
 
+/**
+ * @implements UseCaseInterface<CreateHolderRequest, CreateHolderResponse>
+ */
 final readonly class CreateHolderUseCase implements UseCaseInterface
 {
     public function __construct(
@@ -26,8 +28,6 @@ final readonly class CreateHolderUseCase implements UseCaseInterface
 
     public function execute(UseCaseRequestInterface $request) : CreateHolderResponse
     {
-        Assert::isInstanceOf($request, CreateHolderRequest::class);
-
         $holderId = HolderId::make($this->generatorUuid->generate());
         $birthDate = BirthDate::make($request->birthDate);
         $holderName = HolderName::make($request->holderName);

@@ -15,8 +15,10 @@ use App\Domain\ValueObject\NaturalPerson\FirstName;
 use App\Domain\ValueObject\NaturalPerson\Gender;
 use App\Domain\ValueObject\NaturalPerson\LastName;
 use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
-use Webmozart\Assert\Assert;
 
+/**
+ * @implements UseCaseInterface<CreateNaturalPersonRequest, CreateNaturalPersonResponse>
+ */
 final readonly class CreateNaturalPersonUseCase implements UseCaseInterface
 {
     public function __construct(
@@ -26,8 +28,6 @@ final readonly class CreateNaturalPersonUseCase implements UseCaseInterface
 
     public function execute(UseCaseRequestInterface $request): CreateNaturalPersonResponse
     {
-        Assert::isInstanceOf($request, CreateNaturalPersonRequest::class);
-
         $naturalPersonId = NaturalPersonId::make($this->generatorUuid->generate());
         $gender = Gender::fromNullable($request->gender);
         $firstName = FirstName::make($request->firstName);
