@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Entity\NaturalPerson" table="natural_person">
+        <id name="id" type="natural_person_id" length="36">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="gender" type="string" enum-type="App\Domain\ValueObject\NaturalPerson\Gender" length="20" column="gender"/>
+        <field name="firstName" type="first_name" length="255" column="first_name"/>
+        <field name="lastName" type="last_name" length="255" column="last_name"/>
+        <field name="birthDate" type="birth_date" column="birth_date"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+    </entity>
+</doctrine-mapping>

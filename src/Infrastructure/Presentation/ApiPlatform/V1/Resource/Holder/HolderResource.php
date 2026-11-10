@@ -12,7 +12,8 @@ use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\CreateHolderP
 use App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\Holder\GetHolderProvider;
 
 /**
- * No operation is exposed yet: they will be declared here once the matching
+ * No operation is exposed ye
+ * t: they will be declared here once the matching
  * providers and processors exist under the V1 State namespace.
  */
 #[ApiResource(

@@ -1,0 +1,111 @@
+# @name createNaturalPerson
+### Creation d'une natural person — cas nominal (expect 201)
+POST {{apiUrl}}/natural-persons
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "gender": "male",
+  "firstName": "Lionel",
+  "lastName": "Kouame",
+  "birthday": "1990-05-12"
+}
+
+> {%
+    client.test("Status code is 201 Created", function() {
+        client.assert(response.status === 201, "Expected 201 Created");
+    });
+%}
+
+###
+
+# @name createNaturalPersonMissingFields
+### Creation d'une natural person — champs manquants (expect 422)
+POST {{apiUrl}}/natural-persons
+Content-Type: application/json
+Accept: application/ld+json
+
+{}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name createNaturalPersonMissingFirstname
+### Creation d'une natural person — firstname manquant (expect 422)
+POST {{apiUrl}}/natural-persons
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "lastname": "Kouame",
+  "birthday": "1990-05-12"
+}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name createNaturalPersonMissingLastname
+### Creation d'une natural person — lastname manquant (expect 422)
+POST {{apiUrl}}/natural-persons
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "firstname": "Lionel",
+  "birthday": "1990-05-12"
+}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name createNaturalPersonMissingBirthday
+### Creation d'une natural person — birthday manquant (expect 422)
+POST {{apiUrl}}/natural-persons
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "firstname": "Lionel",
+  "lastname": "Kouame"
+}
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}
+
+###
+
+# @name createNaturalPersonWithoutGender
+### Creation d'une natural person — sans gender (optionnel, expect 201)
+POST {{apiUrl}}/natural-persons
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "firstname": "Jane",
+  "lastname": "Doe",
+  "birthday": "1985-01-01"
+}
+
+> {%
+    client.test("Status code is 201 Created", function() {
+        client.assert(response.status === 201, "Expected 201 Created");
+    });
+%}
