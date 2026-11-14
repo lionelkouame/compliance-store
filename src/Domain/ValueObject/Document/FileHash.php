@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\Document;
 
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Service\IdValidatorInterface;
 
 /**
@@ -16,7 +17,7 @@ final readonly class FileHash
         private string $value,
     ) {
         if (1 !== preg_match('/^[a-f0-9]{64}$/', $this->value)) {
-            throw new \InvalidArgumentException('A file hash must be a 64-character lowercase hexadecimal SHA-256 digest.');
+            throw new InvalidValueException('A file hash must be a 64-character lowercase hexadecimal SHA-256 digest.');
         }
     }
 

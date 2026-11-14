@@ -197,7 +197,7 @@ Accept: application/ld+json
 ###
 
 # @name registerIdentityDocumentMalformedJson
-### Register Identity Document - Malformed JSON (expect 422)
+### Register Identity Document - Malformed JSON (expect 400)
 POST {{apiUrl}}/identity-documents
 Content-Type: application/json
 Accept: application/ld+json
@@ -205,7 +205,7 @@ Accept: application/ld+json
 {"type": "Passport",
 
 > {%
-    client.test("Status code is 422 Unprocessable Entity", function() {
-        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    client.test("Status code is 400 Bad Request", function() {
+        client.assert(response.status === 400, "Expected 400 Bad Request");
     });
 %}

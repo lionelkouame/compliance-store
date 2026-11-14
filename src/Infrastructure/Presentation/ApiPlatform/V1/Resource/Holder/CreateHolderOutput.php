@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Presentation\ApiPlatform\V1\Resource\Holder;
 
-final class CreateHolderOutput
+final readonly class CreateHolderOutput
 {
-    function __construct(
-        public string $identifier
-    ){}
+    public function __construct(
+        public string $identifier,
+    ) {}
 }

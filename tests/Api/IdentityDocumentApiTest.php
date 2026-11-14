@@ -178,6 +178,10 @@ final class IdentityDocumentApiTest extends ApiTestCase
         self::assertResponseStatusCodeSame(422);
     }
 
+    /**
+     * An unparseable body is a 400 (bad syntax), not a 422 (well-formed but
+     * invalid): API Platform's deserializer rejects it before any validation.
+     */
     public function testItRejectsAMalformedJsonBody(): void
     {
         static::createClient()->request('POST', '/api/v1/identity-documents', [
@@ -185,7 +189,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
             'body' => '{"type": "Passport",',
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(400);
     }
 
     public function testItAllowsTheSameNumberForAnotherCountryOrType(): void
@@ -200,5 +204,16 @@ final class IdentityDocumentApiTest extends ApiTestCase
 
             self::assertResponseStatusCodeSame(201);
         }
+    }
+
+    public function testTheErrorDoesNotEchoTheDocumentNumber(): void
+    {
+        $response = static::createClient()->request('POST', '/api/v1/identity-documents', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => ['number' => '18ab12345'] + self::PASSPORT,
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertStringNotContainsString('18ab12345', $response->getContent(false));
     }
 }

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase\Holder\GetHolderByEmail;
 
-use App\Domain\Entity\Holder;
+use App\Application\UseCase\UseCaseResponseInterface;
+use App\Domain\ReadModel\Holder\InfosHolder;
 
-class GetHolderByEmailResponse
+final readonly class GetHolderByEmailResponse implements UseCaseResponseInterface
 {
     public function __construct(
-        public Holder $holder
-    )
-    {}
+        public InfosHolder $readModel,
+    ) {}
 }

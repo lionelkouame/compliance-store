@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\Document;
 
+use App\Domain\Exception\InvalidValueException;
+
 final readonly class Email
 {
     public function __construct(
@@ -12,11 +14,11 @@ final readonly class Email
         $trimmed = trim($this->value);
 
         if ('' === $trimmed) {
-            throw new \InvalidArgumentException('The email cannot be empty.');
+            throw new InvalidValueException('The email cannot be empty.');
         }
 
         if (mb_strlen($trimmed) > 255) {
-            throw new \InvalidArgumentException('The mail cannot exceed 255 characters.');
+            throw new InvalidValueException('The email cannot exceed 255 characters.');
         }
     }
 
@@ -33,7 +35,7 @@ final readonly class Email
     public static function make(string $value): self
     {
         if (trim($value) === '') {
-            throw new \InvalidArgumentException('Storage space name cannot be empty.');
+            throw new InvalidValueException('The email cannot be empty.');
         }
 
         return new self($value);

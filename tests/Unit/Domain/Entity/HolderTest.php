@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Domain\Entity;
 
 use App\Domain\Entity\Holder;
 use App\Domain\Exception\Holder\InvalidHolderStatusTransitionException;
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\ValueObject\Document\Email;
 use App\Domain\ValueObject\Generic\BirthDate;
 use App\Domain\ValueObject\Holder\HolderId;
@@ -38,7 +39,7 @@ final class HolderTest extends TestCase
 
     public function testBirthDateMustBeInThePast(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidValueException::class);
 
         new BirthDate(new \DateTimeImmutable('tomorrow', new \DateTimeZone('UTC')));
     }

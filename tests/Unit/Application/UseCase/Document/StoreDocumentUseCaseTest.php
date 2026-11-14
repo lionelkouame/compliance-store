@@ -1,0 +1,58 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Tests\Unit\Application\UseCase\Document;
+
+use App\Application\UseCase\Document\StoreDocument\StoreDocumentRequest;
+use App\Application\UseCase\Document\StoreDocument\StoreDocumentUseCase;
+use App\Domain\Port\Gateway\CipherGatewayInterface;
+use App\Domain\Port\Gateway\StorageGatewayInterface;
+use App\Domain\Port\Repository\DocumentRepositoryInterface;
+use App\Domain\Port\Service\GeneratorInterface;
+use App\Domain\ValueObject\Document\WrappedDataKey;
+use App\Domain\ValueObject\Generic\EncryptedPayload;
+use App\Domain\ValueObject\Generic\EncryptionEnvelope;
+use PHPUnit\Framework\TestCase;
+
+final class StoreDocumentUseCaseTest extends TestCase
+{
+    public function testExecuteEncryptsStoresAndPersistsADocument(): void
+    {
+        $envelope = new EncryptionEnvelope(
+            payload: EncryptedPayload::make('cipher-bytes'),
+            wrappedDataKey: WrappedDataKey::make('wrapped-key-bytes'),
+        );
+
+        $cipher = $this->createMock(CipherGatewayInterface::class);
+        $cipher->expects(self::once())->method('encrypt')->with('plaintext content')->willReturn($envelope);
+
+        $storage = $this->createMock(StorageGatewayInterface::class);
+        $storage->expects(self::once())->method('store')->with(
+            self::callback(static fn ($id) => '660e8400-e29b-41d4-a716-446655440000' === $id->value()),
+            'cipher-bytes',
+        );
+
+        $documents = $this->createMock(DocumentRepositoryInterface::class);
+        $documents->expects(self::once())->method('add');
+
+        $idGenerator = $this->createStub(GeneratorInterface::class);
+        $idGenerator->method('generate')->willReturn('660e8400-e29b-41d4-a716-446655440000');
+
+        $useCase = new StoreDocumentUseCase(
+            cipher: $cipher,
+            storage: $storage,
+            documents: $documents,
+            idGenerator: $idGenerator,
+        );
+
+        $response = $useCase->execute(new StoreDocumentRequest(
+            content: 'plaintext content',
+        ));
+
+        self::assertSame('660e8400-e29b-41d4-a716-446655440000', $response->readModel->id->value());
+        self::assertSame('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c', $response->readModel->holderId->value());
+        self::assertSame(hash('sha256', 'plaintext content'), $response->readModel->fileHash->value());
+    }
+}
+

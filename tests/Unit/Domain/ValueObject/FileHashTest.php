@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Domain\ValueObject;
 
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\ValueObject\Document\FileHash;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +19,7 @@ final class FileHashTest extends TestCase
 
     public function testFromDigestRejectsNonHexDigest(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidValueException::class);
         FileHash::fromDigest('not-a-valid-hash');
     }
 

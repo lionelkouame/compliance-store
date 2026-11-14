@@ -33,6 +33,12 @@ doctrine:
                 class: App\Infrastructure\Persistence\Doctrine\Type\EmailType
             birth_date:
                 class: App\Infrastructure\Persistence\Doctrine\Type\BirthDateType
+            natural_person_id:
+                class: App\Infrastructure\Persistence\Doctrine\Type\NaturalPersonIdType
+            first_name:
+                class: App\Infrastructure\Persistence\Doctrine\Type\FirstNameType
+            last_name:
+                class: App\Infrastructure\Persistence\Doctrine\Type\LastNameType
     orm:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

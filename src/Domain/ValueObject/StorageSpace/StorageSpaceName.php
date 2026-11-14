@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\StorageSpace;
 
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\ValueObject\TextValueObjectTrait;
 
 final readonly class StorageSpaceName
@@ -14,11 +15,11 @@ final readonly class StorageSpaceName
         $trimmed = trim($this->value);
 
         if ('' === $trimmed) {
-            throw new \InvalidArgumentException('A storage space name cannot be empty.');
+            throw new InvalidValueException('A storage space name cannot be empty.');
         }
 
         if (mb_strlen($trimmed) > 255) {
-            throw new \InvalidArgumentException('A storage space name cannot exceed 255 characters.');
+            throw new InvalidValueException('A storage space name cannot exceed 255 characters.');
         }
     }
 

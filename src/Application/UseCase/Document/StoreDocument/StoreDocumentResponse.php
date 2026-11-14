@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase\Document\StoreDocument;
 
-final readonly class StoreDocumentResponse
+use App\Application\UseCase\UseCaseResponseInterface;
+use App\Domain\ReadModel\Document\InfosDocument;
+
+final readonly class StoreDocumentResponse implements UseCaseResponseInterface
 {
     public function __construct(
-        public string $id,
-        public string $holderId,
-        public string $fileHash,
-        public string $wrappedDataKey,
-        public string $createdAt,
+        public InfosDocument $readModel,
     ) {}
 }

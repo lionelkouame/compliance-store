@@ -7,31 +7,37 @@ namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\Holder;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Application\UseCase\Holder\GetHolderByEmail\GetHolderByEmailRequest;
-use App\Application\UseCase\Holder\GetHolderByEmail\GetHolderByEmailResponse;
 use App\Application\UseCase\Holder\GetHolderByEmail\GetHolderByEmailUseCase;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\Holder\GetHolderEmailOutput;
 
 /**
- * @implements ProviderInterface<GetHolderByEmailResponse>
+ * @implements ProviderInterface<GetHolderEmailOutput>
  */
-readonly class GetHolderProvider implements ProviderInterface
+final readonly class GetHolderProvider implements ProviderInterface
 {
     public function __construct(
         private GetHolderByEmailUseCase $useCase,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?GetHolderByEmailResponse
+    /**
+     * @param array{email?: string} $uriVariables
+     */
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): GetHolderEmailOutput
     {
-        $email = $uriVariables['email'] ?? null;
+        $readModel = $this->useCase->execute(new GetHolderByEmailRequest(
+            email: $uriVariables['email'] ?? '',
+        ))->readModel;
 
-        if (!\is_string($email)) {
-            return null;
-        }
-
-        $getHolderRequestUseCase = new GetHolderByEmailRequest(
-            email: $email,
+        return new GetHolderEmailOutput(
+            holderId: $readModel->id->value(),
+            holderName: $readModel->name->value,
+            birthDate: (string) $readModel->birthDate,
+            status: $readModel->status->value,
+            email: $readModel->email->value,
+            createdAt: $readModel->createdAt->format(\DateTimeInterface::ATOM),
+            consentCollectedAt: $readModel->consentCollectedAt?->format(\DateTimeInterface::ATOM),
+            erasureRequestedAt: $readModel->erasureRequestedAt?->format(\DateTimeInterface::ATOM),
+            anonymizedAt: $readModel->anonymizedAt?->format(\DateTimeInterface::ATOM),
         );
-
-        return $this->useCase
-            ->execute($getHolderRequestUseCase);
     }
 }

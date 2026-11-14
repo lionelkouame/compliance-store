@@ -8,13 +8,9 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
-use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\CreateHolderProcessor;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\Holder\CreateHolderProcessor;
 use App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\Holder\GetHolderProvider;
 
-/**
- * No operation is exposed yet: they will be declared here once the matching
- * providers and processors exist under the V1 State namespace.
- */
 #[ApiResource(
     shortName: 'Holder',
     operations: [
@@ -29,16 +25,14 @@ use App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\Holder\GetHold
             output: CreateHolderOutput::class,
             deserialize: true,
             processor: CreateHolderProcessor::class
-
         ),
         new Get(
             uriTemplate: '/holders/{email}',
             openapi: new Operation(
                 tags: self::TagHolderSection,
                 summary: 'Get one Holder',
-                description: 'Retrieves a single single space by id.',
+                description: 'Retrieves a single holder by email.',
             ),
-            input: GetHolderEmailInput::class,
             output: GetHolderEmailOutput::class,
             provider: GetHolderProvider::class,
         ),

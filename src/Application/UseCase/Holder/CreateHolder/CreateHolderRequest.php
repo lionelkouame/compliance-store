@@ -13,5 +13,4 @@ final readonly class CreateHolderRequest implements UseCaseRequestInterface
         public string $birthDate,
         public string $email,
     ){}
-
 }
