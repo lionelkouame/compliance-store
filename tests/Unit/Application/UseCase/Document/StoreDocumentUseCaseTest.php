@@ -142,4 +142,74 @@ final class StoreDocumentUseCaseTest extends TestCase
             Email::make('jane@example.com'),
         );
     }
+
+    public function testExecuteRemovesTheStoredContentWhenTheDatabaseWriteFails(): void
+    {
+        $failure = new \RuntimeException('Database unavailable.');
+
+        [$storage, $documents] = $this->failingDatabaseWrite($failure);
+        $storage->expects(self::once())->method('delete')
+            ->with(self::callback(static fn ($id) => self::DOCUMENT_ID === $id->value()));
+
+        try {
+            $this->useCaseWithStoredHolder($storage, $documents)
+                ->execute(new StoreDocumentRequest(holderId: self::HOLDER_ID, content: 'plaintext content'));
+            self::fail('The database failure must be rethrown.');
+        } catch (\RuntimeException $caught) {
+            self::assertSame($failure, $caught);
+        }
+    }
+
+    public function testTheOriginalFailureIsReportedEvenIfTheCleanupFails(): void
+    {
+        $failure = new \RuntimeException('Database unavailable.');
+
+        [$storage, $documents] = $this->failingDatabaseWrite($failure);
+        $storage->method('delete')->willThrowException(new \RuntimeException('Storage unavailable.'));
+
+        $this->expectExceptionObject($failure);
+
+        $this->useCaseWithStoredHolder($storage, $documents)
+            ->execute(new StoreDocumentRequest(holderId: self::HOLDER_ID, content: 'plaintext content'));
+    }
+
+    public function testNothingIsDeletedWhenTheDocumentIsPersisted(): void
+    {
+        $storage = $this->createMock(StorageGatewayInterface::class);
+        $storage->expects(self::once())->method('store');
+        $storage->expects(self::never())->method('delete');
+
+        $this->useCaseWithStoredHolder($storage, $this->createStub(DocumentRepositoryInterface::class))
+            ->execute(new StoreDocumentRequest(holderId: self::HOLDER_ID, content: 'plaintext content'));
+    }
+
+    /**
+     * @return array{StorageGatewayInterface&\PHPUnit\Framework\MockObject\MockObject, DocumentRepositoryInterface}
+     */
+    private function failingDatabaseWrite(\Throwable $failure): array
+    {
+        $storage = $this->createMock(StorageGatewayInterface::class);
+        $storage->expects(self::once())->method('store');
+
+        $documents = $this->createStub(DocumentRepositoryInterface::class);
+        $documents->method('add')->willThrowException($failure);
+
+        return [$storage, $documents];
+    }
+
+    private function useCaseWithStoredHolder(
+        StorageGatewayInterface $storage,
+        DocumentRepositoryInterface $documents,
+    ): StoreDocumentUseCase {
+        $cipher = $this->createStub(CipherGatewayInterface::class);
+        $cipher->method('encrypt')->willReturn(new EncryptionEnvelope(
+            payload: EncryptedPayload::make('cipher-bytes'),
+            wrappedDataKey: WrappedDataKey::make('wrapped-key-bytes'),
+        ));
+
+        $holders = $this->createStub(HolderRepositoryInterface::class);
+        $holders->method('findById')->willReturn($this->holder());
+
+        return $this->useCase($cipher, $storage, $documents, $holders, validId: true);
+    }
 }

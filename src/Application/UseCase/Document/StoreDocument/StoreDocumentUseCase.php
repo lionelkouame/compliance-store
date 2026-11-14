@@ -50,9 +50,19 @@ final readonly class StoreDocumentUseCase implements UseCaseInterface
             wrappedDataKey: $envelope->wrappedDataKey,
         );
 
+        // Object storage and the database cannot share a transaction: the content
+        // is written first, and removed again if the database write fails, so a
+        // failure never leaves an orphan encrypted blob behind (review finding M5).
+        // The reverse order would be worse: a database row pointing to no content.
         $this->storage->store($documentId, $envelope->payload->value());
 
-        $this->documents->add($document);
+        try {
+            $this->documents->add($document);
+        } catch (\Throwable $failure) {
+            $this->removeStoredContent($documentId);
+
+            throw $failure;
+        }
 
         return new StoreDocumentResponse(new InfosDocument(
             id: $document->id(),
@@ -60,6 +70,18 @@ final readonly class StoreDocumentUseCase implements UseCaseInterface
             fileHash: $document->fileHash(),
             createdAt: $document->createdAt(),
         ));
+    }
+
+    /**
+     * Best-effort compensation: a cleanup failure is swallowed so that the
+     * caller reports the original failure, which is the real cause.
+     */
+    private function removeStoredContent(DocumentId $documentId): void
+    {
+        try {
+            $this->storage->delete($documentId);
+        } catch (\Throwable) {
+        }
     }
 
     /**

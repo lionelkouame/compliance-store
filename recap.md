@@ -106,7 +106,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 * **Pourquoi** : l'ADR 0004 interdit les primitives dans la surface publique du Domaine, et `NaturalPersonRepositoryInterface` reçoit déjà un `NaturalPersonId`. Avec une simple chaîne, un email non validé atteint directement la Persistence (cas de `GetHolderByEmailUseCase`).
 * **Correction** : `findById(HolderId)` et `findByEmail(Email)`. Le use case construit le VO, qui valide l'email au passage.
 
-### 🟠 M5 — Écriture non atomique dans `StoreDocument`
+### 🟠 M5 — Écriture non atomique dans `StoreDocument` — ✅ corrigé
 
 * **Où** : `StoreDocumentUseCase.php:44` puis `:46`. Le fichier chiffré est envoyé à MinIO avant l'enregistrement en base, et chaque repository fait son propre `flush()`.
 * **Risque** : si l'enregistrement en base échoue, un fichier chiffré reste orphelin dans le stockage. La couche Application n'a aucune notion de transaction.
@@ -168,7 +168,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 
 ## 5. Plan d'action recommandé
 
-> **Avancement** : les étapes 1 à 6 sont faites (constats C1, C2, C3, M1, M2, M3, M4, M7). Pour M1, la documentation a été alignée sur le code ; le Compliance Core lui-même reste à implémenter, avec des tests unitaires et API qui reproduisent chaque défaut.
+> **Avancement** : les étapes 1 à 7 sont faites (constats C1, C2, C3, M1, M2, M3, M4, M5, M7). Pour M1, la documentation a été alignée sur le code ; le Compliance Core lui-même reste à implémenter, avec des tests unitaires et API qui reproduisent chaque défaut.
 
 | Priorité | Action                                                                                                     | Constats | Effort |
 | -------- | ---------------------------------------------------------------------------------------------------------- | -------- | ------ |
@@ -178,7 +178,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 | 4        | Rattacher le document à un titulaire réel dans `StoreDocument` (fait)                                      | C3       | M      |
 | 5        | Remonter les règles dans le Domaine (`ExpiryDate`, fabriques d'enum, transitions de `StorageSpace`) (fait) | M3       | M      |
 | 6        | Décider : implémenter le Compliance Core, ou corriger la documentation (fait : doc alignée)                | M1       | M à L  |
-| 7        | Atomicité stockage + base (port de transaction et nettoyage)                                               | M5       | M      |
+| 7        | Atomicité stockage + base (port de transaction et nettoyage) (fait : compensation)                         | M5       | M      |
 | 8        | Remplacer `GET /holders/{email}` par une recherche sans donnée personnelle dans l'URL                      | M6       | S      |
 | 9        | Sous-couches Deptrac, nettoyage du code mort, harmonisation des VO, port `Clock`                           | m1 à m5  | M      |
 | 10       | Tests des Value Objects, des entités restantes et des repositories                                         | m6       | M      |
