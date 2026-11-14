@@ -23,12 +23,12 @@ The application is built with **PHP 8.4+**, **Symfony 8.1**, and **API Platform 
 
 ```text
 src/
-├── Domain/              # Pure business logic (Entities, Value Objects, Ports)
+├── Domain/              # Pure business logic (Entities, Value Objects, Read Models, Exceptions, Ports)
 │   └── Port/            # Interfaces (Gateways, Repositories, Services)
-├── Application/         # Orchestration & Use Cases (Use Cases & DTOs)
+├── Application/         # Use cases: UseCase/<Feature>/<Action>/{Request, Response, UseCase}
 └── Infrastructure/      # Technical implementations
     ├── Persistence/     # Doctrine repositories, mappings & custom types (PostgreSQL)
-    ├── Presentation/    # API Platform resources & state providers/processors
+    ├── Presentation/    # API Platform resources, Input/Output DTOs & state providers/processors
     ├── Storage/         # MinIO / S3-compatible document storage (Flysystem)
     ├── Gateway/         # Libsodium envelope encryption
     └── Service/         # UUID generators
@@ -36,8 +36,8 @@ src/
 
 To explore the detailed architecture documentation:
 * 📘 [Documentation Table of Contents](docs/README.md)
+* 🏗️ [Architecture Overview](docs/architecture/overview/index.md) — request lifecycle, use case conventions, error handling
 * 📜 [Architecture Decision Records (ADRs)](docs/architecture/adr/)
-* 🔄 [Ingestion & Consultation Workflows](docs/architecture/workflows/)
 
 ---
 

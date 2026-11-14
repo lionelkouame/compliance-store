@@ -6,7 +6,7 @@ Bienvenue dans la documentation officielle du projet **Compliance Store**.
 
 ## 📘 Documentation Métier & Architecture
 
-* **[Aperçu Global & Architecture](architecture/overview/index.md)** : Clean Architecture, principes DDD, structure du code et couches applicatives.
+* **[Aperçu Global & Architecture](architecture/overview/index.md)** : Clean Architecture, principes DDD, structure du code, cycle d'une requête (Input → Request → UseCase → Response → Output), conventions des use cases et gestion des erreurs.
 * **[Registre des Décisions d'Architecture (ADRs)](architecture/adr/)** :
   * [ADR 0001: Native Compliance Core and Provider Extension Port](architecture/adr/0001-native-compliance-and-extension-port.md)
   * [ADR 0002: Envelope Encryption and Zero Trust Storage](architecture/adr/0002-envelope-encryption-zero-trust.md)
@@ -16,10 +16,15 @@ Bienvenue dans la documentation officielle du projet **Compliance Store**.
   * [ADR 0006: Strict Non-Nullable Value Objects and Domain-Level Optionality Handling](architecture/adr/0006-handling-optional-domain-attributes-and-nullability.md)
   * [ADR 0007: Declarative URI Variables Contract in API Platform State Providers via PHPDoc Shapes](architecture/adr/0007-declarative-uri-variables-contract-in-state-providers.md)
   * [ADR 0008: Infrastructure Refactoring](architecture/adr/0008-infra-refactorisation.md)
-* **Workflows & Pipelines** :
-  * [Pipeline d'Ingestion & Redaction PII](architecture/workflows/ingestion.md)
-  * [Pipeline de Consultation & Déchiffrement](architecture/workflows/consultation.md)
-* **[Spécifications de l'API REST](architecture/api/endpoints.md)** : Entrées/Sorties, DTOs et codes HTTP.
+  * [ADR 0009: Compliance Relevance of Document's Value Objects](architecture/adr/0009-document-value-objects-compliance-relevance.md)
+  * [ADR 0010: Binary Responses Escape the State Provider Contract](architecture/adr/0010-binary-responses-escape-state-provider-contract.md)
+  * [ADR 0011: Binary Responses Are Served by State Providers Returning a Response](architecture/adr/0011-binary-responses-served-by-state-providers.md) *(Proposed)*
+  * [ADR 0012: Regulation Engine Extracted as an External, Reusable Provider](architecture/adr/0012-external-regulation-engine-as-provider.md) *(Proposed)*
+  * [ADR 0013: Business Exceptions Categorised in the Domain, Translated to HTTP Once at the Boundary](architecture/adr/0013-business-exceptions-translated-once-at-the-boundary.md)
+* **Workflows & Pipelines** *(à rédiger)* :
+  * Pipeline d'Ingestion & Redaction PII
+  * Pipeline de Consultation & Déchiffrement
+* **Spécifications de l'API REST** *(à rédiger)* : Entrées/Sorties, DTOs et codes HTTP. En attendant, voir la documentation OpenAPI exposée par l'application (`/api/docs`) et les codes HTTP de l'[ADR 0013](architecture/adr/0013-business-exceptions-translated-once-at-the-boundary.md).
 
 ---
 
@@ -35,3 +40,17 @@ Toute la documentation technique liée à l'environnement Docker Compose, Franke
 * [Gestion des Certificats TLS / HTTPS](docker-infra/tls.md)
 * [Ajout de Services Docker Supplémentaires](docker-infra/extra-services.md)
 * [Guide de Dépannage (Troubleshooting)](docker-infra/troubleshooting.md)
+
+---
+
+## ✍️ Rédiger un nouvel ADR
+
+1. Créer `architecture/adr/NNNN-titre-en-kebab-case.md` en reprenant l'en-tête des ADR existants (`Status`, `Date`, `Authors`, `Project`).
+2. Sections attendues : **Context**, **Decision**, **Consequences** (Positive / Negative), et si utile **Alternatives Considered** et **Relationship to other ADRs**.
+3. Ajouter l'ADR dans la liste ci-dessus et, si la décision change une convention, mettre à jour l'[aperçu de l'architecture](architecture/overview/index.md).
+
+---
+
+## 🧪 Tester l'API à la main
+
+Les requêtes du client HTTP de JetBrains sont dans [`tests/http/v1/`](../tests/http/v1/), regroupées par fonctionnalité (environnements dans `tests/http/http-client.env.json`).
