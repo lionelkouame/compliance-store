@@ -7,10 +7,14 @@ namespace App\Application\UseCase\Document\StoreDocument;
 use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\Document;
+use App\Domain\Entity\Holder;
+use App\Domain\Exception\Document\UnknownDocumentHolderException;
 use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
+use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
+use App\Domain\Port\Service\IdValidatorInterface;
 use App\Domain\ReadModel\Document\InfosDocument;
 use App\Domain\ValueObject\Document\DocumentId;
 use App\Domain\ValueObject\Document\FileHash;
@@ -25,18 +29,23 @@ final readonly class StoreDocumentUseCase implements UseCaseInterface
         private CipherGatewayInterface $cipher,
         private StorageGatewayInterface $storage,
         private DocumentRepositoryInterface $documents,
+        private HolderRepositoryInterface $holders,
         private GeneratorInterface $idGenerator,
+        private IdValidatorInterface $idValidator,
     ) {}
 
     public function execute(UseCaseRequestInterface $request): StoreDocumentResponse
     {
+        // Resolved first: nothing is encrypted or stored for an unknown holder.
+        $holder = $this->findHolder($request->holderId);
+
         $fileHash = FileHash::make($request->content);
         $envelope = $this->cipher->encrypt($request->content);
         $documentId = DocumentId::make($this->idGenerator->generate());
 
         $document = Document::create(
             id: $documentId,
-            holderId: HolderId::make('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c'),
+            holderId: $holder->id(),
             fileHash: $fileHash,
             wrappedDataKey: $envelope->wrappedDataKey,
         );
@@ -51,5 +60,19 @@ final readonly class StoreDocumentUseCase implements UseCaseInterface
             fileHash: $document->fileHash(),
             createdAt: $document->createdAt(),
         ));
+    }
+
+    /**
+     * @throws UnknownDocumentHolderException when the id is malformed or matches no holder
+     */
+    private function findHolder(string $holderId): Holder
+    {
+        // A malformed id cannot match any holder either.
+        if (!$this->idValidator->isValid($holderId)) {
+            throw new UnknownDocumentHolderException();
+        }
+
+        return $this->holders->findById(HolderId::make($holderId))
+            ?? throw new UnknownDocumentHolderException();
     }
 }
