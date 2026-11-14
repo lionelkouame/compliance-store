@@ -16,4 +16,10 @@ interface StorageGatewayInterface
     public function store(DocumentId $id, string $ciphertext): void;
 
     public function read(DocumentId $id): string;
+
+    /**
+     * Removes a document's content. Deleting content that does not exist is
+     * not an error, so the call is safe to repeat (compensation, retries).
+     */
+    public function delete(DocumentId $id): void;
 }

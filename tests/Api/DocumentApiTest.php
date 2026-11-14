@@ -8,6 +8,7 @@ use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
 use App\Domain\Entity\Document;
 use App\Domain\Entity\Holder;
+use App\Domain\Port\Repository\DocumentRepositoryInterface;
 use App\Domain\ValueObject\Document\DocumentId;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -54,6 +55,24 @@ final class DocumentApiTest extends ApiTestCase
 
         self::assertInstanceOf(Document::class, $document);
         self::assertSame($holderId, $document->holderId()->value());
+    }
+
+    public function testAFailedDatabaseWriteLeavesNoOrphanContentInStorage(): void
+    {
+        $client = static::createClient();
+        $client->disableReboot();
+        $holderId = $this->createHolder($client);
+        $storageDirectory = self::getContainer()->getParameter('kernel.project_dir').'/var/test_storage/documents';
+        $before = is_dir($storageDirectory) ? \count(scandir($storageDirectory)) : 0;
+
+        $failingRepository = $this->createStub(DocumentRepositoryInterface::class);
+        $failingRepository->method('add')->willThrowException(new \RuntimeException('Database unavailable.'));
+        self::getContainer()->set(DocumentRepositoryInterface::class, $failingRepository);
+
+        $this->storeDocument($client, ['holderId' => $holderId]);
+
+        self::assertResponseStatusCodeSame(500);
+        self::assertSame($before, is_dir($storageDirectory) ? \count(scandir($storageDirectory)) : 0);
     }
 
     public function testItRejectsAMissingFile(): void
