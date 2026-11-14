@@ -79,7 +79,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 * **Pourquoi c'est un problème** : une donnée métier essentielle (à qui appartient le document) est figée dans la couche Application. Rien n'est fourni par la requête, et l'existence du titulaire n'est pas vérifiée. Pour un produit de conformité, chaque document doit être rattaché à son titulaire réel.
 * **Correction** : ajouter `holderId` à `StoreDocumentRequest` et `StoreDocumentInput`, charger le titulaire via `HolderRepositoryInterface` et lever `HolderNotFoundException` s'il n'existe pas.
 
-### 🟠 M1 — Le « Native Compliance Core » (ADR 0001) n'existe pas dans le code
+### 🟠 M1 — Le « Native Compliance Core » (ADR 0001) n'existe pas dans le code — ✅ documentation alignée
 
 * **Constat** : `Domain/Entity/Document.php:15` décrit un document stocké « after passing the Native Compliance Core check (ADR 0001) ». L'ADR 0003 promet aussi le masquage des données personnelles avant stockage.
 * Or il n'y a ni `Domain/Service/`, ni vérificateur de conformité, ni étape de masquage dans `StoreDocumentUseCase`. La vue d'ensemble mentionnait aussi des entités `Policy` et `Rule` qui n'existent pas.
@@ -168,7 +168,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 
 ## 5. Plan d'action recommandé
 
-> **Avancement** : les étapes 1 à 5 sont faites (constats C1, C2, C3, M2, M3, M4, M7), avec des tests unitaires et API qui reproduisent chaque défaut.
+> **Avancement** : les étapes 1 à 6 sont faites (constats C1, C2, C3, M1, M2, M3, M4, M7). Pour M1, la documentation a été alignée sur le code ; le Compliance Core lui-même reste à implémenter, avec des tests unitaires et API qui reproduisent chaque défaut.
 
 | Priorité | Action                                                                                                     | Constats | Effort |
 | -------- | ---------------------------------------------------------------------------------------------------------- | -------- | ------ |
@@ -177,7 +177,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 | 3        | Injecter environnement et version dans `CheckSystemStatusUseCase` (fait)                                   | M7       | XS     |
 | 4        | Rattacher le document à un titulaire réel dans `StoreDocument` (fait)                                      | C3       | M      |
 | 5        | Remonter les règles dans le Domaine (`ExpiryDate`, fabriques d'enum, transitions de `StorageSpace`) (fait) | M3       | M      |
-| 6        | Décider : implémenter le Compliance Core, ou corriger la documentation                                     | M1       | M à L  |
+| 6        | Décider : implémenter le Compliance Core, ou corriger la documentation (fait : doc alignée)                | M1       | M à L  |
 | 7        | Atomicité stockage + base (port de transaction et nettoyage)                                               | M5       | M      |
 | 8        | Remplacer `GET /holders/{email}` par une recherche sans donnée personnelle dans l'URL                      | M6       | S      |
 | 9        | Sous-couches Deptrac, nettoyage du code mort, harmonisation des VO, port `Clock`                           | m1 à m5  | M      |

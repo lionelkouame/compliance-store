@@ -27,6 +27,7 @@ Furthermore, if a document needs to be masked (PII redaction), this operation mu
 3. **Placement in the Pipeline**:
    * Ingestion: `Reception` $\rightarrow$ `Compliance Check` $\rightarrow$ `PII Redaction / Masking (in memory)` $\rightarrow$ `Encryption (CipherPort)` $\rightarrow$ `Storage (StorageGateway)`.
    * Consultation: `Storage Read (Encrypted)` $\rightarrow$ `Decryption (in memory)` $\rightarrow$ `Dynamic Redaction (if partial access)` $\rightarrow$ `HTTP Response`.
+   * *Note (2026-11-14)*: this is the **target** pipeline. Only `Encryption` and `Storage` are implemented today; the compliance check and the redaction steps do not exist yet (see the "Implementation status" section of ADR 0001).
 
 ---
 

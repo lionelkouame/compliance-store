@@ -62,7 +62,7 @@ HTTP Request (JSON/REST)
 
 ### Positive
 * **100% Pure Domain**: No dependency on Symfony, API Platform or Doctrine in the domain.
-* **Security guarantee**: Impossible to save a document without going through the Use Case (which runs PII redaction and Libsodium encryption).
+* **Security guarantee**: Impossible to save a document without going through the Use Case, which is the single place where the ingestion pipeline runs. *(Note, 2026-11-14: today that pipeline is Libsodium encryption only; the compliance check and PII redaction are not implemented yet, see ADR 0001 "Implementation status".)*
 * **API evolvability**: Easy to create API versions (v1, v2) with different DTOs without impacting business logic.
 
 ### Negative

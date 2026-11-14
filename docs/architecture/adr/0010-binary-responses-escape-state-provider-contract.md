@@ -13,7 +13,8 @@
 layer: reads by a `StateProviderInterface`, writes by a `StateProcessorInterface`, each
 delegating to an Application Use Case. Its purpose is stated in that ADR: prevent API
 Platform from touching the database on its own and thereby bypassing the pipeline that
-performs compliance checks, PII redaction and envelope encryption (ADR 0002).
+performs compliance checks, PII redaction and envelope encryption (ADR 0002; only the
+encryption is implemented so far, see ADR 0001 "Implementation status").
 
 That rule carries an implicit assumption about the *shape* of a response. A provider's
 signature is:
