@@ -33,7 +33,7 @@ final readonly class CreateHolderUseCase implements UseCaseInterface
         $holderName = HolderName::make($request->holderName);
         $email = Email::make($request->email);
 
-        if (null !== $this->holderRepository->findByEmail($email->value)) {
+        if (null !== $this->holderRepository->findByEmail($email)) {
             throw new HolderAlreadyExistsException();
         }
 
