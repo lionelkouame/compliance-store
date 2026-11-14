@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\Generic;
 
+use App\Domain\Exception\InvalidValueException;
+
 /**
  * The birth date of a Holder (data subject).
  *
@@ -19,10 +21,7 @@ final readonly class BirthDate
         $today = new \DateTimeImmutable('today', new \DateTimeZone('UTC'));
 
         if ($value->format('Y-m-d') >= $today->format('Y-m-d')) {
-            throw new \InvalidArgumentException(\sprintf(
-                'The birth date "%s" must be in the past.',
-                $value->format('Y-m-d'),
-            ));
+            throw new InvalidValueException('A birth date must be in the past.');
         }
 
         $this->value = $value;
@@ -38,7 +37,7 @@ final readonly class BirthDate
         $date = \DateTimeImmutable::createFromFormat('Y-m-d', $value);
 
         if (false === $date) {
-            throw new \InvalidArgumentException(\sprintf('The birth date "%s" is not valid.', $value));
+            throw new InvalidValueException('A birth date must be a valid Y-m-d date.');
         }
 
         return new self($date);

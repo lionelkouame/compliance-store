@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\UseCase\RegisterIdentityDocument;
+namespace App\Application\UseCase\IdentityDocument\RegisterIdentityDocument;
 
-final readonly class RegisterIdentityDocumentCommand
+use App\Application\UseCase\UseCaseRequestInterface;
+
+final readonly class RegisterIdentityDocumentRequest implements UseCaseRequestInterface
 {
     /**
      * @param string $expiresAt date in Y-m-d format

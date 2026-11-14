@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase\Document\StoreDocument;
 
+use App\Application\UseCase\UseCaseInterface;
+use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\Document;
 use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
+use App\Domain\ReadModel\Document\InfosDocument;
 use App\Domain\ValueObject\Document\DocumentId;
 use App\Domain\ValueObject\Document\FileHash;
 use App\Domain\ValueObject\Holder\HolderId;
 
-final readonly class StoreDocumentUseCase
+/**
+ * @implements UseCaseInterface<StoreDocumentRequest, StoreDocumentResponse>
+ */
+final readonly class StoreDocumentUseCase implements UseCaseInterface
 {
     public function __construct(
         private CipherGatewayInterface $cipher,
@@ -22,13 +28,11 @@ final readonly class StoreDocumentUseCase
         private GeneratorInterface $idGenerator,
     ) {}
 
-    public function execute(StoreDocumentRequest $storeDocumentRequest): StoreDocumentResponse
+    public function execute(UseCaseRequestInterface $request): StoreDocumentResponse
     {
-        $fileHash = FileHash::make($storeDocumentRequest->content);
-        $envelope = $this->cipher->encrypt($storeDocumentRequest->content);
+        $fileHash = FileHash::make($request->content);
+        $envelope = $this->cipher->encrypt($request->content);
         $documentId = DocumentId::make($this->idGenerator->generate());
-
-        $this->storage->store($documentId, $envelope->payload->value());
 
         $document = Document::create(
             id: $documentId,
@@ -37,14 +41,15 @@ final readonly class StoreDocumentUseCase
             wrappedDataKey: $envelope->wrappedDataKey,
         );
 
+        $this->storage->store($documentId, $envelope->payload->value());
+
         $this->documents->add($document);
 
-        return new StoreDocumentResponse(
-            id: $documentId->value(),
-            holderId: $document->holderId()->value(),
-            fileHash: $fileHash->value(),
-            wrappedDataKey: $document->wrappedDataKey()->value(),
-            createdAt: $document->createdAt()->format(\DateTimeInterface::ATOM),
-        );
+        return new StoreDocumentResponse(new InfosDocument(
+            id: $document->id(),
+            holderId: $document->holderId(),
+            fileHash: $document->fileHash(),
+            createdAt: $document->createdAt(),
+        ));
     }
 }

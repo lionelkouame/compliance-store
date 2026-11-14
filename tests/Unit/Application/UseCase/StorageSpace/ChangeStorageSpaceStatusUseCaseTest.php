@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\UseCase;
+namespace App\Tests\Unit\Application\UseCase\StorageSpace;
 
-use App\Application\UseCase\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusCommand;
-use App\Application\UseCase\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusUseCase;
+use App\Application\UseCase\StorageSpace\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusRequest;
+use App\Application\UseCase\StorageSpace\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusUseCase;
 use App\Domain\Entity\StorageSpace;
 use App\Domain\Exception\StorageSpace\InvalidStatusStorageException;
 use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
@@ -40,12 +40,13 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
             idValidator: $idValidator,
         );
 
-        $updated = $useCase->execute(new ChangeStorageSpaceStatusCommand(
+        $response = $useCase->execute(new ChangeStorageSpaceStatusRequest(
             id: '660e8400-e29b-41d4-a716-446655440000',
             status: 'archived',
         ));
 
-        self::assertSame(StorageSpaceStatus::Archived, $updated->status);
+        self::assertSame(StorageSpaceStatus::Archived, $response->readModel->status);
+        self::assertSame('EU-WEST-1', $response->readModel->code->value);
     }
 
     public function testExecuteThrowsWhenStorageSpaceDoesNotExist(): void
@@ -64,7 +65,7 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
 
         $this->expectException(StorageSpaceNotFoundException::class);
 
-        $useCase->execute(new ChangeStorageSpaceStatusCommand(
+        $useCase->execute(new ChangeStorageSpaceStatusRequest(
             id: '660e8400-e29b-41d4-a716-446655440000',
             status: 'archived',
         ));
@@ -92,9 +93,31 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
 
         $this->expectException(InvalidStatusStorageException::class);
 
-        $useCase->execute(new ChangeStorageSpaceStatusCommand(
+        $useCase->execute(new ChangeStorageSpaceStatusRequest(
             id: '660e8400-e29b-41d4-a716-446655440000',
             status: 'bogus',
+        ));
+    }
+
+    public function testExecuteTreatsAMalformedIdAsNotFound(): void
+    {
+        $storageSpaces = $this->createMock(StorageSpaceRepositoryInterface::class);
+        $storageSpaces->expects(self::never())->method('get');
+        $storageSpaces->expects(self::never())->method('update');
+
+        $idValidator = $this->createStub(IdValidatorInterface::class);
+        $idValidator->method('isValid')->willReturn(false);
+
+        $useCase = new ChangeStorageSpaceStatusUseCase(
+            storageSpaces: $storageSpaces,
+            idValidator: $idValidator,
+        );
+
+        $this->expectException(StorageSpaceNotFoundException::class);
+
+        $useCase->execute(new ChangeStorageSpaceStatusRequest(
+            id: 'not-a-uuid',
+            status: 'archived',
         ));
     }
 }

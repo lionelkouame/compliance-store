@@ -9,7 +9,7 @@ use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\NaturalPerson;
 use App\Domain\Port\Repository\NaturalPersonRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
-use App\Domain\ReadModel\NaturalPerson\CreateNaturalPersonRead;
+use App\Domain\ReadModel\NaturalPerson\IdentifierNaturalPerson;
 use App\Domain\ValueObject\Generic\BirthDate;
 use App\Domain\ValueObject\NaturalPerson\FirstName;
 use App\Domain\ValueObject\NaturalPerson\Gender;
@@ -45,7 +45,7 @@ final readonly class CreateNaturalPersonUseCase implements UseCaseInterface
         $this->naturalPersonRepository->add($naturalPerson);
 
         return new CreateNaturalPersonResponse(
-            new CreateNaturalPersonRead($naturalPersonId),
+            new IdentifierNaturalPerson($naturalPersonId),
         );
     }
 }

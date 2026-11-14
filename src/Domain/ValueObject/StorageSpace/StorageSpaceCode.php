@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\StorageSpace;
 
+use App\Domain\Exception\InvalidValueException;
+
 /**
  * Human-readable, unique code identifying a storage space (e.g. "EU-WEST-1").
  */
@@ -13,7 +15,7 @@ final readonly class StorageSpaceCode
         public string $value,
     ) {
         if (1 !== preg_match('/^[A-Z0-9](?:[A-Z0-9_-]{0,62}[A-Z0-9])?$/', $this->value)) {
-            throw new \InvalidArgumentException(\sprintf(
+            throw new InvalidValueException(\sprintf(
                 'The storage space code "%s" must be 1 to 64 uppercase alphanumeric characters, dashes or underscores, and cannot start or end with a separator.',
                 $this->value,
             ));

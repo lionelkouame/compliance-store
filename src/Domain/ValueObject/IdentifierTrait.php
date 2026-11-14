@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject;
 
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Service\IdValidatorInterface;
 
 trait IdentifierTrait
@@ -13,7 +14,7 @@ trait IdentifierTrait
         ?IdValidatorInterface $validator = null,
     ) {
         if (null !== $validator && !$validator->isValid($this->value)) {
-            throw new \InvalidArgumentException(\sprintf(
+            throw new InvalidValueException(\sprintf(
                 'The ID "%s" is not valid.',
                 $this->value,
             ));

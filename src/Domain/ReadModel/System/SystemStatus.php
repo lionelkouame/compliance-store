@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\ValueObject\Generic;
+namespace App\Domain\ReadModel\System;
 
 final readonly class SystemStatus
 {

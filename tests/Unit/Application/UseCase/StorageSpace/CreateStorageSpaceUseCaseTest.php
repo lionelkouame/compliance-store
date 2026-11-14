@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\UseCase;
+namespace App\Tests\Unit\Application\UseCase\StorageSpace;
 
-use App\Application\UseCase\CreateStorageSpace\CreateStorageSpaceCommand;
-use App\Application\UseCase\CreateStorageSpace\CreateStorageSpaceUseCase;
+use App\Application\UseCase\StorageSpace\CreateStorageSpace\CreateStorageSpaceRequest;
+use App\Application\UseCase\StorageSpace\CreateStorageSpace\CreateStorageSpaceUseCase;
 use App\Domain\Entity\StorageSpace;
 use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
@@ -32,15 +32,15 @@ final class CreateStorageSpaceUseCaseTest extends TestCase
             idGenerator: $idGenerator,
         );
 
-        $storageSpace = $useCase->execute(new CreateStorageSpaceCommand(
+        $readModel = $useCase->execute(new CreateStorageSpaceRequest(
             code: 'EU-WEST-1',
             name: 'EU West Primary',
-        ));
+        ))->readModel;
 
-        self::assertSame('660e8400-e29b-41d4-a716-446655440000', $storageSpace->id->value);
-        self::assertSame('EU-WEST-1', $storageSpace->code->value);
-        self::assertSame('EU West Primary', $storageSpace->name->value);
-        self::assertSame(StorageSpaceStatus::Active, $storageSpace->status);
+        self::assertSame('660e8400-e29b-41d4-a716-446655440000', $readModel->id->value);
+        self::assertSame('EU-WEST-1', $readModel->code->value);
+        self::assertSame('EU West Primary', $readModel->name->value);
+        self::assertSame(StorageSpaceStatus::Active, $readModel->status);
     }
 
     public function testExecuteRejectsADuplicateCode(): void
@@ -64,7 +64,7 @@ final class CreateStorageSpaceUseCaseTest extends TestCase
 
         $this->expectException(StorageSpaceCodeAlreadyExistsException::class);
 
-        $useCase->execute(new CreateStorageSpaceCommand(
+        $useCase->execute(new CreateStorageSpaceRequest(
             code: 'EU-WEST-1',
             name: 'Another name',
         ));

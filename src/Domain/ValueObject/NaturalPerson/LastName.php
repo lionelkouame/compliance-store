@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\NaturalPerson;
 
+use App\Domain\Exception\InvalidValueException;
+
 final readonly class LastName
 {
     public function __construct(
@@ -12,11 +14,11 @@ final readonly class LastName
         $trimmed = trim($this->value);
 
         if ('' === $trimmed) {
-            throw new \InvalidArgumentException('A last name cannot be empty.');
+            throw new InvalidValueException('A last name cannot be empty.');
         }
 
         if (mb_strlen($trimmed) > 255) {
-            throw new \InvalidArgumentException('A last name cannot exceed 255 characters.');
+            throw new InvalidValueException('A last name cannot exceed 255 characters.');
         }
     }
 

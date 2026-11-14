@@ -2,40 +2,39 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider;
+namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\NaturalPerson;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Application\UseCase\GetStorageSpace\GetStorageSpaceUseCase;
-use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
-use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpaceResource;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Application\UseCase\NaturalPerson\GetInformationNaturalPerson\GetInformationNaturalPersonRequest;
+use App\Application\UseCase\NaturalPerson\GetInformationNaturalPerson\GetInformationNaturalPersonUseCase;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\NaturalPerson\GetNaturalPersonOutput;
 
 /**
- * @implements ProviderInterface<StorageSpaceResource>
+ * @implements ProviderInterface<GetNaturalPersonOutput>
  */
-final readonly class GetStorageSpaceProvider implements ProviderInterface
+final readonly class GetInformationNaturalPersonProvider implements ProviderInterface
 {
     public function __construct(
-        private GetStorageSpaceUseCase $useCase,
+        private GetInformationNaturalPersonUseCase $useCase,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): StorageSpaceResource
+    /**
+     * @param array{id?: string} $uriVariables
+     */
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): GetNaturalPersonOutput
     {
-        $id = $uriVariables['id'] ?? null;
+        $readModel = $this->useCase->execute(new GetInformationNaturalPersonRequest(
+            identifier: $uriVariables['id'] ?? '',
+        ))->readModel;
 
-        if (!\is_string($id)) {
-            throw new NotFoundHttpException('Invalid storage space id.');
-        }
-
-        try {
-            $storageSpace = $this->useCase->execute($id);
-        } catch (StorageSpaceNotFoundException $e) {
-            throw new NotFoundHttpException($e->getMessage(), $e);
-        } catch (\InvalidArgumentException $e) {
-            throw new NotFoundHttpException('Invalid storage space id.', $e);
-        }
-
-        return StorageSpaceResource::fromEntity($storageSpace);
+        return new GetNaturalPersonOutput(
+            identifier: $readModel->id->value(),
+            gender: $readModel->gender->value,
+            firstName: $readModel->firstName->value,
+            lastName: $readModel->lastName->value,
+            birthDate: (string) $readModel->birthDate,
+            createdAt: $readModel->createdAt->format(\DateTimeInterface::ATOM),
+        );
     }
 }

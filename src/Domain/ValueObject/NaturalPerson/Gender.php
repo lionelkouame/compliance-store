@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\NaturalPerson;
 
+use App\Domain\Exception\InvalidValueException;
+
 /**
  * Administrative gender of a NaturalPerson. Optional on creation: an
  * {@see Gender::Unspecified} value is used when the subject does not
@@ -25,7 +27,7 @@ enum Gender: string
         $gender = self::tryFrom(strtolower(trim($value)));
 
         if (null === $gender) {
-            throw new \InvalidArgumentException(\sprintf('The gender "%s" is not valid.', $value));
+            throw new InvalidValueException(\sprintf('The gender "%s" is not valid.', $value));
         }
 
         return $gender;

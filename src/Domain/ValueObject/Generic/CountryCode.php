@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\Generic;
 
+use App\Domain\Exception\InvalidValueException;
+
 /**
  * ISO 3166-1 alpha-3 country code (e.g. "FRA"), as printed on identity
  * documents (ICAO 9303). Only the format is checked here: the Domain has no
@@ -15,7 +17,7 @@ final readonly class CountryCode
         public string $value,
     ) {
         if (1 !== preg_match('/^[A-Z]{3}$/', $this->value)) {
-            throw new \InvalidArgumentException(\sprintf(
+            throw new InvalidValueException(\sprintf(
                 'The country code "%s" must be an ISO 3166-1 alpha-3 code (3 uppercase letters).',
                 $this->value,
             ));

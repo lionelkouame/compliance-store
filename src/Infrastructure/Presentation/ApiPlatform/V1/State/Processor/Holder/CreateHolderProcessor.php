@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor;
+namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\Holder;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
@@ -14,7 +14,7 @@ use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\Holder\CreateHolderO
 use Webmozart\Assert\Assert;
 
 /**
- * @implements ProcessorInterface<mixed, CreateHolderOutput>
+ * @implements ProcessorInterface<CreateHolderInput, CreateHolderOutput>
  */
 final readonly class CreateHolderProcessor implements ProcessorInterface
 {
@@ -23,7 +23,7 @@ final readonly class CreateHolderProcessor implements ProcessorInterface
         private CreateHolderUseCase $useCase,
     ) {}
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CreateHolderOutput
     {
         Assert::isInstanceOf($data, CreateHolderInput::class);
 
@@ -33,16 +33,14 @@ final readonly class CreateHolderProcessor implements ProcessorInterface
         Assert::string($data->birthDate);
         Assert::string($data->email);
 
-        $useCaseRequest = new CreateHolderRequest(
+        $useCaseResponse = $this->useCase->execute(new CreateHolderRequest(
             holderName: $data->holderName,
             birthDate: $data->birthDate,
             email: $data->email,
-        );
-
-        $useCaseResponse = $this->useCase->execute($useCaseRequest);
+        ));
 
         return new CreateHolderOutput(
-            identifier: $useCaseResponse->readModel->id->value()
+            identifier: $useCaseResponse->readModel->id->value(),
         );
     }
 }

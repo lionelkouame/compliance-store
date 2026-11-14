@@ -2,57 +2,41 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor;
+namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\StorageSpace;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use ApiPlatform\Validator\ValidatorInterface;
-use App\Application\UseCase\CreateStorageSpace\CreateStorageSpaceCommand;
-use App\Application\UseCase\CreateStorageSpace\CreateStorageSpaceUseCase;
-use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
-use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpaceResource;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use App\Application\UseCase\StorageSpace\CreateStorageSpace\CreateStorageSpaceRequest;
+use App\Application\UseCase\StorageSpace\CreateStorageSpace\CreateStorageSpaceUseCase;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpace\CreateStorageSpaceInput;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpace\StorageSpaceOutput;
+use Webmozart\Assert\Assert;
 
 /**
- * @implements ProcessorInterface<mixed, StorageSpaceResource>
+ * @implements ProcessorInterface<CreateStorageSpaceInput, StorageSpaceOutput>
  */
 final readonly class CreateStorageSpaceProcessor implements ProcessorInterface
 {
     public function __construct(
-        private CreateStorageSpaceUseCase $useCase,
-        private RequestStack $requestStack,
         private ValidatorInterface $validator,
+        private CreateStorageSpaceUseCase $useCase,
     ) {}
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): StorageSpaceResource
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): StorageSpaceOutput
     {
-        $request = $this->requestStack->getCurrentRequest();
-        $payload = json_decode($request?->getContent() ?? '', true);
-        $payload = \is_array($payload) ? $payload : [];
+        Assert::isInstanceOf($data, CreateStorageSpaceInput::class);
 
-        $input = new StorageSpaceResource();
-        $input->code = \is_string($payload['code'] ?? null) ? $payload['code'] : null;
-        $input->name = \is_string($payload['name'] ?? null) ? $payload['name'] : null;
+        $this->validator->validate($data);
 
-        $this->validator->validate($input);
+        Assert::string($data->code);
+        Assert::string($data->name);
 
-        if (null === $input->code || null === $input->name) {
-            throw new UnprocessableEntityHttpException('Missing required storage space parameters.');
-        }
+        $useCaseResponse = $this->useCase->execute(new CreateStorageSpaceRequest(
+            code: $data->code,
+            name: $data->name,
+        ));
 
-        try {
-            $storageSpace = $this->useCase->execute(new CreateStorageSpaceCommand(
-                code: $input->code,
-                name: $input->name,
-            ));
-        } catch (StorageSpaceCodeAlreadyExistsException $e) {
-            throw new ConflictHttpException($e->getMessage(), $e);
-        } catch (\InvalidArgumentException $e) {
-            throw new UnprocessableEntityHttpException($e->getMessage(), $e);
-        }
-
-        return StorageSpaceResource::fromEntity($storageSpace);
+        return StorageSpaceOutput::fromReadModel($useCaseResponse->readModel);
     }
 }

@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Application\UseCase\NaturalPerson\CreateNaturalPerson;
+namespace App\Application\UseCase\NaturalPerson\GetInformationNaturalPerson;
 
 use App\Application\UseCase\UseCaseRequestInterface;
 
-final readonly class CreateNaturalPersonRequest implements UseCaseRequestInterface
+final readonly class GetInformationNaturalPersonRequest implements UseCaseRequestInterface
 {
     public function __construct(
-        public string $firstName,
-        public string $lastName,
-        public string $birthday,
-        public ?string $gender = null,
+        public string $identifier,
     ) {}
 }

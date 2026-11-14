@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\UseCase;
+namespace App\Tests\Unit\Application\UseCase\IdentityDocument;
 
-use App\Application\UseCase\RegisterIdentityDocument\RegisterIdentityDocumentCommand;
-use App\Application\UseCase\RegisterIdentityDocument\RegisterIdentityDocumentUseCase;
+use App\Application\UseCase\IdentityDocument\RegisterIdentityDocument\RegisterIdentityDocumentRequest;
+use App\Application\UseCase\IdentityDocument\RegisterIdentityDocument\RegisterIdentityDocumentUseCase;
 use App\Domain\Entity\IdentityDocument;
 use App\Domain\Exception\IdentityDocument\IdentityDocumentAlreadyExistsException;
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Repository\IdentityDocumentRepositoryInterface;
 use App\Domain\Port\Service\IdentityDocumentIdGeneratorInterface;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
@@ -27,13 +28,13 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
         $identityDocuments->method('findByNumber')->willReturn(null);
         $identityDocuments->expects(self::once())->method('add');
 
-        $identityDocument = $this->useCase($identityDocuments)->execute($this->command());
+        $readModel = $this->useCase($identityDocuments)->execute($this->request())->readModel;
 
-        self::assertSame(self::ID, $identityDocument->id()->value());
-        self::assertSame(IdentityDocumentType::Passport, $identityDocument->type());
-        self::assertSame('FRA', $identityDocument->country()->value);
-        self::assertSame('18AB12345', $identityDocument->number()->value);
-        self::assertSame('2035-01-31', $identityDocument->expiresAt()->format('Y-m-d'));
+        self::assertSame(self::ID, $readModel->id->value());
+        self::assertSame(IdentityDocumentType::Passport, $readModel->type);
+        self::assertSame('FRA', $readModel->country->value);
+        self::assertSame('18AB12345', $readModel->number->value);
+        self::assertSame('2035-01-31', $readModel->expiresAt->format('Y-m-d'));
     }
 
     public function testExecuteRejectsADuplicateDocument(): void
@@ -52,7 +53,7 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
 
         $this->expectException(IdentityDocumentAlreadyExistsException::class);
 
-        $this->useCase($identityDocuments)->execute($this->command());
+        $this->useCase($identityDocuments)->execute($this->request());
     }
 
     #[DataProvider('invalidInputProvider')]
@@ -61,9 +62,9 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
         $identityDocuments = $this->createMock(IdentityDocumentRepositoryInterface::class);
         $identityDocuments->expects(self::never())->method('add');
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidValueException::class);
 
-        $this->useCase($identityDocuments)->execute($this->command(type: $type, expiresAt: $expiresAt));
+        $this->useCase($identityDocuments)->execute($this->request(type: $type, expiresAt: $expiresAt));
     }
 
     /**
@@ -87,9 +88,9 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
         );
     }
 
-    private function command(string $type = 'Passport', string $expiresAt = '2035-01-31'): RegisterIdentityDocumentCommand
+    private function request(string $type = 'Passport', string $expiresAt = '2035-01-31'): RegisterIdentityDocumentRequest
     {
-        return new RegisterIdentityDocumentCommand(
+        return new RegisterIdentityDocumentRequest(
             type: $type,
             country: 'FRA',
             number: '18AB12345',

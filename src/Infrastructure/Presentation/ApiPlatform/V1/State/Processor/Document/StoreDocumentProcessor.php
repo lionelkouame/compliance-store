@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor;
+namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\Document;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
@@ -14,13 +14,13 @@ use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\Document\StoreDocume
 use Webmozart\Assert\Assert;
 
 /**
- * @implements ProcessorInterface<mixed, StoreDocumentOutput>
+ * @implements ProcessorInterface<StoreDocumentInput, StoreDocumentOutput>
  */
 final readonly class StoreDocumentProcessor implements ProcessorInterface
 {
     public function __construct(
-        private StoreDocumentUseCase $useCase,
         private ValidatorInterface $validator,
+        private StoreDocumentUseCase $useCase,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): StoreDocumentOutput
@@ -28,19 +28,20 @@ final readonly class StoreDocumentProcessor implements ProcessorInterface
         Assert::isInstanceOf($data, StoreDocumentInput::class);
 
         $this->validator->validate($data);
+
         Assert::notNull($data->file);
 
-        $useCaseRequest = new StoreDocumentRequest(
-            $data->file->getContent(),
-        );
+        $useCaseResponse = $this->useCase->execute(new StoreDocumentRequest(
+            content: $data->file->getContent(),
+        ));
 
-        $useCaseResponse = $this->useCase->execute($useCaseRequest);
+        $readModel = $useCaseResponse->readModel;
 
         return new StoreDocumentOutput(
-            id: $useCaseResponse->id,
-            holderId: $useCaseResponse->holderId,
-            fileHash: $useCaseResponse->fileHash,
-            createdAt: $useCaseResponse->createdAt,
+            id: $readModel->id->value(),
+            holderId: $readModel->holderId->value(),
+            fileHash: $readModel->fileHash->value(),
+            createdAt: $readModel->createdAt->format(\DateTimeInterface::ATOM),
         );
     }
 }

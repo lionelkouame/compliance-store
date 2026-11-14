@@ -2,51 +2,41 @@
 
 declare(strict_types=1);
 
-namespace App\Application\UseCase\NaturalPerson\CreateNaturalPerson;
+namespace App\Application\UseCase\NaturalPerson\GetInformationNaturalPerson;
 
 use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
-use App\Application\UseCase\UseCaseResponseInterface;
-use App\Domain\Entity\NaturalPerson;
+use App\Domain\Exception\NaturalPerson\NaturalPersonNotFoundException;
 use App\Domain\Port\Repository\NaturalPersonRepositoryInterface;
-use App\Domain\Port\Service\GeneratorInterface;
-use App\Domain\ReadModel\NaturalPerson\IdentifierNaturalPerson;
-use App\Domain\ValueObject\Generic\BirthDate;
-use App\Domain\ValueObject\NaturalPerson\FirstName;
-use App\Domain\ValueObject\NaturalPerson\Gender;
-use App\Domain\ValueObject\NaturalPerson\LastName;
+use App\Domain\ReadModel\NaturalPerson\InfosNaturalPerson;
 use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
 
 /**
- * @implements UseCaseInterface<CreateNaturalPersonRequest, CreateNaturalPersonResponse>
+ * @implements UseCaseInterface<GetInformationNaturalPersonRequest, GetInformationNaturalPersonResponse>
  */
-final readonly class CreateNaturalPersonUseCase implements UseCaseInterface
+final readonly class GetInformationNaturalPersonUseCase implements UseCaseInterface
 {
     public function __construct(
-        private GeneratorInterface $generatorUuid,
         private NaturalPersonRepositoryInterface $naturalPersonRepository,
     ) {}
 
-    public function execute(UseCaseRequestInterface $request): UseCaseResponseInterface
+    public function execute(UseCaseRequestInterface $request): GetInformationNaturalPersonResponse
     {
-        $naturalPersonId = NaturalPersonId::make($this->generatorUuid->generate());
-        $gender = Gender::fromNullable($request->gender);
-        $firstName = FirstName::make($request->firstName);
-        $lastName = LastName::make($request->lastName);
-        $birthDate = BirthDate::make($request->birthday);
-
-        $naturalPerson = NaturalPerson::create(
-            $naturalPersonId,
-            $gender,
-            $firstName,
-            $lastName,
-            $birthDate,
+        $naturalPerson = $this->naturalPersonRepository->findById(
+            NaturalPersonId::make($request->identifier),
         );
 
-        $this->naturalPersonRepository->add($naturalPerson);
+        if (null === $naturalPerson) {
+            throw new NaturalPersonNotFoundException();
+        }
 
-        return new CreateNaturalPersonResponse(
-            new IdentifierNaturalPerson($naturalPersonId),
-        );
+        return new GetInformationNaturalPersonResponse(new InfosNaturalPerson(
+            id: $naturalPerson->id(),
+            gender: $naturalPerson->gender(),
+            firstName: $naturalPerson->firstName(),
+            lastName: $naturalPerson->lastName(),
+            birthDate: $naturalPerson->birthDate(),
+            createdAt: $naturalPerson->createdAt(),
+        ));
     }
 }

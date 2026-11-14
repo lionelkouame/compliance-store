@@ -9,6 +9,7 @@ use App\Domain\ValueObject\Document\FileHash;
 use App\Domain\ValueObject\Document\WrappedDataKey;
 use App\Domain\ValueObject\Holder\HolderId;
 
+
 /**
  * A sensitive document, stored encrypted (Zero Trust Storage, ADR 0002)
  * after passing the Native Compliance Core check (ADR 0001). Immutable once

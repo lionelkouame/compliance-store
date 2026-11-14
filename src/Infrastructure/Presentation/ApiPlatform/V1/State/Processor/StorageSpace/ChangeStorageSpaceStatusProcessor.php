@@ -2,57 +2,43 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor;
+namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\StorageSpace;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use App\Application\UseCase\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusCommand;
-use App\Application\UseCase\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusUseCase;
-use App\Domain\Exception\InvalidDataException;
-use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
-use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpaceResource;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use ApiPlatform\Validator\ValidatorInterface;
+use App\Application\UseCase\StorageSpace\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusRequest;
+use App\Application\UseCase\StorageSpace\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusUseCase;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpace\ChangeStorageSpaceStatusInput;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpace\StorageSpaceOutput;
+use Webmozart\Assert\Assert;
 
 /**
- * @implements ProcessorInterface<mixed, StorageSpaceResource>
+ * @implements ProcessorInterface<ChangeStorageSpaceStatusInput, StorageSpaceOutput>
  */
 final readonly class ChangeStorageSpaceStatusProcessor implements ProcessorInterface
 {
     public function __construct(
+        private ValidatorInterface $validator,
         private ChangeStorageSpaceStatusUseCase $useCase,
-        private RequestStack $requestStack,
     ) {}
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): StorageSpaceResource
+    /**
+     * @param array{id?: string} $uriVariables
+     */
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): StorageSpaceOutput
     {
-        $request = $this->requestStack->getCurrentRequest();
-        $payload = json_decode($request?->getContent() ?? '', true);
-        $payload = \is_array($payload) ? $payload : [];
-        $status = \is_string($payload['status'] ?? null) ? $payload['status'] : null;
+        Assert::isInstanceOf($data, ChangeStorageSpaceStatusInput::class);
 
-        if (null === $status) {
-            throw new UnprocessableEntityHttpException('A "status" field is required.');
-        }
+        $this->validator->validate($data);
 
-        $id = $uriVariables['id'] ?? null;
+        Assert::string($data->status);
 
-        if (!\is_string($id)) {
-            throw new NotFoundHttpException('Invalid storage space id.');
-        }
+        $useCaseResponse = $this->useCase->execute(new ChangeStorageSpaceStatusRequest(
+            id: $uriVariables['id'] ?? '',
+            status: $data->status,
+        ));
 
-        try {
-            $storageSpace = $this->useCase->execute(new ChangeStorageSpaceStatusCommand(
-                id: $id,
-                status: $status,
-            ));
-        } catch (StorageSpaceNotFoundException $e) {
-            throw new NotFoundHttpException($e->getMessage(), $e);
-        } catch (InvalidDataException|\InvalidArgumentException $e) {
-            throw new UnprocessableEntityHttpException($e->getMessage(), $e);
-        }
-
-        return StorageSpaceResource::fromEntity($storageSpace);
+        return StorageSpaceOutput::fromReadModel($useCaseResponse->readModel);
     }
 }

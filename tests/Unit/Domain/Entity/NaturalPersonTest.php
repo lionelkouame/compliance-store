@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\Entity;
 
 use App\Domain\Entity\NaturalPerson;
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\ValueObject\Generic\BirthDate;
 use App\Domain\ValueObject\NaturalPerson\FirstName;
 use App\Domain\ValueObject\NaturalPerson\Gender;
@@ -38,28 +39,28 @@ final class NaturalPersonTest extends TestCase
 
     public function testGenderRejectsUnknownValues(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidValueException::class);
 
         Gender::fromNullable('alien');
     }
 
     public function testFirstNameCannotBeEmpty(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidValueException::class);
 
         new FirstName('   ');
     }
 
     public function testLastNameCannotBeEmpty(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidValueException::class);
 
         new LastName('');
     }
 
     public function testBirthDateMustBeInThePast(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidValueException::class);
 
         new BirthDate(new \DateTimeImmutable('tomorrow', new \DateTimeZone('UTC')));
     }

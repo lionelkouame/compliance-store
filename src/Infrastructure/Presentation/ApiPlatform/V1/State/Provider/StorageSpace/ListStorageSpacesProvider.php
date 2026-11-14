@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider;
+namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\StorageSpace;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Application\UseCase\ListStorageSpaces\ListStorageSpacesUseCase;
-use App\Domain\Entity\StorageSpace;
-use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpaceResource;
+use App\Application\UseCase\StorageSpace\ListStorageSpaces\ListStorageSpacesRequest;
+use App\Application\UseCase\StorageSpace\ListStorageSpaces\ListStorageSpacesUseCase;
+use App\Domain\ReadModel\StorageSpace\InfosStorageSpace;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpace\StorageSpaceOutput;
 
 /**
- * @implements ProviderInterface<StorageSpaceResource>
+ * @implements ProviderInterface<StorageSpaceOutput>
  */
 final readonly class ListStorageSpacesProvider implements ProviderInterface
 {
@@ -20,13 +21,15 @@ final readonly class ListStorageSpacesProvider implements ProviderInterface
     ) {}
 
     /**
-     * @return list<StorageSpaceResource>
+     * @return list<StorageSpaceOutput>
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
+        $useCaseResponse = $this->useCase->execute(new ListStorageSpacesRequest());
+
         return array_map(
-            static fn (StorageSpace $storageSpace): StorageSpaceResource => StorageSpaceResource::fromEntity($storageSpace),
-            $this->useCase->execute(),
+            static fn (InfosStorageSpace $readModel): StorageSpaceOutput => StorageSpaceOutput::fromReadModel($readModel),
+            $useCaseResponse->readModels,
         );
     }
 }

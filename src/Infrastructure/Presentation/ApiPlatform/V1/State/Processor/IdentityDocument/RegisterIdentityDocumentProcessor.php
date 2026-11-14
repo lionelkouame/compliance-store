@@ -2,62 +2,54 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor;
+namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\IdentityDocument;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use ApiPlatform\Validator\ValidatorInterface;
-use App\Application\UseCase\RegisterIdentityDocument\RegisterIdentityDocumentCommand;
-use App\Application\UseCase\RegisterIdentityDocument\RegisterIdentityDocumentUseCase;
-use App\Domain\Exception\IdentityDocument\IdentityDocumentAlreadyExistsException;
-use App\Domain\Exception\IdentityDocument\IdentityDocumentExpiredException;
-use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\IdentityDocumentResource;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use App\Application\UseCase\IdentityDocument\RegisterIdentityDocument\RegisterIdentityDocumentRequest;
+use App\Application\UseCase\IdentityDocument\RegisterIdentityDocument\RegisterIdentityDocumentUseCase;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\IdentityDocument\RegisterIdentityDocumentInput;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\IdentityDocument\RegisterIdentityDocumentOutput;
+use Webmozart\Assert\Assert;
 
 /**
- * @implements ProcessorInterface<mixed, IdentityDocumentResource>
+ * @implements ProcessorInterface<RegisterIdentityDocumentInput, RegisterIdentityDocumentOutput>
  */
 final readonly class RegisterIdentityDocumentProcessor implements ProcessorInterface
 {
     public function __construct(
-        private RegisterIdentityDocumentUseCase $useCase,
-        private RequestStack $requestStack,
         private ValidatorInterface $validator,
+        private RegisterIdentityDocumentUseCase $useCase,
     ) {}
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): IdentityDocumentResource
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): RegisterIdentityDocumentOutput
     {
-        $request = $this->requestStack->getCurrentRequest();
-        $payload = json_decode($request?->getContent() ?? '', true);
-        $payload = \is_array($payload) ? $payload : [];
+        Assert::isInstanceOf($data, RegisterIdentityDocumentInput::class);
 
-        $input = new IdentityDocumentResource();
-        $input->type = \is_string($payload['type'] ?? null) ? $payload['type'] : null;
-        $input->country = \is_string($payload['country'] ?? null) ? $payload['country'] : null;
-        $input->number = \is_string($payload['number'] ?? null) ? $payload['number'] : null;
-        $input->expiresAt = \is_string($payload['expiresAt'] ?? null) ? $payload['expiresAt'] : null;
+        $this->validator->validate($data);
 
-        $this->validator->validate($input);
+        Assert::string($data->type);
+        Assert::string($data->country);
+        Assert::string($data->number);
+        Assert::string($data->expiresAt);
 
-        if (null === $input->type || null === $input->country || null === $input->number || null === $input->expiresAt) {
-            throw new UnprocessableEntityHttpException('Missing required identity document parameters.');
-        }
+        $useCaseResponse = $this->useCase->execute(new RegisterIdentityDocumentRequest(
+            type: $data->type,
+            country: $data->country,
+            number: $data->number,
+            expiresAt: $data->expiresAt,
+        ));
 
-        try {
-            $identityDocument = $this->useCase->execute(new RegisterIdentityDocumentCommand(
-                type: $input->type,
-                country: $input->country,
-                number: $input->number,
-                expiresAt: $input->expiresAt,
-            ));
-        } catch (IdentityDocumentAlreadyExistsException $e) {
-            throw new ConflictHttpException($e->getMessage(), $e);
-        } catch (IdentityDocumentExpiredException|\InvalidArgumentException $e) {
-            throw new UnprocessableEntityHttpException($e->getMessage(), $e);
-        }
+        $readModel = $useCaseResponse->readModel;
 
-        return IdentityDocumentResource::fromEntity($identityDocument);
+        return new RegisterIdentityDocumentOutput(
+            id: $readModel->id->value(),
+            type: $readModel->type->value,
+            country: $readModel->country->value,
+            number: $readModel->number->value,
+            expiresAt: $readModel->expiresAt->format('Y-m-d'),
+            createdAt: $readModel->createdAt->format(\DateTimeInterface::ATOM),
+        );
     }
 }

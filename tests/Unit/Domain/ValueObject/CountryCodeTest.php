@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Domain\ValueObject;
 
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\ValueObject\Generic\CountryCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +21,7 @@ final class CountryCodeTest extends TestCase
     #[DataProvider('invalidCodeProvider')]
     public function testRejectsAnInvalidCode(string $invalid): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidValueException::class);
         new CountryCode($invalid);
     }
 

@@ -7,7 +7,7 @@ namespace App\Infrastructure\Presentation\ApiPlatform\V1\Resource\Document;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
-use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\StoreDocumentProcessor;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\Document\StoreDocumentProcessor;
 
 #[ApiResource(
     shortName: 'Document',

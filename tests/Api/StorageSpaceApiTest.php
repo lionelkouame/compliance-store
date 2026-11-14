@@ -127,4 +127,41 @@ final class StorageSpaceApiTest extends ApiTestCase
 
         self::assertResponseStatusCodeSame(422);
     }
+
+    public function testItReturns404WhenChangingTheStatusOfAnUnknownStorageSpace(): void
+    {
+        static::createClient()->request('PATCH', '/api/v1/storage-spaces/00000000-0000-0000-0000-000000000000', [
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+            'json' => ['status' => 'archived'],
+        ]);
+
+        self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testItRejectsAStatusChangeWithoutStatus(): void
+    {
+        $client = static::createClient();
+
+        $created = $client->request('POST', '/api/v1/storage-spaces', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => ['code' => 'EU-WEST-1', 'name' => 'EU West Primary'],
+        ])->toArray();
+
+        $client->request('PATCH', '/api/v1/storage-spaces/'.$created['id'], [
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+            'json' => [],
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
+    public function testItRejectsAnInvalidCode(): void
+    {
+        static::createClient()->request('POST', '/api/v1/storage-spaces', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => ['code' => 'eu west', 'name' => 'EU West Primary'],
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+    }
 }

@@ -1,0 +1,55 @@
+
+# @name createNaturalPersonForGet
+### Pré-requis : on crée une natural person pour récupérer son identifiant (expect 201)
+POST {{apiUrl}}/natural-persons
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+  "gender": "male",
+  "firstName": "Lionel",
+  "lastName": "Kouame",
+  "birthday": "1990-05-12"
+}
+
+> {%
+    client.test("Status code is 201 Created", function() {
+        client.assert(response.status === 201, "Expected 201 Created");
+    });
+    client.global.set("naturalPersonId", response.body.identifier);
+%}
+
+###
+
+# @name getNaturalPerson
+### Récupération d'une natural person — cas nominal (expect 200)
+@naturalPersonId='yotottoto'
+
+GET {{apiUrl}}/natural-persons/{{naturalPersonId}}
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+    client.test("Response exposes the expected fields", function() {
+        client.assert(response.body.hasOwnProperty("firstName"), "Missing firstName");
+        client.assert(response.body.hasOwnProperty("lastName"), "Missing lastName");
+        client.assert(response.body.hasOwnProperty("gender"), "Missing gender");
+        client.assert(response.body.hasOwnProperty("birthDate"), "Missing birthDate");
+        client.assert(response.body.hasOwnProperty("createdAt"), "Missing createdAt");
+    });
+%}
+
+###
+
+# @name getNaturalPersonNotFound
+### Récupération d'une natural person inconnue (expect 404)
+GET {{apiUrl}}/natural-persons/00000000-0000-0000-0000-000000000000
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 404 Not Found", function() {
+        client.assert(response.status === 404, "Expected 404 Not Found");
+    });
+%}

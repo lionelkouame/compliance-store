@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor;
+namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\NaturalPerson;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
@@ -14,7 +14,7 @@ use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\NaturalPerson\Create
 use Webmozart\Assert\Assert;
 
 /**
- * @implements ProcessorInterface<mixed, CreateNaturalPersonOutput>
+ * @implements ProcessorInterface<CreateNaturalPersonInput, CreateNaturalPersonOutput>
  */
 final readonly class CreateNaturalPersonProcessor implements ProcessorInterface
 {
@@ -34,14 +34,12 @@ final readonly class CreateNaturalPersonProcessor implements ProcessorInterface
         Assert::string($data->birthday);
         Assert::nullOrString($data->gender);
 
-        $useCaseRequest = new CreateNaturalPersonRequest(
+        $useCaseResponse = $this->useCase->execute(new CreateNaturalPersonRequest(
             firstName: $data->firstName,
             lastName: $data->lastName,
             birthday: $data->birthday,
             gender: $data->gender,
-        );
-
-        $useCaseResponse = $this->useCase->execute($useCaseRequest);
+        ));
 
         return new CreateNaturalPersonOutput(
             identifier: $useCaseResponse->readModel->id->value(),

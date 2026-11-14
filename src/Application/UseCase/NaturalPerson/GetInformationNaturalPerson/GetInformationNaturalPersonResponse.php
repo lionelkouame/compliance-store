@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Application\UseCase\NaturalPerson\CreateNaturalPerson;
+namespace App\Application\UseCase\NaturalPerson\GetInformationNaturalPerson;
 
 use App\Application\UseCase\UseCaseResponseInterface;
-use App\Domain\ReadModel\NaturalPerson\IdentifierNaturalPerson;
+use App\Domain\ReadModel\NaturalPerson\InfosNaturalPerson;
 
-final readonly class CreateNaturalPersonResponse implements UseCaseResponseInterface
+final readonly class GetInformationNaturalPersonResponse implements UseCaseResponseInterface
 {
     public function __construct(
-        public IdentifierNaturalPerson $readModel,
+        public InfosNaturalPerson $readModel,
     ) {}
 }

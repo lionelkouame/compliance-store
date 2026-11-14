@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\UseCase;
+namespace App\Tests\Unit\Application\UseCase\Document;
 
 use App\Application\UseCase\Document\StoreDocument\StoreDocumentRequest;
 use App\Application\UseCase\Document\StoreDocument\StoreDocumentUseCase;
@@ -50,8 +50,9 @@ final class StoreDocumentUseCaseTest extends TestCase
             content: 'plaintext content',
         ));
 
-        self::assertSame('660e8400-e29b-41d4-a716-446655440000', $response->id);
-        self::assertSame('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c', $response->holderId);
+        self::assertSame('660e8400-e29b-41d4-a716-446655440000', $response->readModel->id->value());
+        self::assertSame('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c', $response->readModel->holderId->value());
+        self::assertSame(hash('sha256', 'plaintext content'), $response->readModel->fileHash->value());
     }
 }
 

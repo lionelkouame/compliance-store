@@ -6,7 +6,6 @@ namespace App\Application\UseCase\Holder\CreateHolder;
 
 use App\Application\UseCase\UseCaseResponseInterface;
 use App\Domain\ReadModel\Holder\CreateHolderRead;
-use App\Domain\ValueObject\Holder\HolderId;
 
 final readonly class CreateHolderResponse implements UseCaseResponseInterface
 {

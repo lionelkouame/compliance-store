@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\StorageSpace;
 
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Service\IdValidatorInterface;
 use App\Domain\ValueObject\IdentifierInterface;
 
@@ -14,7 +15,7 @@ final readonly class StorageSpaceId implements IdentifierInterface
         ?IdValidatorInterface $validator = null,
     ) {
         if (null !== $validator && !$validator->isValid($this->value)) {
-            throw new \InvalidArgumentException(\sprintf(
+            throw new InvalidValueException(\sprintf(
                 'The ID "%s" is not valid.',
                 $this->value,
             ));

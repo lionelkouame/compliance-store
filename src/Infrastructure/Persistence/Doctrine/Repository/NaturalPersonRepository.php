@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Domain\Entity\NaturalPerson;
 use App\Domain\Port\Repository\NaturalPersonRepositoryInterface;
+use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,7 +20,7 @@ final class NaturalPersonRepository extends ServiceEntityRepository implements N
         parent::__construct($registry, NaturalPerson::class);
     }
 
-    public function findById(string $id): ?NaturalPerson
+    public function findById(NaturalPersonId $id): ?NaturalPerson
     {
         return $this->findOneBy(['id' => $id]);
     }

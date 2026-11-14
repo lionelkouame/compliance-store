@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\UseCase\ChangeStorageSpaceStatus;
+namespace App\Application\UseCase\StorageSpace\ChangeStorageSpaceStatus;
 
-final readonly class ChangeStorageSpaceStatusCommand
+use App\Application\UseCase\UseCaseRequestInterface;
+
+final readonly class ChangeStorageSpaceStatusRequest implements UseCaseRequestInterface
 {
     public function __construct(
         public string $id,

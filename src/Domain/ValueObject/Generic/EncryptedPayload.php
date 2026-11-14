@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\Generic;
 
+use App\Domain\Exception\InvalidValueException;
+
 /**
  * Encrypted bytes of a document's content (nonce embedded by the
  * CipherGatewayInterface implementation). Only ever handed to
@@ -16,7 +18,7 @@ final readonly class EncryptedPayload
         private string $value,
     ) {
         if ('' === $this->value) {
-            throw new \InvalidArgumentException('An encrypted payload ciphertext cannot be empty.');
+            throw new InvalidValueException('An encrypted payload ciphertext cannot be empty.');
         }
     }
 

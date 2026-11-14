@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\Document;
 
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Service\IdValidatorInterface;
 
 /**
@@ -18,7 +19,7 @@ final readonly class WrappedDataKey
         private string $value,
     ) {
         if ('' === $this->value) {
-            throw new \InvalidArgumentException('A wrapped data key cannot be empty.');
+            throw new InvalidValueException('A wrapped data key cannot be empty.');
         }
     }
 

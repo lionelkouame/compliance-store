@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider;
+namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\StorageSpace;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Application\UseCase\GetStorageSpace\GetStorageSpaceUseCase;
-use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
-use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpaceResource;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Application\UseCase\StorageSpace\GetStorageSpace\GetStorageSpaceRequest;
+use App\Application\UseCase\StorageSpace\GetStorageSpace\GetStorageSpaceUseCase;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\StorageSpace\StorageSpaceOutput;
 
 /**
- * @implements ProviderInterface<StorageSpaceResource>
+ * @implements ProviderInterface<StorageSpaceOutput>
  */
 final readonly class GetStorageSpaceProvider implements ProviderInterface
 {
@@ -20,22 +19,15 @@ final readonly class GetStorageSpaceProvider implements ProviderInterface
         private GetStorageSpaceUseCase $useCase,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): StorageSpaceResource
+    /**
+     * @param array{id?: string} $uriVariables
+     */
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): StorageSpaceOutput
     {
-        $id = $uriVariables['id'] ?? null;
+        $useCaseResponse = $this->useCase->execute(new GetStorageSpaceRequest(
+            id: $uriVariables['id'] ?? '',
+        ));
 
-        if (!\is_string($id)) {
-            throw new NotFoundHttpException('Invalid storage space id.');
-        }
-
-        try {
-            $storageSpace = $this->useCase->execute($id);
-        } catch (StorageSpaceNotFoundException $e) {
-            throw new NotFoundHttpException($e->getMessage(), $e);
-        } catch (\InvalidArgumentException $e) {
-            throw new NotFoundHttpException('Invalid storage space id.', $e);
-        }
-
-        return StorageSpaceResource::fromEntity($storageSpace);
+        return StorageSpaceOutput::fromReadModel($useCaseResponse->readModel);
     }
 }

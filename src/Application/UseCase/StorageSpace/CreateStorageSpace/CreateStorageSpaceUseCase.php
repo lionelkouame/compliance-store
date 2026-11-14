@@ -2,39 +2,48 @@
 
 declare(strict_types=1);
 
-namespace App\Application\UseCase\CreateStorageSpace;
+namespace App\Application\UseCase\StorageSpace\CreateStorageSpace;
 
+use App\Application\UseCase\UseCaseInterface;
+use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\StorageSpace;
 use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
+use App\Domain\ReadModel\StorageSpace\InfosStorageSpace;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
 
-final readonly class CreateStorageSpaceUseCase
+/**
+ * @implements UseCaseInterface<CreateStorageSpaceRequest, CreateStorageSpaceResponse>
+ */
+final readonly class CreateStorageSpaceUseCase implements UseCaseInterface
 {
     public function __construct(
         private StorageSpaceRepositoryInterface $storageSpaces,
         private GeneratorInterface $idGenerator,
     ) {}
 
-    public function execute(CreateStorageSpaceCommand $command): StorageSpace
+    public function execute(UseCaseRequestInterface $request): CreateStorageSpaceResponse
     {
-        $code = new StorageSpaceCode($command->code);
+        $code = new StorageSpaceCode($request->code);
+        $name = new StorageSpaceName($request->name);
 
         if (null !== $this->storageSpaces->findByCode($code)) {
             throw new StorageSpaceCodeAlreadyExistsException();
         }
-        $storageSpaceId = StorageSpaceId::fromString($this->idGenerator->generate());
+
         $storageSpace = StorageSpace::create(
-            id: $storageSpaceId,
+            id: StorageSpaceId::fromString($this->idGenerator->generate()),
             code: $code,
-            name: new StorageSpaceName($command->name),
+            name: $name,
         );
 
         $this->storageSpaces->save($storageSpace);
 
-        return $storageSpace;
+        return new CreateStorageSpaceResponse(
+            InfosStorageSpace::fromEntity($storageSpace),
+        );
     }
 }

@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider;
+namespace App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\System;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Application\UseCase\CheckSystemStatus\CheckSystemStatusUseCase;
-use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\HealthCheckResource;
+use App\Application\UseCase\System\CheckSystemStatus\CheckSystemStatusRequest;
+use App\Application\UseCase\System\CheckSystemStatus\CheckSystemStatusUseCase;
+use App\Infrastructure\Presentation\ApiPlatform\V1\Resource\System\HealthCheckOutput;
 
 /**
- * @implements ProviderInterface<HealthCheckResource>
+ * @implements ProviderInterface<HealthCheckOutput>
  */
 final readonly class HealthCheckStateProvider implements ProviderInterface
 {
@@ -18,16 +19,15 @@ final readonly class HealthCheckStateProvider implements ProviderInterface
         private CheckSystemStatusUseCase $useCase,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): HealthCheckResource
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): HealthCheckOutput
     {
-        $status = $this->useCase->execute();
+        $readModel = $this->useCase->execute(new CheckSystemStatusRequest())->readModel;
 
-        $resource = new HealthCheckResource();
-        $resource->status = $status->status;
-        $resource->version = $status->version;
-        $resource->environment = $status->environment;
-        $resource->timestamp = $status->timestamp->format(\DateTimeInterface::ATOM);
-
-        return $resource;
+        return new HealthCheckOutput(
+            status: $readModel->status,
+            version: $readModel->version,
+            environment: $readModel->environment,
+            timestamp: $readModel->timestamp->format(\DateTimeInterface::ATOM),
+        );
     }
 }

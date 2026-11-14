@@ -1,0 +1,42 @@
+# @name createHolderForGet
+### Pré-requis : on crée un holder (expect 201, ou 409 s'il existe déjà)
+POST {{apiUrl}}/holders
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+    "holderName": "Jane Doe",
+    "birthDate": "1990-01-01",
+    "email": "jane.doe@example.com"
+}
+
+###
+
+# @name getHolderByEmail
+### Récupération d'un holder par email — cas nominal (expect 200)
+GET {{apiUrl}}/holders/jane.doe@example.com
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+    client.test("Response exposes the expected fields", function() {
+        client.assert(response.body.hasOwnProperty("holderId"), "Missing holderId");
+        client.assert(response.body.hasOwnProperty("holderName"), "Missing holderName");
+        client.assert(response.body.hasOwnProperty("status"), "Missing status");
+    });
+%}
+
+###
+
+# @name getHolderByEmailNotFound
+### Récupération d'un holder inconnu (expect 404)
+GET {{apiUrl}}/holders/nobody@example.com
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 404 Not Found", function() {
+        client.assert(response.status === 404, "Expected 404 Not Found");
+    });
+%}
