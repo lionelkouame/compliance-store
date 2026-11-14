@@ -101,4 +101,42 @@ final class HolderApiTest extends ApiTestCase
 
         self::assertResponseStatusCodeSame(404);
     }
+
+    public function testItRejectsAMissingEmail(): void
+    {
+        $response = static::createClient()->request('POST', '/api/v1/holders', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => ['holderName' => 'Jane Doe', 'birthDate' => '1990-01-01'],
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertStringNotContainsString('Expected a string', $response->getContent(false));
+    }
+
+    public function testItRejectsAnInvalidEmail(): void
+    {
+        static::createClient()->request('POST', '/api/v1/holders', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => ['email' => 'not-an-email'] + self::HOLDER,
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
+    public function testItRejectsAnImpossibleBirthDate(): void
+    {
+        static::createClient()->request('POST', '/api/v1/holders', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => ['birthDate' => '1990-02-30'] + self::HOLDER,
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+    }
+
+    public function testItReturns404ForAMalformedEmail(): void
+    {
+        static::createClient()->request('GET', '/api/v1/holders/not-an-email');
+
+        self::assertResponseStatusCodeSame(404);
+    }
 }

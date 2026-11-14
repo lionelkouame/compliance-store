@@ -9,6 +9,7 @@ use App\Application\UseCase\Holder\CreateHolder\CreateHolderUseCase;
 use App\Domain\Entity\Holder;
 use App\Domain\Exception\AlreadyExistException;
 use App\Domain\Exception\Holder\HolderAlreadyExistsException;
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ValueObject\Document\Email;
@@ -68,5 +69,29 @@ final class CreateHolderUseCaseTest extends TestCase
             birthDate: '1990-01-01',
             email: 'jane@example.com',
         );
+    }
+
+    public function testExecuteLooksTheHolderUpByItsEmailValueObject(): void
+    {
+        $holders = $this->createMock(HolderRepositoryInterface::class);
+        $holders->expects(self::once())->method('findByEmail')
+            ->with(self::callback(static fn (Email $email): bool => 'jane@example.com' === $email->value))
+            ->willReturn(null);
+
+        $this->useCase($holders)->execute($this->request());
+    }
+
+    public function testExecuteRejectsAnImpossibleBirthDate(): void
+    {
+        $holders = $this->createMock(HolderRepositoryInterface::class);
+        $holders->expects(self::never())->method('add');
+
+        $this->expectException(InvalidValueException::class);
+
+        $this->useCase($holders)->execute(new CreateHolderRequest(
+            holderName: 'Jane Doe',
+            birthDate: '1990-02-30',
+            email: 'jane@example.com',
+        ));
     }
 }

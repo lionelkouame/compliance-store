@@ -7,6 +7,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    # Application version reported by /api/v1/health; override with APP_VERSION.
+    env(APP_VERSION): '1.0.0'
+    app.version: '%env(APP_VERSION)%'
 
 services:
     # default configuration for services in *this* file
@@ -37,6 +40,11 @@ services:
     App\Infrastructure\Storage\MinioStorageGateway:
         arguments:
             $documentsStorage: '@documents.storage'
+
+    App\Application\UseCase\System\CheckSystemStatus\CheckSystemStatusUseCase:
+        arguments:
+            $environment: '%kernel.environment%'
+            $version: '%app.version%'
 
     App\Infrastructure\Gateway\SodiumCipherGateway:
         arguments:

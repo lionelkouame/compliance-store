@@ -49,4 +49,14 @@ final class GetHolderByEmailUseCaseTest extends TestCase
 
         (new GetHolderByEmailUseCase($holders))->execute(new GetHolderByEmailRequest('nobody@example.com'));
     }
+
+    public function testExecuteTreatsAMalformedEmailAsNotFound(): void
+    {
+        $holders = $this->createMock(HolderRepositoryInterface::class);
+        $holders->expects(self::never())->method('findByEmail');
+
+        $this->expectException(HolderNotFoundException::class);
+
+        (new GetHolderByEmailUseCase($holders))->execute(new GetHolderByEmailRequest('not-an-email'));
+    }
 }

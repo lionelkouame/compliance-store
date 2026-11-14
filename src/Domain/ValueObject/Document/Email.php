@@ -20,6 +20,12 @@ final readonly class Email
         if (mb_strlen($trimmed) > 255) {
             throw new InvalidValueException('The email cannot exceed 255 characters.');
         }
+
+        // Validated here and not only on the HTTP DTO: the Domain must hold its
+        // invariant whatever the entry channel (ADR 0005, double lock).
+        if (false === filter_var($this->value, \FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidValueException('The email is not a valid email address.');
+        }
     }
 
     public function equals(self $other): bool
@@ -34,10 +40,6 @@ final readonly class Email
 
     public static function make(string $value): self
     {
-        if (trim($value) === '') {
-            throw new InvalidValueException('The email cannot be empty.');
-        }
-
         return new self($value);
     }
 }

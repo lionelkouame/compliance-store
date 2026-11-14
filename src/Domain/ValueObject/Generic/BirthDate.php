@@ -16,7 +16,7 @@ final readonly class BirthDate
 {
     public \DateTimeImmutable $value;
 
-    public function __construct(\DateTimeImmutable  $value)
+    public function __construct(\DateTimeImmutable $value)
     {
         $today = new \DateTimeImmutable('today', new \DateTimeZone('UTC'));
 
@@ -34,9 +34,11 @@ final readonly class BirthDate
 
     public static function make(string $value): self
     {
-        $date = \DateTimeImmutable::createFromFormat('Y-m-d', $value);
+        // "!" resets the time to midnight; re-formatting rejects the dates that
+        // createFromFormat() silently rolls over (1990-02-30 -> 1990-03-02).
+        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value, new \DateTimeZone('UTC'));
 
-        if (false === $date) {
+        if (false === $date || $date->format('Y-m-d') !== $value) {
             throw new InvalidValueException('A birth date must be a valid Y-m-d date.');
         }
 
