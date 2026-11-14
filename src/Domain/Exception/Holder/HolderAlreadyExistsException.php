@@ -10,6 +10,6 @@ class HolderAlreadyExistsException extends AlreadyExistException
 {
     public function __construct()
     {
-        parent::__construct('A holder with string already exists.');
+        parent::__construct('A holder with this email already exists.');
     }
 }
