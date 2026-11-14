@@ -36,10 +36,10 @@ We decide to adopt an **additive composition strategy** based on Clean Architect
 
 ## Rule Classification Heuristic
 
-| Origin of the change | Location of the rule | Example |
-| :--- | :--- | :--- |
-| Legal / GDPR / regulatory change | **Domain (Native Core)** | Reducing a passport's retention period from 5 to 3 years. |
-| Partner / technical vendor change | **Infrastructure (Provider)** | Additional fraud-score check from Onfido. |
+| Origin of the change              | Location of the rule          | Example                                                   |
+| --------------------------------- | ----------------------------- | --------------------------------------------------------- |
+| Legal / GDPR / regulatory change  | **Domain (Native Core)**      | Reducing a passport's retention period from 5 to 3 years. |
+| Partner / technical vendor change | **Infrastructure (Provider)** | Additional fraud-score check from Onfido.                 |
 
 ---
 
@@ -52,3 +52,21 @@ We decide to adopt an **additive composition strategy** based on Clean Architect
 
 ### Negative / Challenges
 * Requires building a declarative rules engine (e.g. based on `Symfony ExpressionLanguage`) in the Domain layer.
+
+---
+
+## Implementation status
+
+*Added on 2026-11-14 after the clean architecture review (`recap.md`, finding M1). The decision above is unchanged: this section only records how much of it the code delivers today, so that no reader (auditor included) mistakes the target for the current state.*
+
+| Element of the decision                                        | Status                                                                                                             |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Mandatory encryption                                           | **Implemented**: envelope encryption before any write (ADR 0002, `CipherGatewayInterface`, `StoreDocumentUseCase`) |
+| Compliance check before storage                                | **Not implemented**: `StoreDocumentUseCase` encrypts and stores without any compliance check                       |
+| PII masking by default                                         | **Not implemented**: documents are stored as received (encrypted)                                                  |
+| Maximum retention period                                       | **Not implemented**: no retention period is recorded or enforced                                                   |
+| Declarative rules engine configurable without deployment       | **Not implemented**                                                                                                |
+| Provider Extension Port (`ExternalComplianceGatewayInterface`) | **Not implemented**: the interface does not exist yet                                                              |
+
+Until these elements exist, Compliance Store guarantees **confidentiality at rest** (encryption) and **integrity** (`FileHash`), but **no** compliance check, masking or retention enforcement.
+

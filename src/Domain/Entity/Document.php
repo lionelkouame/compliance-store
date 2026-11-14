@@ -11,9 +11,12 @@ use App\Domain\ValueObject\Holder\HolderId;
 
 
 /**
- * A sensitive document, stored encrypted (Zero Trust Storage, ADR 0002)
- * after passing the Native Compliance Core check (ADR 0001). Immutable once
- * stored.
+ * A sensitive document, stored encrypted (Zero Trust Storage, ADR 0002).
+ * Immutable once stored.
+ *
+ * The Native Compliance Core check of ADR 0001 is not implemented yet: a
+ * document is encrypted and stored without any compliance check, masking
+ * or retention rule (see ADR 0001, "Implementation status").
  *
  * The document belongs to a Holder (data subject). The relation is carried
  * by the HolderId identifier rather than by an object reference: the Holder
