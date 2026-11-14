@@ -8,6 +8,7 @@ use App\Domain\Exception\IdentityDocument\IdentityDocumentExpiredException;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
 use App\Domain\ValueObject\Generic\CountryCode;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\ExpiryDate;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
 
 /**
@@ -21,7 +22,7 @@ final readonly class IdentityDocument
         private IdentityDocumentType $type,
         private CountryCode $country,
         private IdentityDocumentNumber $number,
-        private \DateTimeImmutable $expiresAt,
+        private ExpiryDate $expiresAt,
         private \DateTimeImmutable $createdAt,
     ) {}
 
@@ -33,13 +34,12 @@ final readonly class IdentityDocument
         IdentityDocumentType $type,
         CountryCode $country,
         IdentityDocumentNumber $number,
-        \DateTimeImmutable $expiresAt,
+        ExpiryDate $expiresAt,
     ): self {
         $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
 
-        // A document is valid through its whole expiry day.
-        if ($expiresAt->format('Y-m-d') < $now->format('Y-m-d')) {
-            throw new IdentityDocumentExpiredException($expiresAt);
+        if ($expiresAt->isExpiredOn($now)) {
+            throw new IdentityDocumentExpiredException($expiresAt->value);
         }
 
         return new self(
@@ -72,7 +72,7 @@ final readonly class IdentityDocument
         return $this->number;
     }
 
-    public function expiresAt(): \DateTimeImmutable
+    public function expiresAt(): ExpiryDate
     {
         return $this->expiresAt;
     }

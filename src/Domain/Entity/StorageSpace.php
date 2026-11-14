@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
+use App\Domain\Exception\StorageSpace\InvalidStorageSpaceStatusTransitionException;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
@@ -36,9 +37,16 @@ final readonly class StorageSpace
     /**
      * Properties are readonly, so a status change is a new instance rather
      * than a mutation: the repository is responsible for persisting it.
+     *
+     * @throws InvalidStorageSpaceStatusTransitionException when the lifecycle forbids it
+     *                                                      (see {@see StorageSpaceStatus})
      */
     public function withStatus(StorageSpaceStatus $status): self
     {
+        if (!$this->status->canTransitionTo($status)) {
+            throw new InvalidStorageSpaceStatusTransitionException($this->status, $status);
+        }
+
         return new self(
             id: $this->id,
             code: $this->code,

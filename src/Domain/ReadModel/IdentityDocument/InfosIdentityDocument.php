@@ -7,7 +7,9 @@ namespace App\Domain\ReadModel\IdentityDocument;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
 use App\Domain\ValueObject\Generic\CountryCode;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\ExpiryDate;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
+
 
 final readonly class InfosIdentityDocument
 {
@@ -16,7 +18,7 @@ final readonly class InfosIdentityDocument
         public IdentityDocumentType $type,
         public CountryCode $country,
         public IdentityDocumentNumber $number,
-        public \DateTimeImmutable $expiresAt,
+        public ExpiryDate $expiresAt,
         public \DateTimeImmutable $createdAt,
     ) {}
 }

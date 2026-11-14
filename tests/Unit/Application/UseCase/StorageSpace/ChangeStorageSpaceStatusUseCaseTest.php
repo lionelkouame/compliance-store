@@ -7,7 +7,8 @@ namespace App\Tests\Unit\Application\UseCase\StorageSpace;
 use App\Application\UseCase\StorageSpace\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusRequest;
 use App\Application\UseCase\StorageSpace\ChangeStorageSpaceStatus\ChangeStorageSpaceStatusUseCase;
 use App\Domain\Entity\StorageSpace;
-use App\Domain\Exception\StorageSpace\InvalidStatusStorageException;
+use App\Domain\Exception\InvalidValueException;
+use App\Domain\Exception\StorageSpace\InvalidStorageSpaceStatusTransitionException;
 use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
@@ -91,7 +92,7 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
             idValidator: $idValidator,
         );
 
-        $this->expectException(InvalidStatusStorageException::class);
+        $this->expectException(InvalidValueException::class);
 
         $useCase->execute(new ChangeStorageSpaceStatusRequest(
             id: '660e8400-e29b-41d4-a716-446655440000',
@@ -119,5 +120,26 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
             id: 'not-a-uuid',
             status: 'archived',
         ));
+    }
+
+    public function testExecuteRejectsATransitionForbiddenByTheLifecycle(): void
+    {
+        $archived = StorageSpace::create(
+            id: StorageSpaceId::fromString('660e8400-e29b-41d4-a716-446655440000'),
+            code: new StorageSpaceCode('EU-WEST-1'),
+            name: new StorageSpaceName('EU West Primary'),
+        )->withStatus(StorageSpaceStatus::Archived);
+
+        $storageSpaces = $this->createMock(StorageSpaceRepositoryInterface::class);
+        $storageSpaces->method('get')->willReturn($archived);
+        $storageSpaces->expects(self::never())->method('update');
+
+        $idValidator = $this->createStub(IdValidatorInterface::class);
+        $idValidator->method('isValid')->willReturn(true);
+
+        $this->expectException(InvalidStorageSpaceStatusTransitionException::class);
+
+        (new ChangeStorageSpaceStatusUseCase(storageSpaces: $storageSpaces, idValidator: $idValidator))
+            ->execute(new ChangeStorageSpaceStatusRequest(id: '660e8400-e29b-41d4-a716-446655440000', status: 'active'));
     }
 }

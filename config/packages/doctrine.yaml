@@ -33,6 +33,8 @@ doctrine:
                 class: App\Infrastructure\Persistence\Doctrine\Type\EmailType
             birth_date:
                 class: App\Infrastructure\Persistence\Doctrine\Type\BirthDateType
+            expiry_date:
+                class: App\Infrastructure\Persistence\Doctrine\Type\ExpiryDateType
             natural_person_id:
                 class: App\Infrastructure\Persistence\Doctrine\Type\NaturalPersonIdType
             first_name:

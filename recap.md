@@ -93,7 +93,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 * **Pourquoi** : l'ADR 0005 exige que le Domaine garantisse ses invariants quel que soit le point d'entrée (CLI, message bus…). Le format n'est contrôlé que par le DTO HTTP.
 * **Correction** : valider le format dans le Value Object, par exemple avec `filter_var($value, FILTER_VALIDATE_EMAIL)`, qui n'ajoute aucune dépendance.
 
-### 🟠 M3 — Des règles métier vivent dans la couche Application
+### 🟠 M3 — Des règles métier vivent dans la couche Application — ✅ corrigé
 
 * `RegisterIdentityDocumentUseCase.php:31` et `:63` : la conversion du type de document et de la date d'expiration (avec ses règles de format) est faite dans le use case.
 * `ChangeStorageSpaceStatusUseCase.php:40` : la conversion du statut se fait dans le use case, alors que `Gender::fromNullable()` montre le bon emplacement (le Domaine).
@@ -168,19 +168,19 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 
 ## 5. Plan d'action recommandé
 
-> **Avancement** : les étapes 1 à 4 sont faites (constats C1, C2, C3, M2, M4, M7), avec des tests unitaires et API qui reproduisent chaque défaut.
+> **Avancement** : les étapes 1 à 5 sont faites (constats C1, C2, C3, M2, M3, M4, M7), avec des tests unitaires et API qui reproduisent chaque défaut.
 
-| Priorité | Action                                                                                              | Constats | Effort |
-| -------- | --------------------------------------------------------------------------------------------------- | -------- | ------ |
-| 1        | Corriger `BirthDate` et `CreateHolderInput`, avec des tests (fait)                                  | C1, C2   | S      |
-| 2        | Valider le format dans `Email` ; typer `HolderRepositoryInterface` avec des VO (fait)               | M2, M4   | S      |
-| 3        | Injecter environnement et version dans `CheckSystemStatusUseCase` (fait)                            | M7       | XS     |
-| 4        | Rattacher le document à un titulaire réel dans `StoreDocument` (fait)                               | C3       | M      |
-| 5        | Remonter les règles dans le Domaine (`ExpiryDate`, fabriques d'enum, transitions de `StorageSpace`) | M3       | M      |
-| 6        | Décider : implémenter le Compliance Core, ou corriger la documentation                              | M1       | M à L  |
-| 7        | Atomicité stockage + base (port de transaction et nettoyage)                                        | M5       | M      |
-| 8        | Remplacer `GET /holders/{email}` par une recherche sans donnée personnelle dans l'URL               | M6       | S      |
-| 9        | Sous-couches Deptrac, nettoyage du code mort, harmonisation des VO, port `Clock`                    | m1 à m5  | M      |
-| 10       | Tests des Value Objects, des entités restantes et des repositories                                  | m6       | M      |
+| Priorité | Action                                                                                                     | Constats | Effort |
+| -------- | ---------------------------------------------------------------------------------------------------------- | -------- | ------ |
+| 1        | Corriger `BirthDate` et `CreateHolderInput`, avec des tests (fait)                                         | C1, C2   | S      |
+| 2        | Valider le format dans `Email` ; typer `HolderRepositoryInterface` avec des VO (fait)                      | M2, M4   | S      |
+| 3        | Injecter environnement et version dans `CheckSystemStatusUseCase` (fait)                                   | M7       | XS     |
+| 4        | Rattacher le document à un titulaire réel dans `StoreDocument` (fait)                                      | C3       | M      |
+| 5        | Remonter les règles dans le Domaine (`ExpiryDate`, fabriques d'enum, transitions de `StorageSpace`) (fait) | M3       | M      |
+| 6        | Décider : implémenter le Compliance Core, ou corriger la documentation                                     | M1       | M à L  |
+| 7        | Atomicité stockage + base (port de transaction et nettoyage)                                               | M5       | M      |
+| 8        | Remplacer `GET /holders/{email}` par une recherche sans donnée personnelle dans l'URL                      | M6       | S      |
+| 9        | Sous-couches Deptrac, nettoyage du code mort, harmonisation des VO, port `Clock`                           | m1 à m5  | M      |
+| 10       | Tests des Value Objects, des entités restantes et des repositories                                         | m6       | M      |
 
 *Effort : XS < 1 h, S ≈ ½ journée, M ≈ 1 à 2 jours, L > 3 jours.*

@@ -111,7 +111,7 @@ final class IdentityDocumentApiTest extends ApiTestCase
         self::assertSame('Passport', $identityDocument->type()->value);
         self::assertSame('FRA', $identityDocument->country()->value);
         self::assertSame('18AB12345', $identityDocument->number()->value);
-        self::assertSame('2035-01-31', $identityDocument->expiresAt()->format('Y-m-d'));
+        self::assertSame('2035-01-31', (string) $identityDocument->expiresAt());
     }
 
     public function testItReturnsTheCreationDate(): void

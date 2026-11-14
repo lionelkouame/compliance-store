@@ -96,7 +96,8 @@ itself extends `App\Domain\Exception\DomainException` (a `\DomainException`):
          │     ├── InvalidValueException             ◄── thrown directly by Value Objects
          │     ├── IdentityDocumentExpiredException
          │     ├── InvalidHolderStatusTransitionException
-         │     └── InvalidStatusStorageException
+         │     ├── InvalidStorageSpaceStatusTransitionException
+         │     └── UnknownDocumentHolderException
          └── PolicyViolationException   (abstract)  reserved — see "Open point" below
 ```
 

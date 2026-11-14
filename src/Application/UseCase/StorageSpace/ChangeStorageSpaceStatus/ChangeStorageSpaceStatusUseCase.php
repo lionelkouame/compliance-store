@@ -6,7 +6,6 @@ namespace App\Application\UseCase\StorageSpace\ChangeStorageSpaceStatus;
 
 use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
-use App\Domain\Exception\StorageSpace\InvalidStatusStorageException;
 use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
@@ -37,13 +36,7 @@ final readonly class ChangeStorageSpaceStatusUseCase implements UseCaseInterface
             throw new StorageSpaceNotFoundException();
         }
 
-        $status = StorageSpaceStatus::tryFrom($request->status);
-
-        if (null === $status) {
-            throw new InvalidStatusStorageException();
-        }
-
-        $updated = $storageSpace->withStatus($status);
+        $updated = $storageSpace->withStatus(StorageSpaceStatus::fromString($request->status));
 
         $this->storageSpaces->update($updated);
 
