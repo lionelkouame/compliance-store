@@ -59,14 +59,14 @@ Les faiblesses ne sont pas dans **la direction des dépendances**, mais dans **l
 
 Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contournée), **🟠 Majeur** (dette qui affaiblit l'architecture), **🟡 Mineur** (cohérence, hygiène).
 
-### 🔴 C1 — Le Domaine accepte des dates de naissance impossibles — ✅ corrigé
+### 🔴 C1 — Le Domaine accepte des dates de naissance impossibles — (fait) corrigé
 
 * **Où** : `src/Domain/ValueObject/Generic/BirthDate.php:37` (`createFromFormat('Y-m-d', …)` sans `!` ni contrôle de débordement).
 * **Preuve** (exécuté) : `BirthDate::make('1990-02-30')` donne `1990-03-02`, et `BirthDate::make('1990-13-45')` donne `1991-02-14`. Sur l'API, `POST /holders` avec `birthDate: 1990-02-30` répond **201** et enregistre le 2 mars.
 * **Pourquoi c'est un problème d'architecture** : un Value Object doit garantir son invariant (ADR 0004). Ici le Domaine laisse entrer une donnée fausse, et aucun verrou extérieur ne le compense : le DTO ne vérifie que la présence du champ.
 * **Correction** : reprendre la technique déjà utilisée dans `RegisterIdentityDocumentUseCase::parseDate` : format `'!Y-m-d'`, puis vérifier que `$date->format('Y-m-d') === $value`.
 
-### 🔴 C2 — `POST /holders` sans email répond 500 et expose un message interne — ✅ corrigé
+### 🔴 C2 — `POST /holders` sans email répond 500 et expose un message interne — (fait) corrigé
 
 * **Où** : `Resource/Holder/CreateHolderInput.php:16` porte seulement `#[Assert\Email]`, qui accepte `null` ; ensuite `State/Processor/Holder/CreateHolderProcessor.php:34` exécute `Assert::string($data->email)`.
 * **Preuve** (exécuté) : `{"holderName":"Jane","birthDate":"1990-01-01"}` donne **HTTP 500** avec le détail « Expected a string. Got: NULL ».
@@ -86,7 +86,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 * **Risque** : la documentation garantit plus que le code. Un lecteur, auditeur compris, peut croire à une protection absente.
 * **Correction** : soit implémenter le service de conformité du Domaine, appelé par `StoreDocumentUseCase`, soit marquer clairement cette garantie comme « à venir » dans l'ADR 0001, dans le commentaire de `Document` et dans la documentation.
 
-### 🟠 M2 — Le double verrou de validation est incomplet pour l'email — ✅ corrigé
+### 🟠 M2 — Le double verrou de validation est incomplet pour l'email — (fait) corrigé
 
 * **Où** : `src/Domain/ValueObject/Document/Email.php` ne vérifie que « non vide » et « 255 caractères maximum ».
 * **Preuve** (exécuté) : `Email::make('not-an-email')` est accepté.
@@ -100,7 +100,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 * `Domain/Entity/StorageSpace.php:40` : `withStatus()` accepte **n'importe quelle** transition (une archive peut redevenir active). C'est une entité anémique, alors que `Holder` contrôle déjà ses transitions (`InvalidHolderStatusTransitionException`).
 * **Correction** : créer un Value Object `ExpiryDate`, et des fabriques `IdentityDocumentType::fromString()` et `StorageSpaceStatus::fromString()` qui lèvent `InvalidValueException`. Déplacer les règles de transition dans `StorageSpace`, sur le modèle de `Holder`.
 
-### 🟠 M4 — Des ports du Domaine exposent des types primitifs — ✅ corrigé
+### 🟠 M4 — Des ports du Domaine exposent des types primitifs — (fait) corrigé
 
 * **Où** : `src/Domain/Port/Repository/HolderRepositoryInterface.php:11` et `:13`, `findById(string)` et `findByEmail(string)`.
 * **Pourquoi** : l'ADR 0004 interdit les primitives dans la surface publique du Domaine, et `NaturalPersonRepositoryInterface` reçoit déjà un `NaturalPersonId`. Avec une simple chaîne, un email non validé atteint directement la Persistence (cas de `GetHolderByEmailUseCase`).
@@ -118,7 +118,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 * **Pourquoi** : une URL est enregistrée dans les journaux d'accès, les proxies et l'historique des navigateurs. Pour un projet de conformité RGPD, l'email ne devrait pas en faire partie. Le choix de la clé de recherche relève de la couche Présentation, mais il a un impact de conformité.
 * **Correction** : rechercher par `HolderId` (`GET /holders/{id}`), ou passer l'email dans le corps d'un `POST /holders/search`.
 
-### 🟠 M7 — Configuration d'environnement codée en dur dans un use case — ✅ corrigé
+### 🟠 M7 — Configuration d'environnement codée en dur dans un use case — (fait) corrigé
 
 * **Où** : `src/Application/UseCase/System/CheckSystemStatusUseCase.php:19-20`, valeurs par défaut `'dev'` et `'1.0.0'`, sans aucune injection dans `services.yaml`.
 * **Effet** : `/api/v1/health` annonce `environment: dev` dans **tous** les environnements, production comprise.
@@ -172,9 +172,9 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 
 | Priorité | Action                                                                                              | Constats | Effort |
 | -------- | --------------------------------------------------------------------------------------------------- | -------- | ------ |
-| 1        | Corriger `BirthDate` et `CreateHolderInput`, avec des tests ✅                                       | C1, C2   | S      |
-| 2        | Valider le format dans `Email` ; typer `HolderRepositoryInterface` avec des VO ✅                    | M2, M4   | S      |
-| 3        | Injecter environnement et version dans `CheckSystemStatusUseCase` ✅                                 | M7       | XS     |
+| 1        | Corriger `BirthDate` et `CreateHolderInput`, avec des tests (fait)                                  | C1, C2   | S      |
+| 2        | Valider le format dans `Email` ; typer `HolderRepositoryInterface` avec des VO (fait)               | M2, M4   | S      |
+| 3        | Injecter environnement et version dans `CheckSystemStatusUseCase` (fait)                            | M7       | XS     |
 | 4        | Rattacher le document à un titulaire réel dans `StoreDocument`                                      | C3       | M      |
 | 5        | Remonter les règles dans le Domaine (`ExpiryDate`, fabriques d'enum, transitions de `StorageSpace`) | M3       | M      |
 | 6        | Décider : implémenter le Compliance Core, ou corriger la documentation                              | M1       | M à L  |
