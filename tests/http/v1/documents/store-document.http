@@ -1,11 +1,16 @@
 
 # @name storeKycCniDocument
 ### Store Sensitive KYC Document - CNI (Carte Nationale d'Identité)
+# Requires an existing holder: set {{holderId}} to the "identifier" returned by POST /holders.
 POST {{apiUrl}}/documents
 Content-Type: multipart/form-data; boundary=ComplianceStoreBoundary
 Accept: application/ld+json
 # Authorization: Bearer {{jwtToken}} — disabled for now, no auth implemented yet
 
+--ComplianceStoreBoundary
+Content-Disposition: form-data; name="holderId"
+
+{{holderId}}
 --ComplianceStoreBoundary
 Content-Disposition: form-data; name="file"; filename="passport.png"
 Content-Type: image/png

@@ -29,9 +29,11 @@ final readonly class StoreDocumentProcessor implements ProcessorInterface
 
         $this->validator->validate($data);
 
+        Assert::string($data->holderId);
         Assert::notNull($data->file);
 
         $useCaseResponse = $this->useCase->execute(new StoreDocumentRequest(
+            holderId: $data->holderId,
             content: $data->file->getContent(),
         ));
 

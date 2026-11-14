@@ -73,7 +73,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 * **Pourquoi c'est un problème d'architecture** : le contrat déclaratif du DTO (ADR 0005) est incomplet. L'assertion technique de l'adaptateur devient alors la seule barrière, et elle produit une erreur serveur au lieu d'un 422.
 * **Correction** : ajouter `#[Assert\NotBlank]` sur `email`. Plus largement, chaque champ vérifié par `Assert::string()` dans un processor doit avoir un `NotBlank` (ou `NotNull`) dans son DTO.
 
-### 🔴 C3 — `StoreDocument` rattache tous les documents au même titulaire, codé en dur
+### 🔴 C3 — `StoreDocument` rattache tous les documents au même titulaire, codé en dur — ✅ corrigé
 
 * **Où** : `src/Application/UseCase/Document/StoreDocument/StoreDocumentUseCase.php:39`, `HolderId::make('01a17b0e-e559-7fc6-b4e1-4b96eaa3262c')`.
 * **Pourquoi c'est un problème** : une donnée métier essentielle (à qui appartient le document) est figée dans la couche Application. Rien n'est fourni par la requête, et l'existence du titulaire n'est pas vérifiée. Pour un produit de conformité, chaque document doit être rattaché à son titulaire réel.
@@ -168,14 +168,14 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 
 ## 5. Plan d'action recommandé
 
-> **Avancement** : les étapes 1 à 3 sont faites (constats C1, C2, M2, M4, M7), avec des tests unitaires et API qui reproduisent chaque défaut.
+> **Avancement** : les étapes 1 à 4 sont faites (constats C1, C2, C3, M2, M4, M7), avec des tests unitaires et API qui reproduisent chaque défaut.
 
 | Priorité | Action                                                                                              | Constats | Effort |
 | -------- | --------------------------------------------------------------------------------------------------- | -------- | ------ |
 | 1        | Corriger `BirthDate` et `CreateHolderInput`, avec des tests (fait)                                  | C1, C2   | S      |
 | 2        | Valider le format dans `Email` ; typer `HolderRepositoryInterface` avec des VO (fait)               | M2, M4   | S      |
 | 3        | Injecter environnement et version dans `CheckSystemStatusUseCase` (fait)                            | M7       | XS     |
-| 4        | Rattacher le document à un titulaire réel dans `StoreDocument`                                      | C3       | M      |
+| 4        | Rattacher le document à un titulaire réel dans `StoreDocument` (fait)                               | C3       | M      |
 | 5        | Remonter les règles dans le Domaine (`ExpiryDate`, fabriques d'enum, transitions de `StorageSpace`) | M3       | M      |
 | 6        | Décider : implémenter le Compliance Core, ou corriger la documentation                              | M1       | M à L  |
 | 7        | Atomicité stockage + base (port de transaction et nettoyage)                                        | M5       | M      |

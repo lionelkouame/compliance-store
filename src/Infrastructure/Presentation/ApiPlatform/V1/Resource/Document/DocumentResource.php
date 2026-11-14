@@ -17,7 +17,7 @@ use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\Document\Stor
             openapi: new Operation(
                 tags: self::TagDocumentSection,
                 summary: 'Store a document',
-                description: 'Ingests a document, encrypts it (envelope encryption) and stores it on the Zero Trust storage backend.',
+                description: 'Ingests a document for an existing holder, encrypts it (envelope encryption) and stores it on the Zero Trust storage backend.',
             ),
             input: StoreDocumentInput::class,
             output: StoreDocumentOutput::class,
