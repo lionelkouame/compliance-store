@@ -13,9 +13,20 @@ PHP      = $(PHP_CONT) php
 COMPOSER = $(PHP_CONT) composer
 SYMFONY  = $(PHP) bin/console
 
+# PostgreSQL (lecture des credentials depuis l'environnement, défauts alignés sur compose.yaml)
+POSTGRES_USER ?= app
+POSTGRES_DB   ?= app
+# Les flags (-e, -T) doivent précéder le nom du service pour `docker compose exec`.
+# PSQL      : commandes non-interactives (-c, dumps) → -T désactive le pseudo-TTY,
+#             sinon docker réclame un TTY quand la sortie est redirigée.
+# PSQL_IT   : shell psql interactif (TTY conservé).
+DB_RUN     = $(DOCKER_COMP) exec -e PGPASSWORD=$${POSTGRES_PASSWORD:-!ChangeMe!}
+PSQL       = $(DB_RUN) -T database psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+PSQL_IT    = $(DB_RUN) database psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build refresh up start down logs sh bash test test-db deptrac phpstan composer vendor sf cc migration-diff migration-generate migrate migration-up migration-down setup-dns setup-hooks website-build
+.PHONY        : help build refresh up start down logs sh bash test test-db deptrac phpstan composer vendor sf cc migration-diff migration-generate migrate migration-up migration-down setup-dns setup-hooks website-build db db-query db-tables db-describe db-dump db-size
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -116,6 +127,30 @@ migration-down: ## Exécute le down d'une migration, example: make migration-dow
 	@$(SYMFONY) doctrine:migrations:execute "DoctrineMigrations\\$(v)" --down --no-interaction
 
 migrate-all: migration-diff migration-generate migrate
+
+## —— Base de données 🐘 ———————————————————————————————————————————————————————
+db: ## Ouvre un shell psql interactif sur la base PostgreSQL
+	@$(PSQL_IT)
+
+db-query: ## Exécute une requête SQL, example: make db-query q="SELECT * FROM document LIMIT 5;"
+	@test -n "$(q)" || (echo 'Usage: make db-query q="SELECT * FROM document LIMIT 5;"' && exit 1)
+	@$(PSQL) -c "$(q)"
+
+db-tables: ## Liste toutes les tables de la base
+	@$(PSQL) -c "\dt"
+
+db-describe: ## Décrit la structure d'une table, example: make db-describe t=document
+	@test -n "$(t)" || (echo "Usage: make db-describe t=document" && exit 1)
+	@$(PSQL) -c "\d $(t)"
+
+db-size: ## Affiche la taille de la base de données
+	@$(PSQL) -c "SELECT pg_size_pretty(pg_database_size('$(POSTGRES_DB)')) AS size;"
+
+db-dump: ## Exporte la base dans var/dump_<timestamp>.sql
+	@mkdir -p var
+	@$(eval DUMP_FILE := var/dump_$(shell date +%Y%m%d_%H%M%S).sql)
+	@$(DB_RUN) -T database pg_dump -U $(POSTGRES_USER) -d $(POSTGRES_DB) > $(DUMP_FILE)
+	@echo "✅ Dump créé : $(DUMP_FILE)"
 
 ## —— Website 📖 ———————————————————————————————————————————————————————————————
 website-build: ## Build the Docusaurus website (website/)
