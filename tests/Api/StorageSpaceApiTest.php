@@ -111,7 +111,7 @@ final class StorageSpaceApiTest extends ApiTestCase
         self::assertSame('archived', $response->toArray()['status']);
     }
 
-    public function testItRejectsAnInvalidStatusTransition(): void
+    public function testItRejectsAnUnknownStatus(): void
     {
         $client = static::createClient();
 
@@ -126,6 +126,27 @@ final class StorageSpaceApiTest extends ApiTestCase
         ]);
 
         self::assertResponseStatusCodeSame(422);
+    }
+
+    public function testItRefusesToReopenAnArchivedStorageSpace(): void
+    {
+        $client = static::createClient();
+
+        $created = $client->request('POST', '/api/v1/storage-spaces', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => ['code' => 'EU-WEST-1', 'name' => 'EU West Primary'],
+        ])->toArray();
+
+        foreach (['archived' => 200, 'active' => 422] as $status => $expectedCode) {
+            $response = $client->request('PATCH', '/api/v1/storage-spaces/'.$created['id'], [
+                'headers' => ['Content-Type' => 'application/merge-patch+json'],
+                'json' => ['status' => $status],
+            ]);
+
+            self::assertResponseStatusCodeSame($expectedCode);
+        }
+
+        self::assertSame('Cannot transition a storage space from "archived" to "active".', $response->toArray(false)['detail']);
     }
 
     public function testItReturns404WhenChangingTheStatusOfAnUnknownStorageSpace(): void

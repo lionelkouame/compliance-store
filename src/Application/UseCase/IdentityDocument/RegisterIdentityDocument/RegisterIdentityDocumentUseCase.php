@@ -8,12 +8,12 @@ use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\IdentityDocument;
 use App\Domain\Exception\IdentityDocument\IdentityDocumentAlreadyExistsException;
-use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Repository\IdentityDocumentRepositoryInterface;
 use App\Domain\Port\Service\IdentityDocumentIdGeneratorInterface;
 use App\Domain\ReadModel\IdentityDocument\InfosIdentityDocument;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
 use App\Domain\ValueObject\Generic\CountryCode;
+use App\Domain\ValueObject\IdentityDocument\ExpiryDate;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
 
 /**
@@ -28,11 +28,7 @@ final readonly class RegisterIdentityDocumentUseCase implements UseCaseInterface
 
     public function execute(UseCaseRequestInterface $request): RegisterIdentityDocumentResponse
     {
-        $type = IdentityDocumentType::tryFrom($request->type) ?? throw new InvalidValueException(\sprintf(
-            'The identity document type "%s" must be one of: %s.',
-            $request->type,
-            implode(', ', array_column(IdentityDocumentType::cases(), 'value')),
-        ));
+        $type = IdentityDocumentType::fromString($request->type);
         $country = new CountryCode($request->country);
         $number = new IdentityDocumentNumber($request->number);
 
@@ -45,7 +41,7 @@ final readonly class RegisterIdentityDocumentUseCase implements UseCaseInterface
             type: $type,
             country: $country,
             number: $number,
-            expiresAt: $this->parseDate($request->expiresAt),
+            expiresAt: ExpiryDate::make($request->expiresAt),
         );
 
         $this->identityDocuments->add($identityDocument);
@@ -58,17 +54,5 @@ final readonly class RegisterIdentityDocumentUseCase implements UseCaseInterface
             expiresAt: $identityDocument->expiresAt(),
             createdAt: $identityDocument->createdAt(),
         ));
-    }
-
-    private function parseDate(string $value): \DateTimeImmutable
-    {
-        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value, new \DateTimeZone('UTC'));
-
-        // createFromFormat silently rolls over impossible dates (2030-02-30), so re-format to reject them.
-        if (false === $date || $date->format('Y-m-d') !== $value) {
-            throw new InvalidValueException(\sprintf('The expiry date "%s" must be a valid Y-m-d date.', $value));
-        }
-
-        return $date;
     }
 }

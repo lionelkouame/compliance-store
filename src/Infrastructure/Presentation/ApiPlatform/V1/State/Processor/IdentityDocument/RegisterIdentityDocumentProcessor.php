@@ -48,7 +48,7 @@ final readonly class RegisterIdentityDocumentProcessor implements ProcessorInter
             type: $readModel->type->value,
             country: $readModel->country->value,
             number: $readModel->number->value,
-            expiresAt: $readModel->expiresAt->format('Y-m-d'),
+            expiresAt: (string) $readModel->expiresAt,
             createdAt: $readModel->createdAt->format(\DateTimeInterface::ATOM),
         );
     }

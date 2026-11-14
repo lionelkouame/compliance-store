@@ -9,6 +9,7 @@ use App\Domain\Exception\IdentityDocument\IdentityDocumentExpiredException;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
 use App\Domain\ValueObject\Generic\CountryCode;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\ExpiryDate;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +18,7 @@ final class IdentityDocumentTest extends TestCase
     public function testCreateExposesItsAttributes(): void
     {
         $id = IdentityDocumentId::make('0192f0c1-0000-7000-8000-000000000001');
-        $expiresAt = new \DateTimeImmutable('+5 years', new \DateTimeZone('UTC'));
+        $expiresAt = new ExpiryDate(new \DateTimeImmutable('+5 years', new \DateTimeZone('UTC')));
 
         $document = $this->create($id, $expiresAt);
 
@@ -31,7 +32,7 @@ final class IdentityDocumentTest extends TestCase
 
     public function testADocumentExpiringTodayIsStillValid(): void
     {
-        $today = new \DateTimeImmutable('today', new \DateTimeZone('UTC'));
+        $today = new ExpiryDate(new \DateTimeImmutable('today', new \DateTimeZone('UTC')));
 
         self::assertSame($today, $this->create(expiresAt: $today)->expiresAt());
     }
@@ -40,17 +41,17 @@ final class IdentityDocumentTest extends TestCase
     {
         $this->expectException(IdentityDocumentExpiredException::class);
 
-        $this->create(expiresAt: new \DateTimeImmutable('yesterday', new \DateTimeZone('UTC')));
+        $this->create(expiresAt: new ExpiryDate(new \DateTimeImmutable('yesterday', new \DateTimeZone('UTC'))));
     }
 
-    private function create(?IdentityDocumentId $id = null, ?\DateTimeImmutable $expiresAt = null): IdentityDocument
+    private function create(?IdentityDocumentId $id = null, ?ExpiryDate $expiresAt = null): IdentityDocument
     {
         return IdentityDocument::create(
             id: $id ?? IdentityDocumentId::make('0192f0c1-0000-7000-8000-000000000001'),
             type: IdentityDocumentType::Passport,
             country: new CountryCode('FRA'),
             number: new IdentityDocumentNumber('18AB12345'),
-            expiresAt: $expiresAt ?? new \DateTimeImmutable('+5 years', new \DateTimeZone('UTC')),
+            expiresAt: $expiresAt ?? new ExpiryDate(new \DateTimeImmutable('+5 years', new \DateTimeZone('UTC'))),
         );
     }
 }

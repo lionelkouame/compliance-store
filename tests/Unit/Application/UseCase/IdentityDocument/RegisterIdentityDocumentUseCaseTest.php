@@ -14,6 +14,7 @@ use App\Domain\Port\Service\IdentityDocumentIdGeneratorInterface;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
 use App\Domain\ValueObject\Generic\CountryCode;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
+use App\Domain\ValueObject\IdentityDocument\ExpiryDate;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +35,7 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
         self::assertSame(IdentityDocumentType::Passport, $readModel->type);
         self::assertSame('FRA', $readModel->country->value);
         self::assertSame('18AB12345', $readModel->number->value);
-        self::assertSame('2035-01-31', $readModel->expiresAt->format('Y-m-d'));
+        self::assertSame('2035-01-31', (string) $readModel->expiresAt);
     }
 
     public function testExecuteRejectsADuplicateDocument(): void
@@ -44,7 +45,7 @@ final class RegisterIdentityDocumentUseCaseTest extends TestCase
             type: IdentityDocumentType::Passport,
             country: new CountryCode('FRA'),
             number: new IdentityDocumentNumber('18AB12345'),
-            expiresAt: new \DateTimeImmutable('2035-01-31'),
+            expiresAt: ExpiryDate::make('2035-01-31'),
         );
 
         $identityDocuments = $this->createMock(IdentityDocumentRepositoryInterface::class);
