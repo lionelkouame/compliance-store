@@ -7,9 +7,11 @@ namespace App\Tests\Unit\Application\UseCase\Holder;
 use App\Application\UseCase\Holder\CreateHolder\CreateHolderRequest;
 use App\Application\UseCase\Holder\CreateHolder\CreateHolderUseCase;
 use App\Domain\Entity\Holder;
+use App\Domain\Event\Holder\HolderCreated;
 use App\Domain\Exception\AlreadyExistException;
 use App\Domain\Exception\Holder\HolderAlreadyExistsException;
 use App\Domain\Exception\InvalidValueException;
+use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ValueObject\Document\Email;
@@ -33,6 +35,20 @@ final class CreateHolderUseCaseTest extends TestCase
         self::assertSame(self::ID, $response->readModel->id->value());
     }
 
+    public function testExecutePublishesAHolderCreatedEvent(): void
+    {
+        $holders = $this->createMock(HolderRepositoryInterface::class);
+        $holders->method('findByEmail')->willReturn(null);
+        $holders->expects(self::once())->method('add');
+
+        $publisher = $this->createMock(DomainEventPublisher::class);
+        $publisher->expects(self::once())->method('publish')
+            ->with(self::callback(static fn (HolderCreated $event): bool => self::ID === $event->holderId()->value()
+                && 'jane@example.com' === $event->email()->value));
+
+        $this->useCase($holders, $publisher)->execute($this->request());
+    }
+
     public function testExecuteRejectsADuplicateEmail(): void
     {
         $holders = $this->createMock(HolderRepositoryInterface::class);
@@ -43,10 +59,12 @@ final class CreateHolderUseCaseTest extends TestCase
             Email::make('jane@example.com'),
         ));
         $holders->expects(self::never())->method('add');
+        $publisher = $this->createMock(DomainEventPublisher::class);
+        $publisher->expects(self::never())->method('publish');
 
         $this->expectException(HolderAlreadyExistsException::class);
 
-        $this->useCase($holders)->execute($this->request());
+        $this->useCase($holders, $publisher)->execute($this->request());
     }
 
     public function testADuplicateEmailBelongsToTheAlreadyExistCategory(): void
@@ -54,12 +72,18 @@ final class CreateHolderUseCaseTest extends TestCase
         self::assertInstanceOf(AlreadyExistException::class, new HolderAlreadyExistsException());
     }
 
-    private function useCase(HolderRepositoryInterface $holders): CreateHolderUseCase
-    {
+    private function useCase(
+        HolderRepositoryInterface $holders,
+        ?DomainEventPublisher $publisher = null,
+    ): CreateHolderUseCase {
         $generator = $this->createStub(GeneratorInterface::class);
         $generator->method('generate')->willReturn(self::ID);
 
-        return new CreateHolderUseCase($generator, $holders);
+        return new CreateHolderUseCase(
+            $generator,
+            $holders,
+            $publisher ?? $this->createStub(DomainEventPublisher::class),
+        );
     }
 
     private function request(): CreateHolderRequest
@@ -85,10 +109,12 @@ final class CreateHolderUseCaseTest extends TestCase
     {
         $holders = $this->createMock(HolderRepositoryInterface::class);
         $holders->expects(self::never())->method('add');
+        $publisher = $this->createMock(DomainEventPublisher::class);
+        $publisher->expects(self::never())->method('publish');
 
         $this->expectException(InvalidValueException::class);
 
-        $this->useCase($holders)->execute(new CreateHolderRequest(
+        $this->useCase($holders, $publisher)->execute(new CreateHolderRequest(
             holderName: 'Jane Doe',
             birthDate: '1990-02-30',
             email: 'jane@example.com',

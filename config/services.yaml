@@ -50,6 +50,9 @@ services:
         arguments:
             $masterKey: '%env(base64:DOCUMENT_MASTER_KEY)%'
 
+    # Bind the domain event-dispatcher port to its Symfony/PSR-14 adapter.
+    App\Domain\Port\Event\DomainEventPublisher: '@App\Infrastructure\Event\SymfonyDomainEventDispatcher'
+
 when@test:
     services:
         # No Monolog bundle is installed: the framework's fallback logger
