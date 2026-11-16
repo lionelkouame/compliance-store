@@ -7,7 +7,9 @@ namespace App\Application\UseCase\Holder\CreateHolder;
 use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\Holder;
+use App\Domain\Event\Holder\HolderCreated;
 use App\Domain\Exception\Holder\HolderAlreadyExistsException;
+use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ReadModel\Holder\CreateHolderRead;
@@ -22,8 +24,9 @@ use App\Domain\ValueObject\Holder\HolderName;
 final readonly class CreateHolderUseCase implements UseCaseInterface
 {
     public function __construct(
-        private GeneratorInterface $generatorUuid,
-        private HolderRepositoryInterface $holderRepository
+        private GeneratorInterface        $generatorUuid,
+        private HolderRepositoryInterface $holderRepository,
+        private DomainEventPublisher      $domainEventPublisher,
     ){}
 
     public function execute(UseCaseRequestInterface $request) : CreateHolderResponse
@@ -45,6 +48,8 @@ final readonly class CreateHolderUseCase implements UseCaseInterface
         );
 
         $this->holderRepository->add($holder);
+
+        $this->domainEventPublisher->publish(HolderCreated::fromHolder($holder));
 
         return new CreateHolderResponse(
             new CreateHolderRead($holderId)
