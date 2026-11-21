@@ -18,7 +18,8 @@ src/
 │   └── Port/                   # Contrats d'interfaces (Ports Hexagonaux)
 │       ├── Gateway/            # StorageGatewayInterface, CipherGatewayInterface
 │       ├── Repository/         # HolderRepositoryInterface, StorageSpaceRepositoryInterface...
-│       └── Service/            # GeneratorInterface, IdValidatorInterface...
+│       ├── Service/            # GeneratorInterface, IdValidatorInterface...
+│       └── Workflow/           # WorkflowEngineInterface (ADR 0014)
 │
 ├── Application/                # COUCHE APPLICATION (Orchestration des cas d'usage)
 │   └── UseCase/<Feature>/<Action>/
@@ -31,6 +32,7 @@ src/
     ├── Storage/                # MinioStorageGateway (stockage S3-compatible)
     ├── Persistence/Doctrine/   # Repositories, mappings XML et types Doctrine (PostgreSQL)
     ├── Service/                # Générateurs et validateurs d'UUID
+    ├── Workflow/               # SymfonyWorkflowEngine (symfony/workflow, ADR 0014)
     └── Presentation/ApiPlatform/V1/
         ├── Resource/<Feature>/ # <Feature>Resource (#[ApiResource]) + DTOs <Action>Input / <Action>Output
         └── State/

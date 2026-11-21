@@ -1,0 +1,36 @@
+# Workflows (state machines) of the application — see ADR 0014.
+#
+# Conventions (Clean Architecture):
+#   * The subject is a Domain entity with NO dependency on symfony/workflow.
+#     It exposes its current place through `get<Property>()` / `set<Property>()`
+#     typed with a backed enum of src/Domain/ValueObject/<Feature>/ (e.g. DocumentStatus).
+#   * Places are the enum's values; transitions are verbs in snake_case.
+#   * Use cases never use Symfony's workflow services: they depend on the
+#     Domain port App\Domain\Port\Workflow\WorkflowEngineInterface and pass
+#     the workflow name declared below.
+#   * A refused transition surfaces as TransitionNotAllowedException (422).
+#   * Side effects (notifications, processing...) belong in listeners under
+#     src/Infrastructure/Workflow/Listener/, never in the Domain.
+#
+# Example:
+#
+#   framework:
+#       workflows:
+#           document_processing:
+#               type: state_machine
+#               audit_trail:
+#                   enabled: true
+#               marking_store:
+#                   type: method
+#                   property: status
+#               supports:
+#                   - App\Domain\Entity\Document
+#               initial_marking: received
+#               places: [received, processing, processed, failed]
+#               transitions:
+#                   start:    { from: received,   to: processing }
+#                   complete: { from: processing, to: processed }
+#                   fail:     { from: processing, to: failed }
+
+framework:
+    workflows: null
