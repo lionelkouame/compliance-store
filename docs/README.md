@@ -21,6 +21,7 @@ Bienvenue dans la documentation officielle du projet **Compliance Store**.
   * [ADR 0011: Binary Responses Are Served by State Providers Returning a Response](architecture/adr/0011-binary-responses-served-by-state-providers.md) *(Proposed)*
   * [ADR 0012: Regulation Engine Extracted as an External, Reusable Provider](architecture/adr/0012-external-regulation-engine-as-provider.md) *(Proposed)*
   * [ADR 0013: Business Exceptions Categorised in the Domain, Translated to HTTP Once at the Boundary](architecture/adr/0013-business-exceptions-translated-once-at-the-boundary.md)
+  * [ADR 0014: Workflows Declared in Configuration, Driven Through a Domain Port](architecture/adr/0014-workflows-behind-a-domain-port.md)
 * **Workflows & Pipelines** *(à rédiger)* :
   * Pipeline d'Ingestion & Redaction PII
   * Pipeline de Consultation & Déchiffrement
