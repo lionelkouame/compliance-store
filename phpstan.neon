@@ -9,3 +9,18 @@ parameters:
     tmpDir: var/cache/phpstan
     symfony:
         containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+    # Business exceptions are checked (ADR 0013): a method that can throw one
+    # must declare it with @throws, so each use case documents its error contract.
+    exceptions:
+        check:
+            missingCheckedExceptionInThrows: true
+            tooWideThrowType: true
+        checkedExceptionClasses:
+            - App\Domain\Exception\DomainException
+    ignoreErrors:
+        # Doctrine types rebuild value objects from rows that were valid when
+        # written: an invalid row is data corruption (a 500), not a client error.
+        -
+            identifier: missingType.checkedException
+            paths:
+                - src/Infrastructure/Persistence/Doctrine/Type/*

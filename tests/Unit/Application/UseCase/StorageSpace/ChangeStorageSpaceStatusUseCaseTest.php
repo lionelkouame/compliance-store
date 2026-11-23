@@ -29,7 +29,7 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
         );
 
         $storageSpaces = $this->createMock(StorageSpaceRepositoryInterface::class);
-        $storageSpaces->method('get')->willReturn($existing);
+        $storageSpaces->method('getById')->willReturn($existing);
         $storageSpaces->expects(self::once())->method('update')
             ->with(self::callback(static fn (StorageSpace $s) => StorageSpaceStatus::Archived === $s->status));
 
@@ -53,7 +53,7 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
     public function testExecuteThrowsWhenStorageSpaceDoesNotExist(): void
     {
         $storageSpaces = $this->createMock(StorageSpaceRepositoryInterface::class);
-        $storageSpaces->method('get')->willReturn(null);
+        $storageSpaces->method('getById')->willThrowException(new StorageSpaceNotFoundException());
         $storageSpaces->expects(self::never())->method('update');
 
         $idValidator = $this->createStub(IdValidatorInterface::class);
@@ -81,7 +81,7 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
         );
 
         $storageSpaces = $this->createMock(StorageSpaceRepositoryInterface::class);
-        $storageSpaces->method('get')->willReturn($existing);
+        $storageSpaces->method('getById')->willReturn($existing);
         $storageSpaces->expects(self::never())->method('update');
 
         $idValidator = $this->createStub(IdValidatorInterface::class);
@@ -103,7 +103,7 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
     public function testExecuteTreatsAMalformedIdAsNotFound(): void
     {
         $storageSpaces = $this->createMock(StorageSpaceRepositoryInterface::class);
-        $storageSpaces->expects(self::never())->method('get');
+        $storageSpaces->expects(self::never())->method('getById');
         $storageSpaces->expects(self::never())->method('update');
 
         $idValidator = $this->createStub(IdValidatorInterface::class);
@@ -131,7 +131,7 @@ final class ChangeStorageSpaceStatusUseCaseTest extends TestCase
         )->withStatus(StorageSpaceStatus::Archived);
 
         $storageSpaces = $this->createMock(StorageSpaceRepositoryInterface::class);
-        $storageSpaces->method('get')->willReturn($archived);
+        $storageSpaces->method('getById')->willReturn($archived);
         $storageSpaces->expects(self::never())->method('update');
 
         $idValidator = $this->createStub(IdValidatorInterface::class);

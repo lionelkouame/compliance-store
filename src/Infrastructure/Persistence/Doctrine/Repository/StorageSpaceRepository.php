@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Domain\Entity\StorageSpace;
+use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
+use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,11 +24,22 @@ final class StorageSpaceRepository extends ServiceEntityRepository implements St
         parent::__construct($registry, StorageSpace::class);
     }
 
+    /**
+     * The use case checks the code beforehand, but two concurrent requests can
+     * both pass that check: the unique index then rejects the second insert,
+     * which is reported as the same business error (409), not as a 500.
+     * @throws StorageSpaceCodeAlreadyExistsException when the code is already taken
+     */
     public function add(StorageSpace $storageSpace): void
     {
         $entityManager = $this->getEntityManager();
         $entityManager->persist($storageSpace);
-        $entityManager->flush();
+
+        try {
+            $entityManager->flush();
+        } catch (UniqueConstraintViolationException) {
+            throw StorageSpaceCodeAlreadyExistsException::withCode($storageSpace->code);
+        }
     }
 
     /**
@@ -46,9 +60,12 @@ final class StorageSpaceRepository extends ServiceEntityRepository implements St
         $this->getEntityManager()->clear();
     }
 
-    public function get(StorageSpaceId $id): ?StorageSpace
+    /**
+     * @throws StorageSpaceNotFoundException when no storage space has this id
+     */
+    public function getById(StorageSpaceId $id): StorageSpace
     {
-        return $this->find($id->value);
+        return $this->find($id->value) ?? throw StorageSpaceNotFoundException::withId($id);
     }
 
     public function findByCode(StorageSpaceCode $code): ?StorageSpace

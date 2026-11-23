@@ -15,6 +15,6 @@ final readonly class SymfonyStorageSpaceUuidGenerator implements StorageSpaceIdG
 {
     public function generate(): StorageSpaceId
     {
-        return StorageSpaceId::fromString(Uuid::v7()->toRfc4122());
+        return StorageSpaceId::fromString(Uuid::v7()->toRfc4122()); // @phpstan-ignore missingType.checkedException (a UUID v7 is always well formed)
     }
 }

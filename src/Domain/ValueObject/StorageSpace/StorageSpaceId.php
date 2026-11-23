@@ -10,6 +10,9 @@ use App\Domain\ValueObject\IdentifierInterface;
 
 final readonly class StorageSpaceId implements IdentifierInterface
 {
+    /**
+     * @throws InvalidValueException when the identifier is malformed
+     */
     public function __construct(
         public string $value,
         ?IdValidatorInterface $validator = null,
@@ -22,6 +25,9 @@ final readonly class StorageSpaceId implements IdentifierInterface
         }
     }
 
+    /**
+     * @throws InvalidValueException when the identifier is malformed
+     */
     public static function fromString(string $value, ?IdValidatorInterface $validator = null): self
     {
         return new self($value, $validator);

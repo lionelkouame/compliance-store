@@ -9,8 +9,17 @@ use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
 
 final class StorageSpaceCodeAlreadyExistsException extends AlreadyExistException
 {
-    public function __construct()
+    private function __construct(string $message)
     {
-        parent::__construct('A storage space with code already exists');
+        parent::__construct($message);
+    }
+
+    /**
+     * A storage space code is a technical label, not personal data: it can be
+     * echoed in the message (ADR 0013 §6).
+     */
+    public static function withCode(StorageSpaceCode $code): self
+    {
+        return new self(\sprintf('A storage space with code "%s" already exists.', $code->value));
     }
 }

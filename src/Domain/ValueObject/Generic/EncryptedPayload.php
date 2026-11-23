@@ -14,6 +14,9 @@ use App\Domain\Exception\InvalidValueException;
  */
 final readonly class EncryptedPayload
 {
+    /**
+     * @throws InvalidValueException when the ciphertext is empty
+     */
     private function __construct(
         private string $value,
     ) {
@@ -22,6 +25,9 @@ final readonly class EncryptedPayload
         }
     }
 
+    /**
+     * @throws InvalidValueException when the ciphertext is empty
+     */
     public static function make(string $value): self
     {
         return new self($value);

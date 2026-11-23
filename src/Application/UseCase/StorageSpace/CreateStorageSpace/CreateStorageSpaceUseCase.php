@@ -8,6 +8,7 @@ use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\StorageSpace;
 use App\Domain\Event\StorageSpace\StorageSpaceCreated;
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
 use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
@@ -28,13 +29,17 @@ final readonly class CreateStorageSpaceUseCase implements UseCaseInterface
         private DomainEventPublisher $domainEventPublisher,
     ) {}
 
+    /**
+     * @throws StorageSpaceCodeAlreadyExistsException when the code is already taken
+     * @throws InvalidValueException when the code or the name is invalid
+     */
     public function execute(UseCaseRequestInterface $request): CreateStorageSpaceResponse
     {
         $code = new StorageSpaceCode($request->code);
         $name = new StorageSpaceName($request->name);
 
         if (null !== $this->storageSpaces->findByCode($code)) {
-            throw new StorageSpaceCodeAlreadyExistsException();
+            throw StorageSpaceCodeAlreadyExistsException::withCode($code);
         }
 
         $storageSpace = StorageSpace::create(

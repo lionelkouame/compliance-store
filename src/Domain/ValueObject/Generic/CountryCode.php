@@ -13,6 +13,9 @@ use App\Domain\Exception\InvalidValueException;
  */
 final readonly class CountryCode
 {
+    /**
+     * @throws InvalidValueException when the code is not three uppercase letters
+     */
     public function __construct(
         public string $value,
     ) {

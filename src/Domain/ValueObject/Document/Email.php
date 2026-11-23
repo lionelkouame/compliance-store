@@ -8,6 +8,9 @@ use App\Domain\Exception\InvalidValueException;
 
 final readonly class Email
 {
+    /**
+     * @throws InvalidValueException when the email is empty or malformed
+     */
     public function __construct(
         public string $value,
     ) {
@@ -38,6 +41,9 @@ final readonly class Email
         return $this->value;
     }
 
+    /**
+     * @throws InvalidValueException when the email is empty or malformed
+     */
     public static function make(string $value): self
     {
         return new self($value);

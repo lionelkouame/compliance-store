@@ -8,6 +8,9 @@ use App\Domain\Exception\InvalidValueException;
 
 final readonly class HolderName
 {
+    /**
+     * @throws InvalidValueException when the name is empty or too long
+     */
     public function __construct(
         public string $value,
     ) {
@@ -31,6 +34,9 @@ final readonly class HolderName
     {
         return $this->value;
     }
+    /**
+     * @throws InvalidValueException when the name is empty or too long
+     */
     public static function make(string $value): self
     {
         if (trim($value) === '') {

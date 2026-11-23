@@ -7,6 +7,7 @@ namespace App\Application\UseCase\NaturalPerson\CreateNaturalPerson;
 use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\NaturalPerson;
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Repository\NaturalPersonRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ReadModel\NaturalPerson\IdentifierNaturalPerson;
@@ -26,6 +27,9 @@ final readonly class CreateNaturalPersonUseCase implements UseCaseInterface
         private NaturalPersonRepositoryInterface $naturalPersonRepository,
     ) {}
 
+    /**
+     * @throws InvalidValueException when a field breaks a value object invariant
+     */
     public function execute(UseCaseRequestInterface $request): CreateNaturalPersonResponse
     {
         $naturalPersonId = NaturalPersonId::make($this->generatorUuid->generate());

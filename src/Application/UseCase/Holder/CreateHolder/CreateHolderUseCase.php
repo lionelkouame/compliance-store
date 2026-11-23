@@ -9,6 +9,7 @@ use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\Holder;
 use App\Domain\Event\Holder\HolderCreated;
 use App\Domain\Exception\Holder\HolderAlreadyExistsException;
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
@@ -29,6 +30,10 @@ final readonly class CreateHolderUseCase implements UseCaseInterface
         private DomainEventPublisher      $domainEventPublisher,
     ){}
 
+    /**
+     * @throws HolderAlreadyExistsException when the email is already used
+     * @throws InvalidValueException when a field breaks a value object invariant
+     */
     public function execute(UseCaseRequestInterface $request) : CreateHolderResponse
     {
         $holderId = HolderId::make($this->generatorUuid->generate());

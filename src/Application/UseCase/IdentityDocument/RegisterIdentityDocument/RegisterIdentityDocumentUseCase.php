@@ -8,6 +8,8 @@ use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\IdentityDocument;
 use App\Domain\Exception\IdentityDocument\IdentityDocumentAlreadyExistsException;
+use App\Domain\Exception\IdentityDocument\IdentityDocumentExpiredException;
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Repository\IdentityDocumentRepositoryInterface;
 use App\Domain\Port\Service\IdentityDocumentIdGeneratorInterface;
 use App\Domain\ReadModel\IdentityDocument\InfosIdentityDocument;
@@ -26,6 +28,11 @@ final readonly class RegisterIdentityDocumentUseCase implements UseCaseInterface
         private IdentityDocumentIdGeneratorInterface $idGenerator,
     ) {}
 
+    /**
+     * @throws IdentityDocumentAlreadyExistsException when the document is already registered
+     * @throws IdentityDocumentExpiredException when the document has already expired
+     * @throws InvalidValueException when a field breaks a value object invariant
+     */
     public function execute(UseCaseRequestInterface $request): RegisterIdentityDocumentResponse
     {
         $type = IdentityDocumentType::fromString($request->type);
@@ -33,7 +40,7 @@ final readonly class RegisterIdentityDocumentUseCase implements UseCaseInterface
         $number = new IdentityDocumentNumber($request->number);
 
         if (null !== $this->identityDocuments->findByNumber($type, $country, $number)) {
-            throw new IdentityDocumentAlreadyExistsException($type, $country, $number);
+            throw IdentityDocumentAlreadyExistsException::withType($type, $country);
         }
 
         $identityDocument = IdentityDocument::create(

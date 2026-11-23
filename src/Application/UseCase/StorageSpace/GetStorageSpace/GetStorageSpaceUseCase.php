@@ -22,6 +22,9 @@ final readonly class GetStorageSpaceUseCase implements UseCaseInterface
         private IdValidatorInterface $idValidator,
     ) {}
 
+    /**
+     * @throws StorageSpaceNotFoundException when the id is malformed or matches no storage space
+     */
     public function execute(UseCaseRequestInterface $request): GetStorageSpaceResponse
     {
         // An id that is not even a valid UUID cannot match anything: it is "not found".
@@ -29,11 +32,7 @@ final readonly class GetStorageSpaceUseCase implements UseCaseInterface
             throw new StorageSpaceNotFoundException();
         }
 
-        $storageSpace = $this->storageSpaces->get(StorageSpaceId::fromString($request->id));
-
-        if (null === $storageSpace) {
-            throw new StorageSpaceNotFoundException();
-        }
+        $storageSpace = $this->storageSpaces->getById(StorageSpaceId::fromString($request->id)); // @phpstan-ignore missingType.checkedException (id validated above)
 
         return new GetStorageSpaceResponse(
             InfosStorageSpace::fromEntity($storageSpace),
