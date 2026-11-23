@@ -15,6 +15,9 @@ use App\Domain\Port\Service\IdValidatorInterface;
  */
 final readonly class WrappedDataKey
 {
+    /**
+     * @throws InvalidValueException when the key is empty
+     */
     private function __construct(
         private string $value,
     ) {
@@ -32,6 +35,9 @@ final readonly class WrappedDataKey
     {
         return $this->value;
     }
+    /**
+     * @throws InvalidValueException when the key is empty
+     */
     public static function make(string $value): self
     {
         return new self($value);

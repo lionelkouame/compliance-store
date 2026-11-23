@@ -21,6 +21,9 @@ final readonly class GetHolderByEmailUseCase implements UseCaseInterface
         private HolderRepositoryInterface $holderRepository,
     ) {}
 
+    /**
+     * @throws HolderNotFoundException when the email is malformed or matches no holder
+     */
     public function execute(UseCaseRequestInterface $request): GetHolderByEmailResponse
     {
         try {

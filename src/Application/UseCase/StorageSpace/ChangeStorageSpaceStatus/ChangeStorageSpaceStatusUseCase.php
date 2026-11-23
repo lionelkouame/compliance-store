@@ -6,6 +6,8 @@ namespace App\Application\UseCase\StorageSpace\ChangeStorageSpaceStatus;
 
 use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
+use App\Domain\Exception\InvalidValueException;
+use App\Domain\Exception\StorageSpace\InvalidStorageSpaceStatusTransitionException;
 use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
@@ -23,6 +25,11 @@ final readonly class ChangeStorageSpaceStatusUseCase implements UseCaseInterface
         private IdValidatorInterface $idValidator,
     ) {}
 
+    /**
+     * @throws StorageSpaceNotFoundException when the id is malformed or matches no storage space
+     * @throws InvalidValueException when the status is unknown
+     * @throws InvalidStorageSpaceStatusTransitionException when the transition is not allowed
+     */
     public function execute(UseCaseRequestInterface $request): ChangeStorageSpaceStatusResponse
     {
         // An id that is not even a valid UUID cannot match anything: it is "not found".
@@ -30,11 +37,7 @@ final readonly class ChangeStorageSpaceStatusUseCase implements UseCaseInterface
             throw new StorageSpaceNotFoundException();
         }
 
-        $storageSpace = $this->storageSpaces->get(StorageSpaceId::fromString($request->id));
-
-        if (null === $storageSpace) {
-            throw new StorageSpaceNotFoundException();
-        }
+        $storageSpace = $this->storageSpaces->getById(StorageSpaceId::fromString($request->id));
 
         $updated = $storageSpace->withStatus(StorageSpaceStatus::fromString($request->status));
 

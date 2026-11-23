@@ -16,6 +16,9 @@ final readonly class BirthDate
 {
     public \DateTimeImmutable $value;
 
+    /**
+     * @throws InvalidValueException when the date is not in the past
+     */
     public function __construct(\DateTimeImmutable $value)
     {
         $today = new \DateTimeImmutable('today', new \DateTimeZone('UTC'));
@@ -32,6 +35,9 @@ final readonly class BirthDate
         return $this->value->format('Y-m-d') === $other->value->format('Y-m-d');
     }
 
+    /**
+     * @throws InvalidValueException when the value is not a valid Y-m-d date in the past
+     */
     public static function make(string $value): self
     {
         // "!" resets the time to midnight; re-formatting rejects the dates that

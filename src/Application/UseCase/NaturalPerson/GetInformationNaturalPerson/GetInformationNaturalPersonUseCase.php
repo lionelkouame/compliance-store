@@ -6,6 +6,7 @@ namespace App\Application\UseCase\NaturalPerson\GetInformationNaturalPerson;
 
 use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
+use App\Domain\Exception\InvalidValueException;
 use App\Domain\Exception\NaturalPerson\NaturalPersonNotFoundException;
 use App\Domain\Port\Repository\NaturalPersonRepositoryInterface;
 use App\Domain\ReadModel\NaturalPerson\InfosNaturalPerson;
@@ -20,6 +21,10 @@ final readonly class GetInformationNaturalPersonUseCase implements UseCaseInterf
         private NaturalPersonRepositoryInterface $naturalPersonRepository,
     ) {}
 
+    /**
+     * @throws NaturalPersonNotFoundException when no natural person has this id
+     * @throws InvalidValueException when the identifier is malformed
+     */
     public function execute(UseCaseRequestInterface $request): GetInformationNaturalPersonResponse
     {
         $naturalPerson = $this->naturalPersonRepository->findById(

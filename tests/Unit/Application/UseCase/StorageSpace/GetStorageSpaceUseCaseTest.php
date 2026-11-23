@@ -23,7 +23,7 @@ final class GetStorageSpaceUseCaseTest extends TestCase
     public function testExecuteReturnsTheStorageSpaceReadModel(): void
     {
         $storageSpaces = $this->createStub(StorageSpaceRepositoryInterface::class);
-        $storageSpaces->method('get')->willReturn(StorageSpace::create(
+        $storageSpaces->method('getById')->willReturn(StorageSpace::create(
             id: StorageSpaceId::fromString(self::ID),
             code: new StorageSpaceCode('EU-WEST-1'),
             name: new StorageSpaceName('EU West Primary'),
@@ -42,7 +42,7 @@ final class GetStorageSpaceUseCaseTest extends TestCase
     public function testExecuteThrowsWhenStorageSpaceDoesNotExist(): void
     {
         $storageSpaces = $this->createStub(StorageSpaceRepositoryInterface::class);
-        $storageSpaces->method('get')->willReturn(null);
+        $storageSpaces->method('getById')->willThrowException(new StorageSpaceNotFoundException());
 
         $this->expectException(StorageSpaceNotFoundException::class);
 
@@ -52,7 +52,7 @@ final class GetStorageSpaceUseCaseTest extends TestCase
     public function testExecuteTreatsAMalformedIdAsNotFound(): void
     {
         $storageSpaces = $this->createMock(StorageSpaceRepositoryInterface::class);
-        $storageSpaces->expects(self::never())->method('get');
+        $storageSpaces->expects(self::never())->method('getById');
 
         $this->expectException(StorageSpaceNotFoundException::class);
 

@@ -13,6 +13,9 @@ use App\Domain\Port\Service\IdValidatorInterface;
  */
 final readonly class FileHash
 {
+    /**
+     * @throws InvalidValueException when the value is not a lowercase hexadecimal SHA-256 digest
+     */
     private function __construct(
         private string $value,
     ) {
@@ -35,6 +38,9 @@ final readonly class FileHash
         return $this->value;
     }
 
+    /**
+     * @throws InvalidValueException when the computed digest is invalid
+     */
     public static function make(string $content): self
     {
         return new self(hash('sha256', $content));
@@ -43,6 +49,7 @@ final readonly class FileHash
     /**
      * Rebuilds a FileHash from an already-computed digest (e.g. read back
      * from persistence), without hashing it again.
+     * @throws InvalidValueException when the value is not a lowercase hexadecimal SHA-256 digest
      */
     public static function fromDigest(string $digest): self
     {

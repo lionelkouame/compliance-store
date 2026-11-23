@@ -15,6 +15,6 @@ final readonly class SymfonyIdentityDocumentUuidGenerator implements IdentityDoc
 {
     public function generate(): IdentityDocumentId
     {
-        return IdentityDocumentId::make(Uuid::v7()->toRfc4122());
+        return IdentityDocumentId::make(Uuid::v7()->toRfc4122()); // @phpstan-ignore missingType.checkedException (a UUID v7 is always well formed)
     }
 }

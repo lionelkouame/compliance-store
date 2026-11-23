@@ -8,6 +8,9 @@ use App\Domain\Exception\InvalidValueException;
 
 final readonly class LastName
 {
+    /**
+     * @throws InvalidValueException when the last name is empty or too long
+     */
     public function __construct(
         public string $value,
     ) {
@@ -32,6 +35,9 @@ final readonly class LastName
         return $this->value;
     }
 
+    /**
+     * @throws InvalidValueException when the last name is empty or too long
+     */
     public static function make(string $value): self
     {
         return new self($value);

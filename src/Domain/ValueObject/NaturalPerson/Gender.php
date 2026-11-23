@@ -18,6 +18,9 @@ enum Gender: string
     case Other = 'other';
     case Unspecified = 'unspecified';
 
+    /**
+     * @throws InvalidValueException when the value is not a known gender
+     */
     public static function fromNullable(?string $value): self
     {
         if (null === $value || '' === trim($value)) {

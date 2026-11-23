@@ -9,6 +9,9 @@ use App\Domain\Port\Service\IdValidatorInterface;
 
 trait IdentifierTrait
 {
+    /**
+     * @throws InvalidValueException when the identifier is malformed
+     */
     private function __construct(
         private readonly string $value,
         ?IdValidatorInterface $validator = null,
@@ -21,6 +24,9 @@ trait IdentifierTrait
         }
     }
 
+    /**
+     * @throws InvalidValueException when the identifier is malformed
+     */
     public static function make(string $value, ?IdValidatorInterface $validator = null): self
     {
         return new self($value, $validator);

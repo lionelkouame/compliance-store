@@ -39,8 +39,8 @@ final readonly class SodiumCipherGateway implements CipherGatewayInterface
         sodium_memzero($dataKey);
 
         return new EncryptionEnvelope(
-            payload: EncryptedPayload::make($ciphertext),
-            wrappedDataKey: WrappedDataKey::make($encryptedDataKey),
+            payload: EncryptedPayload::make($ciphertext), // @phpstan-ignore missingType.checkedException (sodium never returns an empty ciphertext)
+            wrappedDataKey: WrappedDataKey::make($encryptedDataKey), // @phpstan-ignore missingType.checkedException (nonce + MAC are never empty)
         );
     }
 

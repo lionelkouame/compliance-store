@@ -11,6 +11,9 @@ use App\Domain\Exception\InvalidValueException;
  */
 final readonly class StorageSpaceCode
 {
+    /**
+     * @throws InvalidValueException when the code does not match the allowed format
+     */
     public function __construct(
         public string $value,
     ) {

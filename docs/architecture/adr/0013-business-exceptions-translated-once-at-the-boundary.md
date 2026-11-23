@@ -83,7 +83,7 @@ itself extends `App\Domain\Exception\DomainException` (a `\DomainException`):
 
 ```text
  \DomainException
-   └── App\Domain\Exception\DomainException
+   └── App\Domain\Exception\DomainException   (abstract)  never thrown directly
          ├── NotFoundException          (abstract)  the requested aggregate does not exist
          │     ├── HolderNotFoundException
          │     ├── NaturalPersonNotFoundException
@@ -102,6 +102,10 @@ itself extends `App\Domain\Exception\DomainException` (a `\DomainException`):
 ```
 
 A new business exception only has to extend the right category: **no HTTP code changes**.
+
+Business exceptions use **named constructors** that carry the context of the failure
+(`StorageSpaceCodeAlreadyExistsException::withCode($code)`,
+`StorageSpaceNotFoundException::withId($id)`), within the limits of §6.
 
 ### 3. Value Objects throw `InvalidValueException`
 
@@ -153,6 +157,40 @@ public function process(mixed $data, Operation $operation, array $uriVariables =
 A "not found" is an exception too: a use case never returns `null` (which would break the
 `UseCaseInterface<Request, Response>` contract). A malformed identifier that cannot match
 anything is reported as **not found** by the use case, not as invalid data.
+
+When a use case always needs the aggregate, the repository port carries the "not found"
+itself (`StorageSpaceRepositoryInterface::getById(): StorageSpace`, which throws
+`StorageSpaceNotFoundException`) instead of every use case repeating `if (null === ...)`.
+
+Each `execute()` declares the business exceptions it can throw with `@throws`: this is the
+use case's error contract. PHPStan enforces it (`exceptions.checkedExceptionClasses:
+[App\Domain\Exception\DomainException]` in `phpstan.neon`). A value object built from a
+value that cannot be invalid (generated UUID, computed digest, id validated just above) is
+not declared — it would advertise a 422 that cannot happen — and is silenced inline with
+`@phpstan-ignore missingType.checkedException (reason)`.
+
+### 4bis. Uniqueness is checked by the use case and guaranteed by the database
+
+A use case checks uniqueness before inserting (`findByCode`, `findByEmail`, `findByNumber`),
+but two concurrent requests can both pass that check. Every uniqueness invariant is therefore
+also a **unique constraint** in the database, and the Doctrine repository translates the
+resulting `UniqueConstraintViolationException` into the matching `AlreadyExistException`:
+
+```php
+public function add(StorageSpace $storageSpace): void
+{
+    $entityManager = $this->getEntityManager();
+    $entityManager->persist($storageSpace);
+
+    try {
+        $entityManager->flush();
+    } catch (UniqueConstraintViolationException) {
+        throw StorageSpaceCodeAlreadyExistsException::withCode($storageSpace->code);
+    }
+}
+```
+
+The loser of the race gets the same 409 as a sequential duplicate, never a 500.
 
 ### 5. Translation to HTTP happens once, by configuration
 
@@ -240,9 +278,15 @@ The two levels of 422 complement each other — the **double lock** of ADR 0005:
 1. **Categories**: `src/Domain/Exception/{DomainException,NotFoundException,AlreadyExistException,InvalidDataException,PolicyViolationException,InvalidValueException}.php`
 2. **Mapping**: `config/packages/api_platform.yaml` (`exception_to_status`)
 3. **Adapters without `try/catch`**: `src/Infrastructure/Presentation/ApiPlatform/V1/State/{Processor,Provider}/<Feature>/`
-4. **Guard**: `tests/Unit/Architecture/NoInvalidArgumentExceptionInCoreTest.php` fails if
-   `InvalidArgumentException` appears in `src/Domain` or `src/Application`.
+4. **Guards**:
+   * `tests/Unit/Architecture/NoInvalidArgumentExceptionInCoreTest.php` fails if
+     `InvalidArgumentException` appears in `src/Domain` or `src/Application`;
+   * `tests/Unit/Architecture/BusinessExceptionsAreCategorisedTest.php` fails if a concrete
+     business exception extends no mapped category (it would be a 500);
+   * PHPStan checked exceptions: every use case declares its business exceptions (`@throws`).
 5. **HTTP contract tests**: `tests/Api/*ApiTest.php` assert 404 / 409 / 422 for every feature.
+6. **Concurrent duplicates**: `tests/Integration/Persistence/UniqueConstraintTranslationTest.php`
+   inserts a duplicate straight through each repository and expects the business exception.
 
 ### Migration path followed (strangler pattern)
 
@@ -297,7 +341,8 @@ The decision was rolled out progressively, each step keeping the API tests green
 
 `PolicyViolationException` exists but is **not mapped**: if thrown today it would surface as a
 **500**. Its status (403 Forbidden vs 422) must be decided, and added to `exception_to_status`,
-in the same change that introduces its first concrete subclass.
+in the same change that introduces its first concrete subclass. `BusinessExceptionsAreCategorisedTest`
+fails on that first subclass until the category is mapped and listed in the test.
 
 ---
 
@@ -315,7 +360,8 @@ in the same change that introduces its first concrete subclass.
 
 ### Negative
 * Every new business exception **must** extend a category; one extending
-  `DomainException` directly (or `\Exception`) silently becomes a 500.
+  `DomainException` directly (or `\Exception`) would become a 500 — now caught by
+  `BusinessExceptionsAreCategorisedTest`.
 * Error responses carry a generic `title` and the exception message as `detail`; clients
   needing a stable machine-readable error code will require the listener alternative.
 * Exception messages are part of the public API contract (and must stay free of personal data).

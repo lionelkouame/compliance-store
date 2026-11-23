@@ -9,6 +9,9 @@ use App\Domain\ValueObject\TextValueObjectTrait;
 
 final readonly class StorageSpaceName
 {
+    /**
+     * @throws InvalidValueException when the name is empty or too long
+     */
     public function __construct(
         public string $value,
     ) {

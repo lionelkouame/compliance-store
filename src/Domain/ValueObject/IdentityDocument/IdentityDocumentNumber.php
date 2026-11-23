@@ -12,6 +12,9 @@ use App\Domain\Exception\InvalidValueException;
  */
 final readonly class IdentityDocumentNumber
 {
+    /**
+     * @throws InvalidValueException when the number is not 1 to 20 uppercase alphanumeric characters
+     */
     public function __construct(
         public string $value,
     ) {

@@ -15,6 +15,6 @@ final readonly class SymfonyDocumentUuidGenerator implements DocumentIdGenerator
 {
     public function generate(): DocumentId
     {
-        return DocumentId::make(Uuid::v7()->toRfc4122());
+        return DocumentId::make(Uuid::v7()->toRfc4122()); // @phpstan-ignore missingType.checkedException (a UUID v7 is always well formed)
     }
 }
