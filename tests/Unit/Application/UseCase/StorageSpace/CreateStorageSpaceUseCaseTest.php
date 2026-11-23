@@ -7,7 +7,9 @@ namespace App\Tests\Unit\Application\UseCase\StorageSpace;
 use App\Application\UseCase\StorageSpace\CreateStorageSpace\CreateStorageSpaceRequest;
 use App\Application\UseCase\StorageSpace\CreateStorageSpace\CreateStorageSpaceUseCase;
 use App\Domain\Entity\StorageSpace;
+use App\Domain\Event\StorageSpace\StorageSpaceCreated;
 use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
+use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
@@ -22,14 +24,24 @@ final class CreateStorageSpaceUseCaseTest extends TestCase
     {
         $storageSpaces = $this->createMock(StorageSpaceRepositoryInterface::class);
         $storageSpaces->method('findByCode')->willReturn(null);
-        $storageSpaces->expects(self::once())->method('save');
+        $storageSpaces->expects(self::once())->method('add');
 
         $idGenerator = $this->createStub(GeneratorInterface::class);
         $idGenerator->method('generate')->willReturn('660e8400-e29b-41d4-a716-446655440000');
 
+        $publisher = $this->createMock(DomainEventPublisher::class);
+        $publisher->expects(self::once())
+            ->method('publish')
+            ->with(self::callback(
+                static fn (object $event): bool => $event instanceof StorageSpaceCreated
+                    && '660e8400-e29b-41d4-a716-446655440000' === $event->storageSpaceId()->value
+                    && 'EU-WEST-1' === $event->code()->value,
+            ));
+
         $useCase = new CreateStorageSpaceUseCase(
             storageSpaces: $storageSpaces,
             idGenerator: $idGenerator,
+            domainEventPublisher: $publisher,
         );
 
         $readModel = $useCase->execute(new CreateStorageSpaceRequest(
@@ -53,13 +65,17 @@ final class CreateStorageSpaceUseCaseTest extends TestCase
 
         $storageSpaces = $this->createMock(StorageSpaceRepositoryInterface::class);
         $storageSpaces->method('findByCode')->willReturn($existing);
-        $storageSpaces->expects(self::never())->method('save');
+        $storageSpaces->expects(self::never())->method('add');
 
         $idGenerator = $this->createStub(GeneratorInterface::class);
+
+        $publisher = $this->createMock(DomainEventPublisher::class);
+        $publisher->expects(self::never())->method('publish');
 
         $useCase = new CreateStorageSpaceUseCase(
             storageSpaces: $storageSpaces,
             idGenerator: $idGenerator,
+            domainEventPublisher: $publisher,
         );
 
         $this->expectException(StorageSpaceCodeAlreadyExistsException::class);

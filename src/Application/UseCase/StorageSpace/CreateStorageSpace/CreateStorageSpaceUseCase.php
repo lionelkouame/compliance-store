@@ -7,7 +7,9 @@ namespace App\Application\UseCase\StorageSpace\CreateStorageSpace;
 use App\Application\UseCase\UseCaseInterface;
 use App\Application\UseCase\UseCaseRequestInterface;
 use App\Domain\Entity\StorageSpace;
+use App\Domain\Event\StorageSpace\StorageSpaceCreated;
 use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
+use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ReadModel\StorageSpace\InfosStorageSpace;
@@ -23,6 +25,7 @@ final readonly class CreateStorageSpaceUseCase implements UseCaseInterface
     public function __construct(
         private StorageSpaceRepositoryInterface $storageSpaces,
         private GeneratorInterface $idGenerator,
+        private DomainEventPublisher $domainEventPublisher,
     ) {}
 
     public function execute(UseCaseRequestInterface $request): CreateStorageSpaceResponse
@@ -40,7 +43,11 @@ final readonly class CreateStorageSpaceUseCase implements UseCaseInterface
             name: $name,
         );
 
-        $this->storageSpaces->save($storageSpace);
+        $this->storageSpaces->add($storageSpace);
+
+        $this->domainEventPublisher->publish(
+            StorageSpaceCreated::fromStorageSpace($storageSpace),
+        );
 
         return new CreateStorageSpaceResponse(
             InfosStorageSpace::fromEntity($storageSpace),
