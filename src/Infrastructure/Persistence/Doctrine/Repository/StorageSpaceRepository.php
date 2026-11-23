@@ -21,7 +21,7 @@ final class StorageSpaceRepository extends ServiceEntityRepository implements St
         parent::__construct($registry, StorageSpace::class);
     }
 
-    public function save(StorageSpace $storageSpace): void
+    public function add(StorageSpace $storageSpace): void
     {
         $entityManager = $this->getEntityManager();
         $entityManager->persist($storageSpace);

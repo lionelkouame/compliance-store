@@ -10,7 +10,7 @@ use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 
 interface StorageSpaceRepositoryInterface
 {
-    public function save(StorageSpace $storageSpace): void;
+    public function add(StorageSpace $storageSpace): void;
 
     public function update(StorageSpace $storageSpace): void;
 

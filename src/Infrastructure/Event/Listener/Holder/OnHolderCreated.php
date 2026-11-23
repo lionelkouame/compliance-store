@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Event\Listener;
+namespace App\Infrastructure\Event\Listener\Holder;
 
 use App\Domain\Event\Holder\HolderCreated;
 use Psr\Log\LoggerInterface;
