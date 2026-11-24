@@ -79,7 +79,7 @@ final readonly class Holder
     public function requestErasure(): self
     {
         if (HolderStatus::Active !== $this->status) {
-            throw new InvalidHolderStatusTransitionException($this->status, HolderStatus::ErasureRequested);
+            throw InvalidHolderStatusTransitionException::between($this->status, HolderStatus::ErasureRequested);
         }
 
         return new self(
@@ -115,7 +115,7 @@ final readonly class Holder
     public function anonymize(): self
     {
         if (HolderStatus::ErasureRequested !== $this->status) {
-            throw new InvalidHolderStatusTransitionException($this->status, HolderStatus::Anonymized);
+            throw InvalidHolderStatusTransitionException::between($this->status, HolderStatus::Anonymized);
         }
 
         return new self(

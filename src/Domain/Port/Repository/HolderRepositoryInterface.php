@@ -6,8 +6,10 @@ namespace App\Domain\Port\Repository;
 
 use App\Domain\Entity\Holder;
 use App\Domain\Exception\Holder\HolderAlreadyExistsException;
+use App\Domain\Exception\Holder\InvalidHolderStatusTransitionException;
 use App\Domain\ValueObject\Document\Email;
 use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Holder\HolderStatus;
 
 interface HolderRepositoryInterface
 {
@@ -23,6 +25,12 @@ interface HolderRepositoryInterface
     /**
      * Enregistre la nouvelle version d'un titulaire existant (le titulaire est
      * immuable : chaque transition produit une nouvelle instance).
+     *
+     * L'écriture n'a lieu que si le titulaire est toujours dans l'état
+     * $expectedStatus, celui à partir duquel la transition a été calculée :
+     * de deux transitions concurrentes, seule la première aboutit.
+     *
+     * @throws InvalidHolderStatusTransitionException quand l'état a changé depuis la lecture
      */
-    public function update(Holder $holder): void;
+    public function update(Holder $holder, HolderStatus $expectedStatus): void;
 }

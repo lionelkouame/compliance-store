@@ -30,7 +30,10 @@ final class RequestHolderErasureUseCaseTest extends TestCase
         $holders->method('findById')->willReturn($this->holder());
         $holders->expects(self::once())
             ->method('update')
-            ->with(self::callback(static fn (Holder $holder): bool => HolderStatus::ErasureRequested === $holder->status()));
+            ->with(
+                self::callback(static fn (Holder $holder): bool => HolderStatus::ErasureRequested === $holder->status()),
+                HolderStatus::Active, // l'état lu, que l'UPDATE conditionnel doit retrouver en base
+            );
 
         $publisher = $this->createMock(DomainEventPublisher::class);
         $publisher->expects(self::once())
