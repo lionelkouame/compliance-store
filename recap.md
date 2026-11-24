@@ -112,11 +112,12 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 * **Risque** : si l'enregistrement en base échoue, un fichier chiffré reste orphelin dans le stockage. La couche Application n'a aucune notion de transaction.
 * **Correction** : ajouter un port `TransactionInterface` (ou `UnitOfWork`) dans le Domaine et supprimer le fichier si la persistance échoue. Au minimum, documenter l'ordre choisi et sa stratégie de nettoyage.
 
-### 🟠 M6 — Une donnée personnelle circule dans les URL
+### 🟠 M6 — Une donnée personnelle circule dans les URL — ✅ corrigé (#86)
 
 * **Où** : `Resource/Holder/HolderResource.php:30`, `GET /holders/{email}`.
 * **Pourquoi** : une URL est enregistrée dans les journaux d'accès, les proxies et l'historique des navigateurs. Pour un projet de conformité RGPD, l'email ne devrait pas en faire partie. Le choix de la clé de recherche relève de la couche Présentation, mais il a un impact de conformité.
 * **Correction** : rechercher par `HolderId` (`GET /holders/{id}`), ou passer l'email dans le corps d'un `POST /holders/search`.
+* **Fait** : les deux. `GET /v1/holders/{id}` (use case `GetHolder`) remplace `GET /v1/holders/{email}`, et la recherche par email passe par `POST /v1/holders/search`.
 
 ### 🟠 M7 — Configuration d'environnement codée en dur dans un use case — (fait) corrigé
 
@@ -179,7 +180,7 @@ Sévérités : **🔴 Critique** (bug visible ou règle d'architecture contourn�
 | 5        | Remonter les règles dans le Domaine (`ExpiryDate`, fabriques d'enum, transitions de `StorageSpace`) (fait) | M3       | M      |
 | 6        | Décider : implémenter le Compliance Core, ou corriger la documentation (fait : doc alignée)                | M1       | M à L  |
 | 7        | Atomicité stockage + base (port de transaction et nettoyage) (fait : compensation)                         | M5       | M      |
-| 8        | Remplacer `GET /holders/{email}` par une recherche sans donnée personnelle dans l'URL                      | M6       | S      |
+| 8        | Remplacer `GET /holders/{email}` par une recherche sans donnée personnelle dans l'URL (fait : #86)         | M6       | S      |
 | 9        | Sous-couches Deptrac, nettoyage du code mort, harmonisation des VO, port `Clock`                           | m1 à m5  | M      |
 | 10       | Tests des Value Objects, des entités restantes et des repositories                                         | m6       | M      |
 

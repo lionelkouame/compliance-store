@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\Holder\CreateHolderProcessor;
+use App\Infrastructure\Presentation\ApiPlatform\V1\State\Processor\Holder\SearchHolderProcessor;
 use App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\Holder\GetHolderProvider;
 
 #[ApiResource(
@@ -27,14 +28,28 @@ use App\Infrastructure\Presentation\ApiPlatform\V1\State\Provider\Holder\GetHold
             processor: CreateHolderProcessor::class
         ),
         new Get(
-            uriTemplate: '/holders/{email}',
+            uriTemplate: '/holders/{id}',
             openapi: new Operation(
                 tags: self::TagHolderSection,
-                summary: 'Get one Holder',
-                description: 'Retrieves a single holder by email.',
+                summary: 'Get one holder',
+                description: 'Retrieves a single holder by its identifier.',
             ),
-            output: GetHolderEmailOutput::class,
+            output: HolderOutput::class,
             provider: GetHolderProvider::class,
+        ),
+        // Recherche par email : l'email voyage dans le corps, jamais dans l'URL (constat M6).
+        new Post(
+            uriTemplate: '/holders/search',
+            status: 200,
+            openapi: new Operation(
+                tags: self::TagHolderSection,
+                summary: 'Search a holder by email',
+                description: 'Finds the holder registered with the given email. The email is sent in the request body so that it never appears in URLs or access logs.',
+            ),
+            input: SearchHolderInput::class,
+            output: HolderOutput::class,
+            deserialize: true,
+            processor: SearchHolderProcessor::class,
         ),
     ],
     routePrefix: '/v1',

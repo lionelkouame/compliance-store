@@ -12,9 +12,28 @@ Accept: application/ld+json
 
 ###
 
-# @name getHolderByEmail
-### Récupération d'un holder par email — cas nominal (expect 200)
-GET {{apiUrl}}/holders/jane.doe@example.com
+# @name searchHolderByEmail
+### Recherche d'un holder par email — l'email voyage dans le corps, jamais dans l'URL (expect 200)
+POST {{apiUrl}}/holders/search
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+    "email": "jane.doe@example.com"
+}
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+    client.global.set("holderId", response.body.holderId);
+%}
+
+###
+
+# @name getHolderById
+### Lecture d'un holder par identifiant — cas nominal (expect 200)
+GET {{apiUrl}}/holders/{{holderId}}
 Accept: application/ld+json
 
 > {%
@@ -30,10 +49,28 @@ Accept: application/ld+json
 
 ###
 
-# @name getHolderByEmailNotFound
-### Récupération d'un holder inconnu (expect 404)
-GET {{apiUrl}}/holders/nobody@example.com
+# @name getHolderByIdNotFound
+### Lecture d'un holder inconnu (expect 404)
+GET {{apiUrl}}/holders/01a17b0e-e559-7fc6-b4e1-4b96eaa3262c
 Accept: application/ld+json
+
+> {%
+    client.test("Status code is 404 Not Found", function() {
+        client.assert(response.status === 404, "Expected 404 Not Found");
+    });
+%}
+
+###
+
+# @name searchHolderByEmailNotFound
+### Recherche d'un email inconnu (expect 404)
+POST {{apiUrl}}/holders/search
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+    "email": "nobody@example.com"
+}
 
 > {%
     client.test("Status code is 404 Not Found", function() {

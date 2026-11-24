@@ -39,16 +39,6 @@ final readonly class GetHolderByEmailUseCase implements UseCaseInterface
             throw new HolderNotFoundException();
         }
 
-        return new GetHolderByEmailResponse(new InfosHolder(
-            id: $holder->id(),
-            name: $holder->name(),
-            birthDate: $holder->birthDate(),
-            status: $holder->status(),
-            email: $holder->email(),
-            createdAt: $holder->createdAt(),
-            consentCollectedAt: $holder->consentCollectedAt(),
-            erasureRequestedAt: $holder->erasureRequestedAt(),
-            anonymizedAt: $holder->anonymizedAt(),
-        ));
+        return new GetHolderByEmailResponse(InfosHolder::fromEntity($holder));
     }
 }
