@@ -55,14 +55,14 @@ final readonly class AnonymizeHolderUseCase implements UseCaseInterface
      * @throws HolderNotFoundException                quand l'identifiant est malformé ou ne correspond à aucun titulaire
      * @throws InvalidHolderStatusTransitionException quand aucune demande d'effacement n'est en cours, ou qu'une anonymisation concurrente est passée avant
      */
-    public function execute(UseCaseRequestInterface $request): AnonymizeHolderResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): AnonymizeHolderResponse
     {
         // Un identifiant qui n'est même pas un UUID valide ne peut rien désigner : c'est un « non trouvé » (ADR 0013).
-        if (!$this->idValidator->isValid($request->id)) {
+        if (!$this->idValidator->isValid($registerIdentityDocumentRequest->id)) {
             throw new HolderNotFoundException();
         }
 
-        $holder = $this->holders->findById(HolderId::make($request->id)) // @phpstan-ignore missingType.checkedException (identifiant validé ci-dessus)
+        $holder = $this->holders->findById(HolderId::make($registerIdentityDocumentRequest->id)) // @phpstan-ignore missingType.checkedException (identifiant validé ci-dessus)
             ?? throw new HolderNotFoundException();
 
         $anonymized = $holder->anonymize();

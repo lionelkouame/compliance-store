@@ -33,10 +33,10 @@ final readonly class CreateStorageSpaceUseCase implements UseCaseInterface
      * @throws StorageSpaceCodeAlreadyExistsException when the code is already taken
      * @throws InvalidValueException when the code or the name is invalid
      */
-    public function execute(UseCaseRequestInterface $request): CreateStorageSpaceResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): CreateStorageSpaceResponse
     {
-        $code = new StorageSpaceCode($request->code);
-        $name = new StorageSpaceName($request->name);
+        $code = new StorageSpaceCode($registerIdentityDocumentRequest->code);
+        $name = new StorageSpaceName($registerIdentityDocumentRequest->name);
 
         if (null !== $this->storageSpaces->findByCode($code)) {
             throw StorageSpaceCodeAlreadyExistsException::withCode($code);

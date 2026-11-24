@@ -11,9 +11,9 @@ namespace App\Application\UseCase;
 interface UseCaseInterface
 {
     /**
-     * @param TRequest $request
+     * @param TRequest $registerIdentityDocumentRequest
      *
      * @return TResponse
      */
-    public function execute(UseCaseRequestInterface $request): UseCaseResponseInterface;
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): UseCaseResponseInterface;
 }

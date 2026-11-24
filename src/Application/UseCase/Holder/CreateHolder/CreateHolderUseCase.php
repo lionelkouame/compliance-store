@@ -34,12 +34,12 @@ final readonly class CreateHolderUseCase implements UseCaseInterface
      * @throws HolderAlreadyExistsException when the email is already used
      * @throws InvalidValueException when a field breaks a value object invariant
      */
-    public function execute(UseCaseRequestInterface $request) : CreateHolderResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest) : CreateHolderResponse
     {
         $holderId = HolderId::make($this->generatorUuid->generate());
-        $birthDate = BirthDate::make($request->birthDate);
-        $holderName = HolderName::make($request->holderName);
-        $email = Email::make($request->email);
+        $birthDate = BirthDate::make($registerIdentityDocumentRequest->birthDate);
+        $holderName = HolderName::make($registerIdentityDocumentRequest->holderName);
+        $email = Email::make($registerIdentityDocumentRequest->email);
 
         if (null !== $this->holderRepository->findByEmail($email)) {
             throw new HolderAlreadyExistsException();

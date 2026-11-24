@@ -36,14 +36,14 @@ final readonly class RequestHolderErasureUseCase implements UseCaseInterface
      * @throws HolderNotFoundException                quand l'identifiant est malformé ou ne correspond à aucun titulaire
      * @throws InvalidHolderStatusTransitionException quand le titulaire n'est plus actif (demande déjà faite, ou déjà anonymisé), y compris par une requête concurrente
      */
-    public function execute(UseCaseRequestInterface $request): RequestHolderErasureResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): RequestHolderErasureResponse
     {
         // Un identifiant qui n'est même pas un UUID valide ne peut rien désigner : c'est un « non trouvé » (ADR 0013).
-        if (!$this->idValidator->isValid($request->id)) {
+        if (!$this->idValidator->isValid($registerIdentityDocumentRequest->id)) {
             throw new HolderNotFoundException();
         }
 
-        $holder = $this->holders->findById(HolderId::make($request->id)) // @phpstan-ignore missingType.checkedException (identifiant validé ci-dessus)
+        $holder = $this->holders->findById(HolderId::make($registerIdentityDocumentRequest->id)) // @phpstan-ignore missingType.checkedException (identifiant validé ci-dessus)
             ?? throw new HolderNotFoundException();
 
         $requested = $holder->requestErasure();

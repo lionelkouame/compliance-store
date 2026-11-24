@@ -30,16 +30,16 @@ final readonly class ChangeStorageSpaceStatusUseCase implements UseCaseInterface
      * @throws InvalidValueException when the status is unknown
      * @throws InvalidStorageSpaceStatusTransitionException when the transition is not allowed, or the status changed concurrently
      */
-    public function execute(UseCaseRequestInterface $request): ChangeStorageSpaceStatusResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): ChangeStorageSpaceStatusResponse
     {
         // An id that is not even a valid UUID cannot match anything: it is "not found".
-        if (!$this->idValidator->isValid($request->id)) {
+        if (!$this->idValidator->isValid($registerIdentityDocumentRequest->id)) {
             throw new StorageSpaceNotFoundException();
         }
 
-        $storageSpace = $this->storageSpaces->getById(StorageSpaceId::fromString($request->id));
+        $storageSpace = $this->storageSpaces->getById(StorageSpaceId::fromString($registerIdentityDocumentRequest->id));
 
-        $updated = $storageSpace->withStatus(StorageSpaceStatus::fromString($request->status));
+        $updated = $storageSpace->withStatus(StorageSpaceStatus::fromString($registerIdentityDocumentRequest->status));
 
         // Statut lu en base : l'écriture est refusée si un autre traitement l'a changé entre-temps.
         $this->storageSpaces->update($updated, expectedStatus: $storageSpace->status);

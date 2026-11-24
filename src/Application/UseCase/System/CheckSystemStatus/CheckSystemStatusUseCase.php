@@ -25,7 +25,7 @@ final readonly class CheckSystemStatusUseCase implements UseCaseInterface
         private string $version,
     ) {}
 
-    public function execute(UseCaseRequestInterface $request): CheckSystemStatusResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): CheckSystemStatusResponse
     {
         return new CheckSystemStatusResponse(new SystemStatus(
             status: self::STATUS_OK,

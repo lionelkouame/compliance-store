@@ -32,12 +32,13 @@ final readonly class RegisterIdentityDocumentUseCase implements UseCaseInterface
      * @throws IdentityDocumentAlreadyExistsException when the document is already registered
      * @throws IdentityDocumentExpiredException when the document has already expired
      * @throws InvalidValueException when a field breaks a value object invariant
+     * @var RegisterIdentityDocumentRequest $registerIdentityDocumentRequest
      */
-    public function execute(UseCaseRequestInterface $request): RegisterIdentityDocumentResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): RegisterIdentityDocumentResponse
     {
-        $type = IdentityDocumentType::fromString($request->type);
-        $country = new CountryCode($request->country);
-        $number = new IdentityDocumentNumber($request->number);
+        $type = IdentityDocumentType::fromString($registerIdentityDocumentRequest->type);
+        $country = new CountryCode($registerIdentityDocumentRequest->country);
+        $number = new IdentityDocumentNumber($registerIdentityDocumentRequest->number);
 
         if (null !== $this->identityDocuments->findByNumber($type, $country, $number)) {
             throw IdentityDocumentAlreadyExistsException::withType($type, $country);
@@ -48,7 +49,7 @@ final readonly class RegisterIdentityDocumentUseCase implements UseCaseInterface
             type: $type,
             country: $country,
             number: $number,
-            expiresAt: ExpiryDate::make($request->expiresAt),
+            expiresAt: ExpiryDate::make($registerIdentityDocumentRequest->expiresAt),
         );
 
         $this->identityDocuments->add($identityDocument);
