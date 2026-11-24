@@ -1,0 +1,62 @@
+# @name createHolderForErasure
+### Pré-requis : on crée un holder à effacer (expect 201)
+POST {{apiUrl}}/holders
+Content-Type: application/json
+Accept: application/ld+json
+
+{
+    "holderName": "John Erased",
+    "birthDate": "1985-06-15",
+    "email": "john.erased@example.com"
+}
+
+> {%
+    client.global.set("erasedHolderId", response.body.identifier);
+%}
+
+###
+
+# @name requestHolderErasure
+### Demande d'effacement RGPD art. 17 (expect 200, status erasure_requested)
+POST {{apiUrl}}/holders/{{erasedHolderId}}/erasure-request
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+    client.test("The erasure is pending", function() {
+        client.assert(response.body.status === "erasure_requested", "Expected erasure_requested");
+    });
+%}
+
+###
+
+# @name anonymizeHolder
+### Exécution de l'effacement : anonymisation + suppression des documents (expect 200)
+POST {{apiUrl}}/holders/{{erasedHolderId}}/anonymization
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 OK");
+    });
+    client.test("Personal data is gone", function() {
+        client.assert(response.body.status === "anonymized", "Expected anonymized");
+        client.assert(response.body.email.endsWith("@anonymized.invalid"), "Email must be anonymized");
+        client.assert(response.body.birthDate === "1985-01-01", "Birth date must be generalized");
+    });
+%}
+
+###
+
+# @name anonymizeHolderTwice
+### Une seconde anonymisation est refusée (expect 422)
+POST {{apiUrl}}/holders/{{erasedHolderId}}/anonymization
+Accept: application/ld+json
+
+> {%
+    client.test("Status code is 422 Unprocessable Entity", function() {
+        client.assert(response.status === 422, "Expected 422 Unprocessable Entity");
+    });
+%}

@@ -23,6 +23,17 @@ use App\Domain\ValueObject\Holder\HolderStatus;
 final readonly class Holder
 {
     /**
+     * Nom attribué à tout titulaire anonymisé.
+     */
+    public const string ANONYMIZED_NAME = 'Anonymized holder';
+
+    /**
+     * Domaine réservé (RFC 2606) : une adresse anonymisée ne peut jamais
+     * atteindre une vraie boîte mail.
+     */
+    public const string ANONYMIZED_EMAIL_DOMAIN = 'anonymized.invalid';
+
+    /**
      * @param ?\DateTimeImmutable $consentCollectedAt when consent was collected; null when processing relies on another ground
      * @param ?\DateTimeImmutable $erasureRequestedAt when the data subject asked for erasure (GDPR art. 17); null otherwise
      * @param ?\DateTimeImmutable $anonymizedAt       when erasure was carried out; null otherwise
@@ -85,12 +96,23 @@ final readonly class Holder
     }
 
     /**
-     * Carries out the erasure by anonymizing the holder. Only a holder with a
-     * pending erasure request can be anonymized.
+     * Exécute l'effacement (RGPD art. 17) en remplaçant chaque donnée
+     * personnelle. Seul un titulaire ayant une demande d'effacement en cours
+     * peut être anonymisé.
      *
-     * @throws InvalidHolderStatusTransitionException
+     * - le nom devient un libellé générique ;
+     * - l'email devient « <identifiant>@anonymized.invalid » : il n'identifie
+     *   plus personne mais reste unique (contrainte en base) et valide ;
+     * - la date de naissance est généralisée au 1er janvier de son année :
+     *   elle ne permet plus d'identifier la personne mais conserve les
+     *   statistiques d'âge.
+     *
+     * L'identifiant est conservé : il ne porte aucune information sur la
+     * personne et permet de prouver que l'effacement a eu lieu.
+     *
+     * @throws InvalidHolderStatusTransitionException quand aucune demande d'effacement n'est en cours
      */
-    public function anonymize(HolderName $anonymizedName): self
+    public function anonymize(): self
     {
         if (HolderStatus::ErasureRequested !== $this->status) {
             throw new InvalidHolderStatusTransitionException($this->status, HolderStatus::Anonymized);
@@ -98,10 +120,10 @@ final readonly class Holder
 
         return new self(
             id: $this->id,
-            name: $anonymizedName,
-            birthDate: $this->birthDate,
+            name: new HolderName(self::ANONYMIZED_NAME), // @phpstan-ignore missingType.checkedException (libellé constant valide)
+            birthDate: new BirthDate($this->birthDate->value->setDate((int) $this->birthDate->value->format('Y'), 1, 1)), // @phpstan-ignore missingType.checkedException (antérieure ou égale à une date déjà passée)
             status: HolderStatus::Anonymized,
-            email: $this->email,
+            email: new Email(\sprintf('%s@%s', $this->id->value(), self::ANONYMIZED_EMAIL_DOMAIN)), // @phpstan-ignore missingType.checkedException (UUID + domaine réservé : toujours valide)
             createdAt: $this->createdAt,
             consentCollectedAt: $this->consentCollectedAt,
             erasureRequestedAt: $this->erasureRequestedAt,

@@ -9,8 +9,13 @@ use App\Domain\Exception\Holder\HolderAlreadyExistsException;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\ValueObject\Document\Email;
 use App\Domain\ValueObject\Holder\HolderId;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use App\Infrastructure\Persistence\Doctrine\Type\BirthDateType;
+use App\Infrastructure\Persistence\Doctrine\Type\EmailType;
+use App\Infrastructure\Persistence\Doctrine\Type\HolderIdType;
+use App\Infrastructure\Persistence\Doctrine\Type\HolderNameType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -48,5 +53,42 @@ final class HolderRepository extends ServiceEntityRepository implements HolderRe
         } catch (UniqueConstraintViolationException) {
             throw new HolderAlreadyExistsException();
         }
+    }
+
+    /**
+     * Holder est immuable : l'unité de travail de Doctrine ne peut pas suivre
+     * ses changements. La mise à jour est donc une requête SQL explicite,
+     * comme pour StorageSpace, puis l'unité de travail est vidée pour qu'une
+     * lecture suivante recharge la nouvelle version.
+     */
+    public function update(Holder $holder): void
+    {
+        $connection = $this->getEntityManager()->getConnection();
+
+        $connection->executeStatement(
+            'UPDATE holder
+                SET name = :name, email = :email, birth_date = :birthDate, status = :status,
+                    erasure_requested_at = :erasureRequestedAt, anonymized_at = :anonymizedAt
+              WHERE id = :id',
+            [
+                'id' => $holder->id(),
+                'name' => $holder->name(),
+                'email' => $holder->email(),
+                'birthDate' => $holder->birthDate(),
+                'status' => $holder->status()->value,
+                'erasureRequestedAt' => $holder->erasureRequestedAt(),
+                'anonymizedAt' => $holder->anonymizedAt(),
+            ],
+            [
+                'id' => HolderIdType::NAME,
+                'name' => HolderNameType::NAME,
+                'email' => EmailType::NAME,
+                'birthDate' => BirthDateType::NAME,
+                'erasureRequestedAt' => Types::DATETIME_IMMUTABLE,
+                'anonymizedAt' => Types::DATETIME_IMMUTABLE,
+            ],
+        );
+
+        $this->getEntityManager()->clear();
     }
 }
