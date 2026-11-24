@@ -19,4 +19,10 @@ interface HolderRepositoryInterface
      * @throws HolderAlreadyExistsException when the email is already taken, including by a concurrent insert
      */
     public function add(Holder $holder): void;
+
+    /**
+     * Enregistre la nouvelle version d'un titulaire existant (le titulaire est
+     * immuable : chaque transition produit une nouvelle instance).
+     */
+    public function update(Holder $holder): void;
 }

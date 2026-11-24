@@ -63,26 +63,45 @@ final class HolderTest extends TestCase
     {
         $this->expectException(InvalidHolderStatusTransitionException::class);
 
-        $this->register()->anonymize(new HolderName('REDACTED'));
+        $this->register()->anonymize();
     }
 
-    public function testAnonymizeReplacesTheNameAndStampsTheDate(): void
+    public function testAnonymizeReplacesEveryPersonalDataAndStampsTheDate(): void
     {
-        $holder = $this->register()
+        $holder = $this->register(birthDate: '1990-07-14')
             ->requestErasure()
-            ->anonymize(new HolderName('REDACTED'));
+            ->anonymize();
 
         self::assertSame(HolderStatus::Anonymized, $holder->status());
-        self::assertSame('REDACTED', (string) $holder->name());
         self::assertNotNull($holder->anonymizedAt());
+        self::assertSame(Holder::ANONYMIZED_NAME, (string) $holder->name());
+        self::assertSame('770e8400-e29b-41d4-a716-446655440111@anonymized.invalid', $holder->email()->value);
+        // Généralisée au 1er janvier : l'âge reste exploitable, la date exacte disparaît.
+        self::assertSame('1990-01-01', (string) $holder->birthDate());
     }
 
-    private function register(?\DateTimeImmutable $consentCollectedAt = null): Holder
+    public function testAnonymizeKeepsTheIdentifierAndTheErasureRequestDate(): void
+    {
+        $requested = $this->register()->requestErasure();
+        $anonymized = $requested->anonymize();
+
+        self::assertTrue($requested->id()->equals($anonymized->id()));
+        self::assertEquals($requested->erasureRequestedAt(), $anonymized->erasureRequestedAt());
+    }
+
+    public function testAnAnonymizedHolderCannotBeAnonymizedAgain(): void
+    {
+        $this->expectException(InvalidHolderStatusTransitionException::class);
+
+        $this->register()->requestErasure()->anonymize()->anonymize();
+    }
+
+    private function register(?\DateTimeImmutable $consentCollectedAt = null, string $birthDate = '1990-01-01'): Holder
     {
         return Holder::create(
             id: HolderId::make('770e8400-e29b-41d4-a716-446655440111'),
             name: new HolderName('Ada Lovelace'),
-            birthDate: new BirthDate(new \DateTimeImmutable('1990-01-01', new \DateTimeZone('UTC'))),
+            birthDate: new BirthDate(new \DateTimeImmutable($birthDate, new \DateTimeZone('UTC'))),
             email: new Email('ada@example.com'),
             consentCollectedAt: $consentCollectedAt,
         );
