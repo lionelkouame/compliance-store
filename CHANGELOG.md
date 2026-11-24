@@ -12,10 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `SodiumCipherGateway` implementation for Libsodium envelope encryption.
 - `MinioStorageGateway` implementation for S3-compatible document storage (Flysystem).
 - `StoreDocumentUseCase` exposed as `POST /v1/documents` (multipart upload).
-- `GET /v1/holders/{id}` (`GetHolderUseCase`) and `POST /v1/holders/search` (lookup by email sent in the request body).
 
 ### Removed
-- **Breaking**: `GET /v1/holders/{email}`. An email is personal data and must not appear in URLs, which are logged (review finding M6). Use `GET /v1/holders/{id}` or `POST /v1/holders/search`.
 - `RegulatoryScope` feature (entity, value objects, use cases, repository, API resource, `DocumentComplianceChecker` domain service and `NonCompliantDocumentException`): never released, dropped before its first stable version.
 
 ### Planned
