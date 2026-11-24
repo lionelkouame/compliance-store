@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
-use App\Domain\ValueObject\Generic\BirthDate;
 use App\Domain\ValueObject\NaturalPerson\FirstName;
 use App\Domain\ValueObject\NaturalPerson\Gender;
 use App\Domain\ValueObject\NaturalPerson\LastName;
-use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Identifier\NaturalPersonId;
 
 /**
  * A natural person (human being) identified by their civil identity.

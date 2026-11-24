@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Storage;
 
-use App\Domain\ValueObject\Document\DocumentId;
+use App\Domain\ValueObject\Shared\Identifier\DocumentId;
 
 /**
  * Location of a document's encrypted content in the storage backend

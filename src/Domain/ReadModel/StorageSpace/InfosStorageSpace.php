@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\ReadModel\StorageSpace;
 
 use App\Domain\Entity\StorageSpace;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceStatus;
 

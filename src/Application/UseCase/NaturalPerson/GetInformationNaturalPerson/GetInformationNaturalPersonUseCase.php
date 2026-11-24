@@ -10,7 +10,7 @@ use App\Domain\Exception\InvalidValueException;
 use App\Domain\Exception\NaturalPerson\NaturalPersonNotFoundException;
 use App\Domain\Port\Repository\NaturalPersonRepositoryInterface;
 use App\Domain\ReadModel\NaturalPerson\InfosNaturalPerson;
-use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
+use App\Domain\ValueObject\Shared\Identifier\NaturalPersonId;
 
 /**
  * @implements UseCaseInterface<GetInformationNaturalPersonRequest, GetInformationNaturalPersonResponse>

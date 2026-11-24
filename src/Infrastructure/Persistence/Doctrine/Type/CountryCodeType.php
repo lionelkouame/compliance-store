@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Type;
 
-use App\Domain\ValueObject\Generic\CountryCode;
+use App\Domain\ValueObject\Shared\Generic\CountryCode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
 

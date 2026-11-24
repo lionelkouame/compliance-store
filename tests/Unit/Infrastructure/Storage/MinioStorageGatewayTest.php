@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Infrastructure\Storage;
 
-use App\Domain\ValueObject\Document\DocumentId;
+use App\Domain\ValueObject\Shared\Identifier\DocumentId;
 use App\Infrastructure\Storage\MinioStorageGateway;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter;

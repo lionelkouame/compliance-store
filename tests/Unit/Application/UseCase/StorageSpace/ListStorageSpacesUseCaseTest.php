@@ -8,8 +8,8 @@ use App\Application\UseCase\StorageSpace\ListStorageSpaces\ListStorageSpacesRequ
 use App\Application\UseCase\StorageSpace\ListStorageSpaces\ListStorageSpacesUseCase;
 use App\Domain\Entity\StorageSpace;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
 use PHPUnit\Framework\TestCase;
 

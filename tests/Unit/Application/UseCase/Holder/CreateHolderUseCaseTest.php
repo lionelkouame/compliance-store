@@ -15,9 +15,9 @@ use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ValueObject\Document\Email;
-use App\Domain\ValueObject\Generic\BirthDate;
-use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\ValueObject\Holder\HolderName;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 use PHPUnit\Framework\TestCase;
 
 final class CreateHolderUseCaseTest extends TestCase

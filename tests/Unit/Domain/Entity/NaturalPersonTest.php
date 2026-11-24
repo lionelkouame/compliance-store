@@ -6,11 +6,11 @@ namespace App\Tests\Unit\Domain\Entity;
 
 use App\Domain\Entity\NaturalPerson;
 use App\Domain\Exception\InvalidValueException;
-use App\Domain\ValueObject\Generic\BirthDate;
 use App\Domain\ValueObject\NaturalPerson\FirstName;
 use App\Domain\ValueObject\NaturalPerson\Gender;
 use App\Domain\ValueObject\NaturalPerson\LastName;
-use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Identifier\NaturalPersonId;
 use PHPUnit\Framework\TestCase;
 
 final class NaturalPersonTest extends TestCase

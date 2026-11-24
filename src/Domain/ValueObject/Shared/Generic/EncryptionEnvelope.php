@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\ValueObject\Generic;
+namespace App\Domain\ValueObject\Shared\Generic;
 
 use App\Domain\ValueObject\Document\WrappedDataKey;
 

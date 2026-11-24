@@ -6,7 +6,7 @@ namespace App\Domain\Exception\IdentityDocument;
 
 use App\Domain\Exception\AlreadyExistException;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
-use App\Domain\ValueObject\Generic\CountryCode;
+use App\Domain\ValueObject\Shared\Generic\CountryCode;
 
 final class IdentityDocumentAlreadyExistsException extends AlreadyExistException
 {

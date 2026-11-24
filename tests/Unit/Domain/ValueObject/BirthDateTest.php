@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\ValueObject;
 
 use App\Domain\Exception\InvalidValueException;
-use App\Domain\ValueObject\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

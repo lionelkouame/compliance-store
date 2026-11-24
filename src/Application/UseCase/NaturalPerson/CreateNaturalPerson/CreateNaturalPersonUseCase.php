@@ -11,11 +11,11 @@ use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Repository\NaturalPersonRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ReadModel\NaturalPerson\IdentifierNaturalPerson;
-use App\Domain\ValueObject\Generic\BirthDate;
 use App\Domain\ValueObject\NaturalPerson\FirstName;
 use App\Domain\ValueObject\NaturalPerson\Gender;
 use App\Domain\ValueObject\NaturalPerson\LastName;
-use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Identifier\NaturalPersonId;
 
 /**
  * @implements UseCaseInterface<CreateNaturalPersonRequest, CreateNaturalPersonResponse>

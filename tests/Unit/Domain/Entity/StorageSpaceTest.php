@@ -6,8 +6,8 @@ namespace App\Tests\Unit\Domain\Entity;
 
 use App\Domain\Entity\StorageSpace;
 use App\Domain\Exception\StorageSpace\InvalidStorageSpaceStatusTransitionException;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceStatus;
 use PHPUnit\Framework\Attributes\DataProvider;

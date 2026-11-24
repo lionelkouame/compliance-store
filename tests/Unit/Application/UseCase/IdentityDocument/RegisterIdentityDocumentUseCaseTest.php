@@ -12,10 +12,10 @@ use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Repository\IdentityDocumentRepositoryInterface;
 use App\Domain\Port\Service\IdentityDocumentIdGeneratorInterface;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
-use App\Domain\ValueObject\Generic\CountryCode;
-use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
 use App\Domain\ValueObject\IdentityDocument\ExpiryDate;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
+use App\Domain\ValueObject\Shared\Generic\CountryCode;
+use App\Domain\ValueObject\Shared\Identifier\IdentityDocumentId;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

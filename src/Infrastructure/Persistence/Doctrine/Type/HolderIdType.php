@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Type;
 
-use App\Domain\ValueObject\Document\DocumentId;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
 use Webmozart\Assert\Assert;

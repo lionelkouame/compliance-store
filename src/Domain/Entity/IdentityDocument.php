@@ -6,10 +6,10 @@ namespace App\Domain\Entity;
 
 use App\Domain\Exception\IdentityDocument\IdentityDocumentExpiredException;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
-use App\Domain\ValueObject\Generic\CountryCode;
-use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
 use App\Domain\ValueObject\IdentityDocument\ExpiryDate;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
+use App\Domain\ValueObject\Shared\Generic\CountryCode;
+use App\Domain\ValueObject\Shared\Identifier\IdentityDocumentId;
 
 /**
  * An identity document (passport, national ID card) issued by a country.

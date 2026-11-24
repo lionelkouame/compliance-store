@@ -17,14 +17,14 @@ use App\Domain\Port\Persistence\TransactionInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
-use App\Domain\ValueObject\Document\DocumentId;
 use App\Domain\ValueObject\Document\Email;
 use App\Domain\ValueObject\Document\FileHash;
 use App\Domain\ValueObject\Document\WrappedDataKey;
-use App\Domain\ValueObject\Generic\BirthDate;
-use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\ValueObject\Holder\HolderName;
 use App\Domain\ValueObject\Holder\HolderStatus;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Identifier\DocumentId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 use PHPUnit\Framework\TestCase;
 
 final class AnonymizeHolderUseCaseTest extends TestCase

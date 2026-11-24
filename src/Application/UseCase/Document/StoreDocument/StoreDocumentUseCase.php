@@ -16,9 +16,9 @@ use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
 use App\Domain\ReadModel\Document\InfosDocument;
-use App\Domain\ValueObject\Document\DocumentId;
 use App\Domain\ValueObject\Document\FileHash;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\DocumentId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 /**
  * @implements UseCaseInterface<StoreDocumentRequest, StoreDocumentResponse>

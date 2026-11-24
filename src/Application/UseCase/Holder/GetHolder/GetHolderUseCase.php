@@ -10,7 +10,7 @@ use App\Domain\Exception\Holder\HolderNotFoundException;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
 use App\Domain\ReadModel\Holder\InfosHolder;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 /**
  * Lit un titulaire par son identifiant. Remplace la lecture par email, qui

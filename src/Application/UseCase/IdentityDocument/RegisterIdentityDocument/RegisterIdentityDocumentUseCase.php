@@ -14,9 +14,9 @@ use App\Domain\Port\Repository\IdentityDocumentRepositoryInterface;
 use App\Domain\Port\Service\IdentityDocumentIdGeneratorInterface;
 use App\Domain\ReadModel\IdentityDocument\InfosIdentityDocument;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
-use App\Domain\ValueObject\Generic\CountryCode;
 use App\Domain\ValueObject\IdentityDocument\ExpiryDate;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
+use App\Domain\ValueObject\Shared\Generic\CountryCode;
 
 /**
  * @implements UseCaseInterface<RegisterIdentityDocumentRequest, RegisterIdentityDocumentResponse>
@@ -32,7 +32,7 @@ final readonly class RegisterIdentityDocumentUseCase implements UseCaseInterface
      * @throws IdentityDocumentAlreadyExistsException when the document is already registered
      * @throws IdentityDocumentExpiredException when the document has already expired
      * @throws InvalidValueException when a field breaks a value object invariant
-     * @var RegisterIdentityDocumentRequest $registerIdentityDocumentRequest
+     * @var  RegisterIdentityDocumentRequest $registerIdentityDocumentRequest
      */
     public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): RegisterIdentityDocumentResponse
     {

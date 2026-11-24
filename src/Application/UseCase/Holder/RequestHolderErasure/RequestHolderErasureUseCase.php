@@ -13,7 +13,7 @@ use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
 use App\Domain\ReadModel\Holder\InfosHolder;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 /**
  * Enregistre la demande d'effacement d'un titulaire (RGPD art. 17).

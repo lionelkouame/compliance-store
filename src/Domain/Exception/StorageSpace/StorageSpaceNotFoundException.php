@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Exception\StorageSpace;
 
 use App\Domain\Exception\NotFoundException;
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 
 final class StorageSpaceNotFoundException extends NotFoundException
 {

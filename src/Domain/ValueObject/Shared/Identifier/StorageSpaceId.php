@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\ValueObject\StorageSpace;
+namespace App\Domain\ValueObject\Shared\Identifier;
 
 use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Service\IdValidatorInterface;

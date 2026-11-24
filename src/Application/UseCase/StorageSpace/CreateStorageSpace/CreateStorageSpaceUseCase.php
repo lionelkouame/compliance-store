@@ -14,8 +14,8 @@ use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ReadModel\StorageSpace\InfosStorageSpace;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
 
 /**

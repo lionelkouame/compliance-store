@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ReadModel\NaturalPerson;
 
-use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
+use App\Domain\ValueObject\Shared\Identifier\NaturalPersonId;
 
 final readonly class IdentifierNaturalPerson
 {

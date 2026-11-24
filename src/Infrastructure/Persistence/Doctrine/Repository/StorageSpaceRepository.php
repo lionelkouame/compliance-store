@@ -9,11 +9,11 @@ use App\Domain\Exception\StorageSpace\InvalidStorageSpaceStatusTransitionExcepti
 use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
 use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceStatus;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

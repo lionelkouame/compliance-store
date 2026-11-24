@@ -8,11 +8,11 @@ use App\Domain\Entity\IdentityDocument;
 use App\Domain\Exception\IdentityDocument\IdentityDocumentAlreadyExistsException;
 use App\Domain\Port\Repository\IdentityDocumentRepositoryInterface;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
-use App\Domain\ValueObject\Generic\CountryCode;
-use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use App\Domain\ValueObject\Shared\Generic\CountryCode;
+use App\Domain\ValueObject\Shared\Identifier\IdentityDocumentId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

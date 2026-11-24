@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Port\Gateway;
 
 use App\Domain\ValueObject\Document\WrappedDataKey;
-use App\Domain\ValueObject\Generic\EncryptedPayload;
-use App\Domain\ValueObject\Generic\EncryptionEnvelope;
+use App\Domain\ValueObject\Shared\Generic\EncryptedPayload;
+use App\Domain\ValueObject\Shared\Generic\EncryptionEnvelope;
 
 /**
  * Envelope encryption port (ADR 0002): no byte is sent to

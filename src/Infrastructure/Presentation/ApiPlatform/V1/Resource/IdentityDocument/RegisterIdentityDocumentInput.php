@@ -21,6 +21,9 @@ final class RegisterIdentityDocumentInput
     #[Assert\NotBlank(message: 'An identity document number is required.')]
     public ?string $number = null;
 
+    #[Assert\NotBlank(message: 'An identity document number is required.')]
+    public ?string $documentIdentifier = null;
+
     #[Assert\NotBlank(message: 'An expiry date is required.')]
     public ?string $expiresAt = null;
 }

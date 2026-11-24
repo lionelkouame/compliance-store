@@ -16,7 +16,7 @@ use App\Domain\Port\Repository\DocumentRepositoryInterface;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
 use App\Domain\ReadModel\Holder\InfosHolder;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 /**
  * Exécute l'effacement d'un titulaire (RGPD art. 17) : supprime ses

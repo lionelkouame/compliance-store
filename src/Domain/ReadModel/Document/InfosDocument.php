@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\ReadModel\Document;
 
-use App\Domain\ValueObject\Document\DocumentId;
 use App\Domain\ValueObject\Document\FileHash;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\DocumentId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 /**
  * Read-only projection of a stored Document. The wrapped data key is

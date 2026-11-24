@@ -10,7 +10,7 @@ use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
 use App\Domain\ReadModel\StorageSpace\InfosStorageSpace;
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 
 /**
  * @implements UseCaseInterface<GetStorageSpaceRequest, GetStorageSpaceResponse>

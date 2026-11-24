@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine;
 
 use App\Domain\Entity\Document;
-use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
