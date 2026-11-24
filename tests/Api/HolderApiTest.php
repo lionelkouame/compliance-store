@@ -76,7 +76,7 @@ final class HolderApiTest extends ApiTestCase
         self::assertResponseHeaderSame('content-type', 'application/problem+json; charset=utf-8');
     }
 
-    public function testItGetsAHolderByEmail(): void
+    public function testItGetsAHolderById(): void
     {
         $client = static::createClient();
 
@@ -85,7 +85,7 @@ final class HolderApiTest extends ApiTestCase
             'json' => self::HOLDER,
         ])->toArray();
 
-        $data = $client->request('GET', '/api/v1/holders/jane@example.com')->toArray();
+        $data = $client->request('GET', '/api/v1/holders/'.$created['identifier'])->toArray();
 
         self::assertResponseStatusCodeSame(200);
         self::assertSame($created['identifier'], $data['holderId']);
@@ -95,11 +95,72 @@ final class HolderApiTest extends ApiTestCase
         self::assertSame('jane@example.com', $data['email']);
     }
 
-    public function testItReturns404ForAnUnknownEmail(): void
+    public function testItReturns404ForAnUnknownId(): void
     {
-        static::createClient()->request('GET', '/api/v1/holders/nobody@example.com');
+        static::createClient()->request('GET', '/api/v1/holders/01a17b0e-e559-7fc6-b4e1-4b96eaa3262c');
 
         self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testItReturns404ForAMalformedId(): void
+    {
+        static::createClient()->request('GET', '/api/v1/holders/not-a-uuid');
+
+        self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testTheEmailCanNoLongerBeUsedInTheUrl(): void
+    {
+        // Constat M6 : une donnée personnelle ne doit plus jamais servir de clé dans une URL.
+        static::createClient()->request('GET', '/api/v1/holders/jane@example.com');
+
+        self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testItSearchesAHolderByEmail(): void
+    {
+        $client = static::createClient();
+
+        $created = $client->request('POST', '/api/v1/holders', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => self::HOLDER,
+        ])->toArray();
+
+        $data = $client->request('POST', '/api/v1/holders/search', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => ['email' => 'jane@example.com'],
+        ])->toArray();
+
+        self::assertResponseStatusCodeSame(200);
+        self::assertSame($created['identifier'], $data['holderId']);
+        self::assertSame('jane@example.com', $data['email']);
+    }
+
+    public function testSearchReturns404ForAnUnknownEmail(): void
+    {
+        static::createClient()->request('POST', '/api/v1/holders/search', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => ['email' => 'nobody@example.com'],
+        ]);
+
+        self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testSearchRejectsAMissingOrInvalidEmail(): void
+    {
+        $client = static::createClient();
+
+        $client->request('POST', '/api/v1/holders/search', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [],
+        ]);
+        self::assertResponseStatusCodeSame(422);
+
+        $client->request('POST', '/api/v1/holders/search', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => ['email' => 'not-an-email'],
+        ]);
+        self::assertResponseStatusCodeSame(422);
     }
 
     public function testItRejectsAMissingEmail(): void
@@ -131,12 +192,5 @@ final class HolderApiTest extends ApiTestCase
         ]);
 
         self::assertResponseStatusCodeSame(422);
-    }
-
-    public function testItReturns404ForAMalformedEmail(): void
-    {
-        static::createClient()->request('GET', '/api/v1/holders/not-an-email');
-
-        self::assertResponseStatusCodeSame(404);
     }
 }
