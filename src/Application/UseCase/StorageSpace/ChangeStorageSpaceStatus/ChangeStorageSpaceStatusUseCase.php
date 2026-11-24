@@ -28,7 +28,7 @@ final readonly class ChangeStorageSpaceStatusUseCase implements UseCaseInterface
     /**
      * @throws StorageSpaceNotFoundException when the id is malformed or matches no storage space
      * @throws InvalidValueException when the status is unknown
-     * @throws InvalidStorageSpaceStatusTransitionException when the transition is not allowed
+     * @throws InvalidStorageSpaceStatusTransitionException when the transition is not allowed, or the status changed concurrently
      */
     public function execute(UseCaseRequestInterface $request): ChangeStorageSpaceStatusResponse
     {
@@ -41,7 +41,8 @@ final readonly class ChangeStorageSpaceStatusUseCase implements UseCaseInterface
 
         $updated = $storageSpace->withStatus(StorageSpaceStatus::fromString($request->status));
 
-        $this->storageSpaces->update($updated);
+        // Statut lu en base : l'écriture est refusée si un autre traitement l'a changé entre-temps.
+        $this->storageSpaces->update($updated, expectedStatus: $storageSpace->status);
 
         return new ChangeStorageSpaceStatusResponse(
             InfosStorageSpace::fromEntity($updated),

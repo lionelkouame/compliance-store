@@ -13,6 +13,7 @@ use App\Domain\Exception\Holder\HolderNotFoundException;
 use App\Domain\Exception\Holder\InvalidHolderStatusTransitionException;
 use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
+use App\Domain\Port\Persistence\TransactionInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
@@ -51,6 +52,7 @@ final class AnonymizeHolderUseCaseTest extends TestCase
         $holders = $this->createMock(HolderRepositoryInterface::class);
         $holders->method('findById')->willReturn($this->holder()->requestErasure());
         $holders->expects(self::once())->method('update')
+            ->with(self::anything(), HolderStatus::ErasureRequested)
             ->willReturnCallback(static function (Holder $holder) use (&$calls): void {
                 $calls[] = 'update '.$holder->status()->value;
             });
@@ -59,17 +61,19 @@ final class AnonymizeHolderUseCaseTest extends TestCase
         $publisher->expects(self::once())->method('publish')
             ->with(self::isInstanceOf(HolderAnonymized::class));
 
-        $readModel = $this->useCase($holders, $documentRepository, $storage, $publisher)
+        $readModel = $this->useCase($holders, $documentRepository, $storage, $publisher, $this->recordingTransaction($calls))
             ->execute(new AnonymizeHolderRequest(self::ID))
             ->readModel;
 
-        // Contenu supprimé avant la ligne qui porte la clé, et le titulaire seulement à la fin.
+        // Contenus supprimés hors transaction, puis lignes et titulaire dans une seule transaction.
         self::assertSame([
             'delete 01a17b0e-e559-7fc6-b4e1-000000000001',
-            'remove 01a17b0e-e559-7fc6-b4e1-000000000001',
             'delete 01a17b0e-e559-7fc6-b4e1-000000000002',
+            'begin',
+            'remove 01a17b0e-e559-7fc6-b4e1-000000000001',
             'remove 01a17b0e-e559-7fc6-b4e1-000000000002',
             'update anonymized',
+            'commit',
         ], $calls);
         self::assertSame(HolderStatus::Anonymized, $readModel->status);
         self::assertSame(Holder::ANONYMIZED_NAME, $readModel->name->value);
@@ -125,16 +129,54 @@ final class AnonymizeHolderUseCaseTest extends TestCase
             ->execute(new AnonymizeHolderRequest(self::ID));
     }
 
+    public function testAConcurrentAnonymizationIsRefusedAndPublishesNothing(): void
+    {
+        $holders = $this->createStub(HolderRepositoryInterface::class);
+        $holders->method('findById')->willReturn($this->holder()->requestErasure());
+        $holders->method('update')->willThrowException(InvalidHolderStatusTransitionException::concurrentChange(HolderStatus::Anonymized));
+
+        $publisher = $this->createMock(DomainEventPublisher::class);
+        $publisher->expects(self::never())->method('publish');
+
+        $this->expectException(InvalidHolderStatusTransitionException::class);
+
+        $this->useCase($holders, $this->createStub(DocumentRepositoryInterface::class), $this->createStub(StorageGatewayInterface::class), $publisher)
+            ->execute(new AnonymizeHolderRequest(self::ID));
+    }
+
     private function useCase(
         HolderRepositoryInterface $holders,
         DocumentRepositoryInterface $documents,
         StorageGatewayInterface $storage,
         DomainEventPublisher $publisher,
+        ?TransactionInterface $transaction = null,
     ): AnonymizeHolderUseCase {
         $idValidator = $this->createStub(IdValidatorInterface::class);
         $idValidator->method('isValid')->willReturn(true);
 
-        return new AnonymizeHolderUseCase($holders, $documents, $storage, $idValidator, $publisher);
+        return new AnonymizeHolderUseCase($holders, $documents, $storage, $transaction ?? $this->recordingTransaction(), $idValidator, $publisher);
+    }
+
+    /**
+     * Transaction en mémoire qui exécute l'opération et trace son début et sa fin.
+     *
+     * @param list<string> $calls
+     */
+    private function recordingTransaction(array &$calls = []): TransactionInterface
+    {
+        return new class($calls) implements TransactionInterface {
+            /** @param list<string> $calls */
+            public function __construct(private array &$calls) {}
+
+            public function run(callable $operation): mixed
+            {
+                $this->calls[] = 'begin';
+                $result = $operation();
+                $this->calls[] = 'commit';
+
+                return $result;
+            }
+        };
     }
 
     private function holder(): Holder

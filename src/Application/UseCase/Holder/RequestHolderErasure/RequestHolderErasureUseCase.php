@@ -34,7 +34,7 @@ final readonly class RequestHolderErasureUseCase implements UseCaseInterface
 
     /**
      * @throws HolderNotFoundException                quand l'identifiant est malformé ou ne correspond à aucun titulaire
-     * @throws InvalidHolderStatusTransitionException quand le titulaire n'est plus actif (demande déjà faite, ou déjà anonymisé)
+     * @throws InvalidHolderStatusTransitionException quand le titulaire n'est plus actif (demande déjà faite, ou déjà anonymisé), y compris par une requête concurrente
      */
     public function execute(UseCaseRequestInterface $request): RequestHolderErasureResponse
     {
@@ -46,12 +46,13 @@ final readonly class RequestHolderErasureUseCase implements UseCaseInterface
         $holder = $this->holders->findById(HolderId::make($request->id)) // @phpstan-ignore missingType.checkedException (identifiant validé ci-dessus)
             ?? throw new HolderNotFoundException();
 
-        $holder = $holder->requestErasure();
+        $requested = $holder->requestErasure();
 
-        $this->holders->update($holder);
+        // Statut lu en base : l'écriture est refusée si un autre traitement l'a changé entre-temps.
+        $this->holders->update($requested, expectedStatus: $holder->status());
 
-        $this->domainEventPublisher->publish(HolderErasureRequested::fromHolder($holder));
+        $this->domainEventPublisher->publish(HolderErasureRequested::fromHolder($requested));
 
-        return new RequestHolderErasureResponse(InfosHolder::fromEntity($holder));
+        return new RequestHolderErasureResponse(InfosHolder::fromEntity($requested));
     }
 }

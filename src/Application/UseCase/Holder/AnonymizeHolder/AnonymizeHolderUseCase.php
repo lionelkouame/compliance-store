@@ -11,6 +11,7 @@ use App\Domain\Exception\Holder\HolderNotFoundException;
 use App\Domain\Exception\Holder\InvalidHolderStatusTransitionException;
 use App\Domain\Port\Event\DomainEventPublisher;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
+use App\Domain\Port\Persistence\TransactionInterface;
 use App\Domain\Port\Repository\DocumentRepositoryInterface;
 use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
@@ -24,13 +25,18 @@ use App\Domain\ValueObject\Holder\HolderId;
  * Ordre des opérations :
  * 1. la transition est calculée en premier : un titulaire sans demande
  *    d'effacement est refusé avant toute suppression ;
- * 2. pour chaque document, le contenu chiffré est supprimé du stockage objet,
- *    puis la ligne (qui porte la clé de données chiffrée). Dans cet ordre, un
- *    échec laisse au pire une ligne sans contenu, et une nouvelle tentative
- *    termine le travail : la suppression dans le stockage est idempotente ;
- * 3. le titulaire n'est enregistré comme anonymisé qu'une fois tous ses
- *    documents supprimés. Tant que ce n'est pas le cas, il reste en
- *    « erasure_requested » et l'opération peut être relancée.
+ * 2. le contenu chiffré de chaque document est supprimé du stockage objet,
+ *    hors transaction : le stockage n'y participe pas, et un appel réseau ne
+ *    doit pas garder une transaction ouverte ;
+ * 3. les lignes des documents (qui portent les clés de données chiffrées) et
+ *    le titulaire anonymisé sont écrits dans une seule transaction : tout ou
+ *    rien.
+ *
+ * Si l'étape 3 échoue, le titulaire reste en « erasure_requested » avec des
+ * documents dont le contenu a déjà disparu : une nouvelle tentative termine
+ * le travail, la suppression dans le stockage étant idempotente. Si deux
+ * anonymisations sont concurrentes, la seconde est refusée par l'UPDATE
+ * conditionnel et sa transaction est annulée.
  *
  * @implements UseCaseInterface<AnonymizeHolderRequest, AnonymizeHolderResponse>
  */
@@ -40,13 +46,14 @@ final readonly class AnonymizeHolderUseCase implements UseCaseInterface
         private HolderRepositoryInterface $holders,
         private DocumentRepositoryInterface $documents,
         private StorageGatewayInterface $storage,
+        private TransactionInterface $transaction,
         private IdValidatorInterface $idValidator,
         private DomainEventPublisher $domainEventPublisher,
     ) {}
 
     /**
      * @throws HolderNotFoundException                quand l'identifiant est malformé ou ne correspond à aucun titulaire
-     * @throws InvalidHolderStatusTransitionException quand aucune demande d'effacement n'est en cours
+     * @throws InvalidHolderStatusTransitionException quand aucune demande d'effacement n'est en cours, ou qu'une anonymisation concurrente est passée avant
      */
     public function execute(UseCaseRequestInterface $request): AnonymizeHolderResponse
     {
@@ -60,12 +67,20 @@ final readonly class AnonymizeHolderUseCase implements UseCaseInterface
 
         $anonymized = $holder->anonymize();
 
-        foreach ($this->documents->findByHolder($holder->id()) as $document) {
+        $documents = $this->documents->findByHolder($holder->id());
+
+        foreach ($documents as $document) {
             $this->storage->delete($document->id());
-            $this->documents->remove($document);
         }
 
-        $this->holders->update($anonymized);
+        $this->transaction->run(function () use ($documents, $anonymized, $holder): void {
+            foreach ($documents as $document) {
+                $this->documents->remove($document);
+            }
+
+            // Statut lu en base : l'écriture est refusée si une autre anonymisation est passée entre-temps.
+            $this->holders->update($anonymized, expectedStatus: $holder->status());
+        });
 
         $this->domainEventPublisher->publish(HolderAnonymized::fromHolder($anonymized));
 

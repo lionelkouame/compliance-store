@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Domain\Entity\StorageSpace;
+use App\Domain\Exception\StorageSpace\InvalidStorageSpaceStatusTransitionException;
 use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
 use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
+use App\Domain\ValueObject\StorageSpace\StorageSpaceStatus;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -46,18 +48,29 @@ final class StorageSpaceRepository extends ServiceEntityRepository implements St
      * StorageSpace properties are readonly, so Doctrine's unit of work can't
      * change-track it like a regular entity: the update is an explicit SQL
      * statement rather than a persist() on a mutated instance.
+     *
+     * La condition sur le statut attendu sert de verrou optimiste : si un autre
+     * traitement a changé le statut depuis la lecture, aucune ligne n'est
+     * modifiée et la transition est refusée.
+     *
+     * @throws InvalidStorageSpaceStatusTransitionException quand le statut a changé depuis la lecture
      */
-    public function update(StorageSpace $storageSpace): void
+    public function update(StorageSpace $storageSpace, StorageSpaceStatus $expectedStatus): void
     {
-        $this->getEntityManager()->getConnection()->executeStatement(
-            'UPDATE storage_space SET status = :status WHERE id = :id',
+        $updated = $this->getEntityManager()->getConnection()->executeStatement(
+            'UPDATE storage_space SET status = :status WHERE id = :id AND status = :expectedStatus',
             [
                 'status' => $storageSpace->status->value,
                 'id' => $storageSpace->id->value,
+                'expectedStatus' => $expectedStatus->value,
             ],
         );
 
         $this->getEntityManager()->clear();
+
+        if (0 === $updated) {
+            throw InvalidStorageSpaceStatusTransitionException::concurrentChange($storageSpace->status);
+        }
     }
 
     /**

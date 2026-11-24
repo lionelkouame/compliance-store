@@ -44,7 +44,7 @@ final readonly class StorageSpace
     public function withStatus(StorageSpaceStatus $status): self
     {
         if (!$this->status->canTransitionTo($status)) {
-            throw new InvalidStorageSpaceStatusTransitionException($this->status, $status);
+            throw InvalidStorageSpaceStatusTransitionException::between($this->status, $status);
         }
 
         return new self(
