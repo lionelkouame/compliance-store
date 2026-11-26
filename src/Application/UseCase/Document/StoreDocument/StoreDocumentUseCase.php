@@ -44,7 +44,7 @@ final readonly class StoreDocumentUseCase implements UseCaseInterface
 
         $fileHash = FileHash::make($registerIdentityDocumentRequest->content); // @phpstan-ignore missingType.checkedException (a computed SHA-256 digest is always valid)
         $envelope = $this->cipher->encrypt($registerIdentityDocumentRequest->content);
-        $documentId = DocumentId::make($this->idGenerator->generate()); // @phpstan-ignore missingType.checkedException (generated id)
+        $documentId = DocumentId::make($this->idGenerator->generate());
 
         $document = Document::create(
             id: $documentId,
