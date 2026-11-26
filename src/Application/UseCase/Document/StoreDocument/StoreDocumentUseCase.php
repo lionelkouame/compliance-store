@@ -42,7 +42,7 @@ final readonly class StoreDocumentUseCase implements UseCaseInterface
         // Resolved first: nothing is encrypted or stored for an unknown holder.
         $holder = $this->findHolder($registerIdentityDocumentRequest->holderId);
 
-        $fileHash = FileHash::make($registerIdentityDocumentRequest->content); // @phpstan-ignore missingType.checkedException (a computed SHA-256 digest is always valid)
+        $fileHash = FileHash::make($registerIdentityDocumentRequest->content);
         $envelope = $this->cipher->encrypt($registerIdentityDocumentRequest->content);
         $documentId = DocumentId::make($this->idGenerator->generate());
 
