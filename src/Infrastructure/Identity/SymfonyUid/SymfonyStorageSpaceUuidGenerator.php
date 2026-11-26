@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Service;
+namespace App\Infrastructure\Identity\SymfonyUid;
 
 use App\Domain\Port\Service\StorageSpaceIdGeneratorInterface;
 use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;

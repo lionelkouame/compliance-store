@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Storage;
+namespace App\Infrastructure\Storage\Flysystem;
 
 use App\Domain\ValueObject\Shared\Identifier\DocumentId;
 

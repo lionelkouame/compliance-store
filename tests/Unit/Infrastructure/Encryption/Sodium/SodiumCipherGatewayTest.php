@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Infrastructure\Gateway;
+namespace App\Tests\Unit\Infrastructure\Encryption\Sodium;
 
-use App\Infrastructure\Gateway\SodiumCipherGateway;
+use App\Infrastructure\Encryption\Sodium\SodiumCipherGateway;
 use PHPUnit\Framework\TestCase;
 
 final class SodiumCipherGatewayTest extends TestCase

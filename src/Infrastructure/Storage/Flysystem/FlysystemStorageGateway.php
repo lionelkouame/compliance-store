@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Storage;
+namespace App\Infrastructure\Storage\Flysystem;
 
 use App\Domain\Port\Gateway\StorageGatewayInterface;
 use App\Domain\ValueObject\Shared\Identifier\DocumentId;
@@ -16,7 +16,7 @@ use League\Flysystem\FilesystemOperator;
  * The physical object key is derived here from the document id (ADR 0009);
  * it is never modeled in the domain.
  */
-final readonly class MinioStorageGateway implements StorageGatewayInterface
+final readonly class FlysystemStorageGateway implements StorageGatewayInterface
 {
     public function __construct(
         private FilesystemOperator $documentsStorage,

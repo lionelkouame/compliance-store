@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Event\Listener\StorageSpace;
+namespace App\Infrastructure\Event\Symfony\Listener\StorageSpace;
 
 use App\Domain\Event\StorageSpace\StorageSpaceCreated;
 use Psr\Log\LoggerInterface;

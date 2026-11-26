@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Infrastructure\Storage;
+namespace App\Tests\Unit\Infrastructure\Storage\Flysystem;
 
 use App\Domain\ValueObject\Shared\Identifier\DocumentId;
-use App\Infrastructure\Storage\MinioStorageGateway;
+use App\Infrastructure\Storage\Flysystem\FlysystemStorageGateway;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
-final class MinioStorageGatewayTest extends TestCase
+final class FlysystemStorageGatewayTest extends TestCase
 {
     private const DOCUMENT_ID = '660e8400-e29b-41d4-a716-446655440000';
 
@@ -31,7 +31,7 @@ final class MinioStorageGatewayTest extends TestCase
 
     public function testDeleteRemovesTheStoredContent(): void
     {
-        $gateway = new MinioStorageGateway($this->filesystem);
+        $gateway = new FlysystemStorageGateway($this->filesystem);
         $id = DocumentId::make(self::DOCUMENT_ID);
 
         $gateway->store($id, 'cipher-bytes');
@@ -44,7 +44,7 @@ final class MinioStorageGatewayTest extends TestCase
 
     public function testDeletingMissingContentIsNotAnError(): void
     {
-        (new MinioStorageGateway($this->filesystem))->delete(DocumentId::make(self::DOCUMENT_ID));
+        (new FlysystemStorageGateway($this->filesystem))->delete(DocumentId::make(self::DOCUMENT_ID));
 
         self::assertFalse($this->filesystem->fileExists('documents/'.self::DOCUMENT_ID));
     }

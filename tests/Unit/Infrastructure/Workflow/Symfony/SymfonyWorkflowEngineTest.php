@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Infrastructure\Workflow;
+namespace App\Tests\Unit\Infrastructure\Workflow\Symfony;
 
 use App\Domain\Exception\Workflow\TransitionNotAllowedException;
-use App\Infrastructure\Workflow\SymfonyWorkflowEngine;
+use App\Infrastructure\Workflow\Symfony\SymfonyWorkflowEngine;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\Workflow\DefinitionBuilder;

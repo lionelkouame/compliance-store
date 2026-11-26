@@ -28,11 +28,13 @@ src/
 │       └── <Action>UseCase.php   # Orchestration
 │
 └── Infrastructure/             # COUCHE INFRASTRUCTURE (Implémentations techniques)
-    ├── Gateway/                # SodiumCipherGateway (chiffrement d'enveloppe)
-    ├── Storage/                # MinioStorageGateway (stockage S3-compatible)
+    │                           # <Responsabilité>/<Technologie>/ (ADR 0008, ADR 0015)
+    ├── Encryption/Sodium/      # SodiumCipherGateway (chiffrement d'enveloppe)
+    ├── Storage/Flysystem/      # FlysystemStorageGateway + StorageKey (stockage S3-compatible)
     ├── Persistence/Doctrine/   # Repositories, mappings XML et types Doctrine (PostgreSQL)
-    ├── Service/                # Générateurs et validateurs d'UUID
-    ├── Workflow/               # SymfonyWorkflowEngine (symfony/workflow, ADR 0014)
+    ├── Identity/SymfonyUid/    # Générateurs et validateurs d'UUID
+    ├── Event/Symfony/          # SymfonyDomainEventDispatcher + listeners
+    ├── Workflow/Symfony/       # SymfonyWorkflowEngine (symfony/workflow, ADR 0014)
     └── Presentation/ApiPlatform/V1/
         ├── Resource/<Feature>/ # <Feature>Resource (#[ApiResource]) + DTOs <Action>Input / <Action>Output
         └── State/

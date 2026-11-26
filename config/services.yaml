@@ -25,7 +25,7 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    # S3-compatible client used by MinioStorageGateway (documents.storage, see flysystem.yaml).
+    # S3-compatible client used by FlysystemStorageGateway (documents.storage, see flysystem.yaml).
     Aws\S3\S3Client:
         arguments:
             -
@@ -37,7 +37,7 @@ services:
                     key: '%env(AWS_S3_ACCESS_KEY)%'
                     secret: '%env(AWS_S3_SECRET_KEY)%'
 
-    App\Infrastructure\Storage\MinioStorageGateway:
+    App\Infrastructure\Storage\Flysystem\FlysystemStorageGateway:
         arguments:
             $documentsStorage: '@documents.storage'
 
@@ -46,15 +46,15 @@ services:
             $environment: '%kernel.environment%'
             $version: '%app.version%'
 
-    App\Infrastructure\Gateway\SodiumCipherGateway:
+    App\Infrastructure\Encryption\Sodium\SodiumCipherGateway:
         arguments:
             $masterKey: '%env(base64:DOCUMENT_MASTER_KEY)%'
 
     # Bind the domain event-dispatcher port to its Symfony/PSR-14 adapter.
-    App\Domain\Port\Event\DomainEventPublisher: '@App\Infrastructure\Event\SymfonyDomainEventDispatcher'
+    App\Domain\Port\Event\DomainEventPublisher: '@App\Infrastructure\Event\Symfony\SymfonyDomainEventDispatcher'
 
     # Bind the domain workflow port to its symfony/workflow adapter (ADR 0014).
-    App\Domain\Port\Workflow\WorkflowEngineInterface: '@App\Infrastructure\Workflow\SymfonyWorkflowEngine'
+    App\Domain\Port\Workflow\WorkflowEngineInterface: '@App\Infrastructure\Workflow\Symfony\SymfonyWorkflowEngine'
 
     # Bind the domain transaction port to its Doctrine adapter (issue #90).
     App\Domain\Port\Persistence\TransactionInterface: '@App\Infrastructure\Persistence\Doctrine\DoctrineTransaction'

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Workflow;
+namespace App\Infrastructure\Workflow\Symfony;
 
 use App\Domain\Exception\Workflow\TransitionNotAllowedException;
 use App\Domain\Port\Workflow\WorkflowEngineInterface;

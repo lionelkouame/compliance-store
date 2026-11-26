@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Gateway;
+namespace App\Infrastructure\Encryption\Sodium;
 
 use App\Domain\Port\Gateway\CipherGatewayInterface;
 use App\Domain\ValueObject\Document\WrappedDataKey;

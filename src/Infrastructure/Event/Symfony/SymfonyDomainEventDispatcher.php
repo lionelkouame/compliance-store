@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Event;
+namespace App\Infrastructure\Event\Symfony;
 
 use App\Domain\Event\DomainEvent;
 use App\Domain\Port\Event\DomainEventPublisher as DomainEventDispatcherInterface;

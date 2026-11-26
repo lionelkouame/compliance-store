@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Event\Listener\Holder;
+namespace App\Infrastructure\Event\Symfony\Listener\Holder;
 
 use App\Domain\Event\Holder\HolderAnonymized;
 use Psr\Log\LoggerInterface;
