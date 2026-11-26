@@ -22,10 +22,11 @@ src/
 │       └── Workflow/           # WorkflowEngineInterface (ADR 0014)
 │
 ├── Application/                # COUCHE APPLICATION (Orchestration des cas d'usage)
-│   └── UseCase/<Feature>/<Action>/
-│       ├── <Action>Request.php   # Données d'entrée primitives
-│       ├── <Action>Response.php  # Enveloppe un ReadModel du Domaine
-│       └── <Action>UseCase.php   # Orchestration
+│   ├── UseCase/<Feature>/<Action>/
+│   │   ├── <Action>Request.php   # Données d'entrée primitives
+│   │   ├── <Action>Response.php  # Enveloppe un ReadModel du Domaine
+│   │   └── <Action>UseCase.php   # Orchestration
+│   └── Service/<Feature>/        # Logique partagée entre use cases (ADR 0016), ex. DocumentVault
 │
 └── Infrastructure/             # COUCHE INFRASTRUCTURE (Implémentations techniques)
     │                           # <Responsabilité>/<Technologie>/ (ADR 0008, ADR 0015)
