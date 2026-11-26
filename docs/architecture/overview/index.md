@@ -31,7 +31,7 @@ src/
     │                           # <Responsabilité>/<Technologie>/ (ADR 0008, ADR 0015)
     ├── Encryption/Sodium/      # SodiumCipherGateway (chiffrement d'enveloppe)
     ├── Storage/Flysystem/      # FlysystemStorageGateway + StorageKey (stockage S3-compatible)
-    ├── Persistence/Doctrine/   # Repositories, mappings XML et types Doctrine (PostgreSQL)
+    ├── Persistence/Doctrine/   # Repositories, mappings XML, types Doctrine et Fixtures/ (PostgreSQL)
     ├── Identity/SymfonyUid/    # Générateurs et validateurs d'UUID
     ├── Event/Symfony/          # SymfonyDomainEventDispatcher + listeners
     ├── Workflow/Symfony/       # SymfonyWorkflowEngine (symfony/workflow, ADR 0014)
