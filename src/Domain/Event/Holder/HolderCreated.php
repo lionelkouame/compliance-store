@@ -7,7 +7,7 @@ namespace App\Domain\Event\Holder;
 use App\Domain\Entity\Holder;
 use App\Domain\Event\DomainEvent;
 use App\Domain\ValueObject\Document\Email;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 /**
  * Raised once a new {@see Holder} has been created and persisted.

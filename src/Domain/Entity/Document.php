@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
-use App\Domain\ValueObject\Document\DocumentId;
 use App\Domain\ValueObject\Document\FileHash;
 use App\Domain\ValueObject\Document\WrappedDataKey;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\DocumentId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 
 /**

@@ -6,8 +6,8 @@ namespace App\Domain\Event\StorageSpace;
 
 use App\Domain\Entity\StorageSpace;
 use App\Domain\Event\DomainEvent;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 
 /**
  * Raised once a new {@see StorageSpace} has been created and persisted.

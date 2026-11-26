@@ -19,7 +19,7 @@ final readonly class ListStorageSpacesUseCase implements UseCaseInterface
         private StorageSpaceRepositoryInterface $storageSpaces,
     ) {}
 
-    public function execute(UseCaseRequestInterface $request): ListStorageSpacesResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): ListStorageSpacesResponse
     {
         return new ListStorageSpacesResponse(array_map(
             static fn (StorageSpace $storageSpace): InfosStorageSpace => InfosStorageSpace::fromEntity($storageSpace),

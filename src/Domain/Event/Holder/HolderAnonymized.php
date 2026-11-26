@@ -6,7 +6,7 @@ namespace App\Domain\Event\Holder;
 
 use App\Domain\Entity\Holder;
 use App\Domain\Event\DomainEvent;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 /**
  * Émis une fois le titulaire anonymisé et ses documents supprimés.

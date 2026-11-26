@@ -6,10 +6,10 @@ namespace App\Domain\ReadModel\Holder;
 
 use App\Domain\Entity\Holder;
 use App\Domain\ValueObject\Document\Email;
-use App\Domain\ValueObject\Generic\BirthDate;
-use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\ValueObject\Holder\HolderName;
 use App\Domain\ValueObject\Holder\HolderStatus;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 final readonly class InfosHolder
 {

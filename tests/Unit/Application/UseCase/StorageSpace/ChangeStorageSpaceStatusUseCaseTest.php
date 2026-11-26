@@ -12,8 +12,8 @@ use App\Domain\Exception\StorageSpace\InvalidStorageSpaceStatusTransitionExcepti
 use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
 use App\Domain\Port\Repository\StorageSpaceRepositoryInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceName;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceStatus;
 use PHPUnit\Framework\TestCase;

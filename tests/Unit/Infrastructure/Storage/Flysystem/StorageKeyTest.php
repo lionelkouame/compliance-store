@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Tests\Unit\Infrastructure\Storage\Flysystem;
+
+use App\Domain\ValueObject\Shared\Identifier\DocumentId;
+use App\Infrastructure\Storage\Flysystem\StorageKey;
+use PHPUnit\Framework\TestCase;
+
+final class StorageKeyTest extends TestCase
+{
+    public function testForDocumentBuildsAPathFromTheDocumentId(): void
+    {
+        $id = DocumentId::make('550e8400-e29b-41d4-a716-446655440000');
+
+        $key = StorageKey::forDocument($id);
+
+        self::assertSame('documents/550e8400-e29b-41d4-a716-446655440000', $key->value);
+    }
+
+    public function testConstructorRejectsEmptyValue(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new StorageKey('  ');
+    }
+}

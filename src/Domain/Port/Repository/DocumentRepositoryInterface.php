@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Port\Repository;
 
 use App\Domain\Entity\Document;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 interface DocumentRepositoryInterface
 {

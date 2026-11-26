@@ -8,10 +8,10 @@ use App\Domain\Entity\Holder;
 use App\Domain\Exception\Holder\InvalidHolderStatusTransitionException;
 use App\Domain\Exception\InvalidValueException;
 use App\Domain\ValueObject\Document\Email;
-use App\Domain\ValueObject\Generic\BirthDate;
-use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\ValueObject\Holder\HolderName;
 use App\Domain\ValueObject\Holder\HolderStatus;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 use PHPUnit\Framework\TestCase;
 
 final class HolderTest extends TestCase

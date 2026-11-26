@@ -24,10 +24,10 @@ final readonly class GetHolderByEmailUseCase implements UseCaseInterface
     /**
      * @throws HolderNotFoundException when the email is malformed or matches no holder
      */
-    public function execute(UseCaseRequestInterface $request): GetHolderByEmailResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): GetHolderByEmailResponse
     {
         try {
-            $email = Email::make($request->email);
+            $email = Email::make($registerIdentityDocumentRequest->email);
         } catch (InvalidValueException) {
             // A malformed email cannot match any holder: it is "not found" (ADR 0013).
             throw new HolderNotFoundException();

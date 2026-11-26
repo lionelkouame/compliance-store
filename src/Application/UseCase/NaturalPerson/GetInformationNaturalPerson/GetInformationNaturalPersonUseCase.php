@@ -10,7 +10,7 @@ use App\Domain\Exception\InvalidValueException;
 use App\Domain\Exception\NaturalPerson\NaturalPersonNotFoundException;
 use App\Domain\Port\Repository\NaturalPersonRepositoryInterface;
 use App\Domain\ReadModel\NaturalPerson\InfosNaturalPerson;
-use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
+use App\Domain\ValueObject\Shared\Identifier\NaturalPersonId;
 
 /**
  * @implements UseCaseInterface<GetInformationNaturalPersonRequest, GetInformationNaturalPersonResponse>
@@ -25,10 +25,10 @@ final readonly class GetInformationNaturalPersonUseCase implements UseCaseInterf
      * @throws NaturalPersonNotFoundException when no natural person has this id
      * @throws InvalidValueException when the identifier is malformed
      */
-    public function execute(UseCaseRequestInterface $request): GetInformationNaturalPersonResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): GetInformationNaturalPersonResponse
     {
         $naturalPerson = $this->naturalPersonRepository->findById(
-            NaturalPersonId::make($request->identifier),
+            NaturalPersonId::make($registerIdentityDocumentRequest->identifier),
         );
 
         if (null === $naturalPerson) {

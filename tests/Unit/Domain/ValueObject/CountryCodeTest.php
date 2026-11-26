@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\ValueObject;
 
 use App\Domain\Exception\InvalidValueException;
-use App\Domain\ValueObject\Generic\CountryCode;
+use App\Domain\ValueObject\Shared\Generic\CountryCode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

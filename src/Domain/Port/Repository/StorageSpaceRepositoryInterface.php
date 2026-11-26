@@ -8,8 +8,8 @@ use App\Domain\Entity\StorageSpace;
 use App\Domain\Exception\StorageSpace\InvalidStorageSpaceStatusTransitionException;
 use App\Domain\Exception\StorageSpace\StorageSpaceCodeAlreadyExistsException;
 use App\Domain\Exception\StorageSpace\StorageSpaceNotFoundException;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceCode;
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
 use App\Domain\ValueObject\StorageSpace\StorageSpaceStatus;
 
 interface StorageSpaceRepositoryInterface

@@ -19,8 +19,8 @@ use Webmozart\Assert\Assert;
 final readonly class RegisterIdentityDocumentProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ValidatorInterface $validator,
-        private RegisterIdentityDocumentUseCase $useCase,
+        private ValidatorInterface              $validator,
+        private RegisterIdentityDocumentUseCase $registerIdentityDocumentUseCase,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): RegisterIdentityDocumentOutput
@@ -34,7 +34,7 @@ final readonly class RegisterIdentityDocumentProcessor implements ProcessorInter
         Assert::string($data->number);
         Assert::string($data->expiresAt);
 
-        $useCaseResponse = $this->useCase->execute(new RegisterIdentityDocumentRequest(
+        $useCaseResponse = $this->registerIdentityDocumentUseCase->execute(new RegisterIdentityDocumentRequest(
             type: $data->type,
             country: $data->country,
             number: $data->number,

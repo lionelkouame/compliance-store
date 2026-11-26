@@ -11,11 +11,11 @@ use App\Domain\Exception\InvalidValueException;
 use App\Domain\Port\Repository\NaturalPersonRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ReadModel\NaturalPerson\IdentifierNaturalPerson;
-use App\Domain\ValueObject\Generic\BirthDate;
 use App\Domain\ValueObject\NaturalPerson\FirstName;
 use App\Domain\ValueObject\NaturalPerson\Gender;
 use App\Domain\ValueObject\NaturalPerson\LastName;
-use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Identifier\NaturalPersonId;
 
 /**
  * @implements UseCaseInterface<CreateNaturalPersonRequest, CreateNaturalPersonResponse>
@@ -30,13 +30,13 @@ final readonly class CreateNaturalPersonUseCase implements UseCaseInterface
     /**
      * @throws InvalidValueException when a field breaks a value object invariant
      */
-    public function execute(UseCaseRequestInterface $request): CreateNaturalPersonResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): CreateNaturalPersonResponse
     {
         $naturalPersonId = NaturalPersonId::make($this->generatorUuid->generate());
-        $gender = Gender::fromNullable($request->gender);
-        $firstName = FirstName::make($request->firstName);
-        $lastName = LastName::make($request->lastName);
-        $birthDate = BirthDate::make($request->birthday);
+        $gender = Gender::fromNullable($registerIdentityDocumentRequest->gender);
+        $firstName = FirstName::make($registerIdentityDocumentRequest->firstName);
+        $lastName = LastName::make($registerIdentityDocumentRequest->lastName);
+        $birthDate = BirthDate::make($registerIdentityDocumentRequest->birthday);
 
         $naturalPerson = NaturalPerson::create(
             $naturalPersonId,

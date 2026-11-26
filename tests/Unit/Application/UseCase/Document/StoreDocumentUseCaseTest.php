@@ -18,11 +18,11 @@ use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
 use App\Domain\ValueObject\Document\Email;
 use App\Domain\ValueObject\Document\WrappedDataKey;
-use App\Domain\ValueObject\Generic\BirthDate;
-use App\Domain\ValueObject\Generic\EncryptedPayload;
-use App\Domain\ValueObject\Generic\EncryptionEnvelope;
-use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\ValueObject\Holder\HolderName;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Generic\EncryptedPayload;
+use App\Domain\ValueObject\Shared\Generic\EncryptionEnvelope;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 use PHPUnit\Framework\TestCase;
 
 final class StoreDocumentUseCaseTest extends TestCase

@@ -8,8 +8,8 @@ use App\Domain\Entity\Holder;
 use App\Domain\Exception\Holder\HolderAlreadyExistsException;
 use App\Domain\Exception\Holder\InvalidHolderStatusTransitionException;
 use App\Domain\ValueObject\Document\Email;
-use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\ValueObject\Holder\HolderStatus;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 interface HolderRepositoryInterface
 {

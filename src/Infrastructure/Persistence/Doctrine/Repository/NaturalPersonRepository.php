@@ -6,7 +6,7 @@ namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Domain\Entity\NaturalPerson;
 use App\Domain\Port\Repository\NaturalPersonRepositoryInterface;
-use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
+use App\Domain\ValueObject\Shared\Identifier\NaturalPersonId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

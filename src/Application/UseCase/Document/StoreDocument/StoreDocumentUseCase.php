@@ -16,9 +16,9 @@ use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\Port\Service\IdValidatorInterface;
 use App\Domain\ReadModel\Document\InfosDocument;
-use App\Domain\ValueObject\Document\DocumentId;
 use App\Domain\ValueObject\Document\FileHash;
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\DocumentId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 /**
  * @implements UseCaseInterface<StoreDocumentRequest, StoreDocumentResponse>
@@ -35,16 +35,16 @@ final readonly class StoreDocumentUseCase implements UseCaseInterface
     ) {}
 
     /**
-     * @throws UnknownDocumentHolderException when the holder id is malformed or matches no holder
+     * @throws UnknownDocumentHolderException|\Throwable when the holder id is malformed or matches no holder
      */
-    public function execute(UseCaseRequestInterface $request): StoreDocumentResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest): StoreDocumentResponse
     {
         // Resolved first: nothing is encrypted or stored for an unknown holder.
-        $holder = $this->findHolder($request->holderId);
+        $holder = $this->findHolder($registerIdentityDocumentRequest->holderId);
 
-        $fileHash = FileHash::make($request->content); // @phpstan-ignore missingType.checkedException (a computed SHA-256 digest is always valid)
-        $envelope = $this->cipher->encrypt($request->content);
-        $documentId = DocumentId::make($this->idGenerator->generate()); // @phpstan-ignore missingType.checkedException (generated id)
+        $fileHash = FileHash::make($registerIdentityDocumentRequest->content);
+        $envelope = $this->cipher->encrypt($registerIdentityDocumentRequest->content);
+        $documentId = DocumentId::make($this->idGenerator->generate());
 
         $document = Document::create(
             id: $documentId,

@@ -9,7 +9,7 @@ use ApiPlatform\Symfony\Bundle\Test\Client;
 use App\Domain\Entity\Document;
 use App\Domain\Entity\Holder;
 use App\Domain\Port\Gateway\StorageGatewayInterface;
-use App\Domain\ValueObject\Document\DocumentId;
+use App\Domain\ValueObject\Shared\Identifier\DocumentId;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

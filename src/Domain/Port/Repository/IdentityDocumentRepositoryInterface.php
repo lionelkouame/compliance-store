@@ -7,9 +7,9 @@ namespace App\Domain\Port\Repository;
 use App\Domain\Entity\IdentityDocument;
 use App\Domain\Exception\IdentityDocument\IdentityDocumentAlreadyExistsException;
 use App\Domain\ValueObject\Document\IdentityDocumentType;
-use App\Domain\ValueObject\Generic\CountryCode;
-use App\Domain\ValueObject\IdentityDocument\IdentityDocumentId;
 use App\Domain\ValueObject\IdentityDocument\IdentityDocumentNumber;
+use App\Domain\ValueObject\Shared\Generic\CountryCode;
+use App\Domain\ValueObject\Shared\Identifier\IdentityDocumentId;
 
 interface IdentityDocumentRepositoryInterface
 {

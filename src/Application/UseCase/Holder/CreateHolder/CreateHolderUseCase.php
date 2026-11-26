@@ -15,9 +15,9 @@ use App\Domain\Port\Repository\HolderRepositoryInterface;
 use App\Domain\Port\Service\GeneratorInterface;
 use App\Domain\ReadModel\Holder\CreateHolderRead;
 use App\Domain\ValueObject\Document\Email;
-use App\Domain\ValueObject\Generic\BirthDate;
-use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\ValueObject\Holder\HolderName;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 /**
  * @implements UseCaseInterface<CreateHolderRequest, CreateHolderResponse>
@@ -34,12 +34,12 @@ final readonly class CreateHolderUseCase implements UseCaseInterface
      * @throws HolderAlreadyExistsException when the email is already used
      * @throws InvalidValueException when a field breaks a value object invariant
      */
-    public function execute(UseCaseRequestInterface $request) : CreateHolderResponse
+    public function execute(UseCaseRequestInterface $registerIdentityDocumentRequest) : CreateHolderResponse
     {
         $holderId = HolderId::make($this->generatorUuid->generate());
-        $birthDate = BirthDate::make($request->birthDate);
-        $holderName = HolderName::make($request->holderName);
-        $email = Email::make($request->email);
+        $birthDate = BirthDate::make($registerIdentityDocumentRequest->birthDate);
+        $holderName = HolderName::make($registerIdentityDocumentRequest->holderName);
+        $email = Email::make($registerIdentityDocumentRequest->email);
 
         if (null !== $this->holderRepository->findByEmail($email)) {
             throw new HolderAlreadyExistsException();

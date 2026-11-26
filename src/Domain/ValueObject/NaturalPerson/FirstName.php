@@ -35,6 +35,7 @@ final readonly class FirstName
         return $this->value;
     }
 
+
     /**
      * @throws InvalidValueException when the first name is empty or too long
      */

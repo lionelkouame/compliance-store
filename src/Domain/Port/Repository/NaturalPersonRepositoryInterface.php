@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Port\Repository;
 
 use App\Domain\Entity\NaturalPerson;
-use App\Domain\ValueObject\NaturalPerson\NaturalPersonId;
+use App\Domain\ValueObject\Shared\Identifier\NaturalPersonId;
 
 interface NaturalPersonRepositoryInterface
 {

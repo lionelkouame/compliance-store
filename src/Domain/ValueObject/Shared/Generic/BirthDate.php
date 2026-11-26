@@ -1,0 +1,58 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\ValueObject\Shared\Generic;
+
+use App\Domain\Exception\InvalidValueException;
+
+/**
+ * The birth date of a Holder (data subject).
+ *
+ * Invariant: a birth date is always strictly in the past. The time component
+ * is irrelevant here, so only the calendar day (UTC) is compared.
+ */
+final readonly class BirthDate
+{
+    public \DateTimeImmutable $value;
+
+    /**
+     * @throws InvalidValueException when the date is not in the past
+     */
+    public function __construct(\DateTimeImmutable $value)
+    {
+        $today = new \DateTimeImmutable('today', new \DateTimeZone('UTC'));
+
+        if ($value->format('Y-m-d') >= $today->format('Y-m-d')) {
+            throw new InvalidValueException('A birth date must be in the past.');
+        }
+
+        $this->value = $value;
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->value->format('Y-m-d') === $other->value->format('Y-m-d');
+    }
+
+    /**
+     * @throws InvalidValueException when the value is not a valid Y-m-d date in the past
+     */
+    public static function make(string $value): self
+    {
+        // "!" resets the time to midnight; re-formatting rejects the dates that
+        // createFromFormat() silently rolls over (1990-02-30 -> 1990-03-02).
+        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value, new \DateTimeZone('UTC'));
+
+        if (false === $date || $date->format('Y-m-d') !== $value) {
+            throw new InvalidValueException('A birth date must be a valid Y-m-d date.');
+        }
+
+        return new self($date);
+    }
+
+    public function __toString(): string
+    {
+        return $this->value->format('Y-m-d');
+    }
+}

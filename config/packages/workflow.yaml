@@ -10,7 +10,7 @@
 #     the workflow name declared below.
 #   * A refused transition surfaces as TransitionNotAllowedException (422).
 #   * Side effects (notifications, processing...) belong in listeners under
-#     src/Infrastructure/Workflow/Listener/, never in the Domain.
+#     src/Infrastructure/Workflow/Symfony/Listener/, never in the Domain.
 #
 # Example:
 #

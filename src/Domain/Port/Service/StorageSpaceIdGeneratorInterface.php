@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Port\Service;
 
-use App\Domain\ValueObject\StorageSpace\StorageSpaceId;
+use App\Domain\ValueObject\Shared\Identifier\StorageSpaceId;
 
 /**
  * Domain port for generating unique storage space identifiers.

@@ -6,10 +6,10 @@ namespace App\Domain\Entity;
 
 use App\Domain\Exception\Holder\InvalidHolderStatusTransitionException;
 use App\Domain\ValueObject\Document\Email;
-use App\Domain\ValueObject\Generic\BirthDate;
-use App\Domain\ValueObject\Holder\HolderId;
 use App\Domain\ValueObject\Holder\HolderName;
 use App\Domain\ValueObject\Holder\HolderStatus;
+use App\Domain\ValueObject\Shared\Generic\BirthDate;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 /**
  * The natural person a sensitive document belongs to (data subject under

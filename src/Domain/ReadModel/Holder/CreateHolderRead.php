@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ReadModel\Holder;
 
-use App\Domain\ValueObject\Holder\HolderId;
+use App\Domain\ValueObject\Shared\Identifier\HolderId;
 
 readonly class CreateHolderRead
 {
